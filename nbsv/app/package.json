@@ -1,0 +1,61 @@
+{
+  "name": "nbsv",
+  "version": "1.0.0",
+  "description": "Simularium viewer for jupyter extension",
+  "main": "lib/index.js",
+  "keywords": [
+    "jupyter",
+    "widgets",
+    "ipython",
+    "ipywidgets",
+    "jupyterlab-extension"
+  ],
+  "files": [
+    "lib/**/*.js",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "clean": "rimraf dist/",
+    "build": "npm run build:lib && npm run build:labextension && webpack --mode=production",
+    "build:lib": "tsc --project .",
+    "build:css": "lessc --js --include-path=./node_modules src/style.less lib/style.css",
+    "build:labextension": "jupyter labextension build .",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "jupyterlab": {
+    "extension": "lib/plugin",
+    "outputDir": "../share/jupyter/labextensions/nbsv",
+    "sharedPackages": {
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aics/simularium-viewer": "^3.5.1",
+    "@jupyter-widgets/base": "^6.0.4",
+    "react": "16.9",
+    "react-dom": "16.9"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.4",
+    "@jupyterlab/builder": "^3.6.3",
+    "@phosphor/application": "^1.7.3",
+    "@phosphor/widgets": "^1.9.3",
+    "@types/react": "^18.0.34",
+    "antd": "^5.4.0",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "less-loader": "^11.1.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass-loader": "^13.2.2",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4"
+  }
+}

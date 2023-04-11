@@ -1,0 +1,10 @@
+default_context:
+    author_name: "Megan Riel-Mehan"
+    author_email: "meganr@alleninstitute.org"
+    hosting_github_username_or_org: "simularium"
+    project_name: "nbsv"
+    project_slug: "nbsv"
+    python_slug: "nbsv"
+    project_short_description: "A jupyter notebook installable version of the simularium viewer "
+    hosting_pypi_username: "simularium"
+    license: "MIT License"
