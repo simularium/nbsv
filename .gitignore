@@ -145,7 +145,7 @@ $RECYCLE.BIN/
 # ----
 
 **/node_modules/
-nbsv/nbextension/index.*
+nbsv/nbextension/*index.*
 
 # Coverage data
 # -------------

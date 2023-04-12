@@ -6,9 +6,9 @@
 
 import pytest
 
-from ..example import ExampleWidget
+from ..ViewerWidget import ViewerWidget
 
 
 def test_example_creation_blank():
-    w = ExampleWidget()
+    w = ViewerWidget()
     assert w.value == 'Hello World'

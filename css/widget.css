@@ -1,4 +1,7 @@
 .custom-widget {
-  background-color: lightseagreen;
+  background-color: blueviolet;
   padding: 0px 2px;
+  color: black;
+  margin: 20px;
+  height: 300px;
 }
