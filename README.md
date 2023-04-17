@@ -1,7 +1,7 @@
 
 # nbsv
 
-[![Build Status](https://travis-ci.org/simularium/nbsv.svg?branch=master)](https://travis-ci.org/simularium/nbsv)
+[![Build](https://github.com/simularium/nbsv/actions/workflows/build.yml/badge.svg)](https://github.com/simularium/nbsv/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/simularium/nbsv/branch/main/graph/badge.svg)](https://codecov.io/gh/simularium/nbsv)
 
 
