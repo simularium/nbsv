@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nbsv"
-description = "Simularium Vieweer Jupyter Widget "
+description = "Simularium Viewer Jupyter Widget "
 readme = "README.md"
 license = { file = "LICENSE.txt" }
 requires-python = ">=3.7"
@@ -47,7 +47,10 @@ docs = [
     "sphinx>=1.5",
     "sphinx_rtd_theme",
 ]
-examples = []
+examples = [
+    "simulariumio",
+    "numpy",
+]
 test = [
     "nbval",
     "pytest-cov",

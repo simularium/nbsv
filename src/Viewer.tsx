@@ -4,7 +4,19 @@ import SimulariumViewer, {
 } from '@aics/simularium-viewer';
 import React from 'react';
 
-// import "antd/dist/antd.css";
+import { WidgetModel } from '@jupyter-widgets/base';
+
+export interface WidgetModelWithState extends WidgetModel {
+  controller: SimulariumController;
+}
+
+export interface WidgetProps {
+  controller: SimulariumController;
+  height: number;
+  width: number;
+}
+
+// import 'antd/dist/antd.css';
 // TODO: this starts as .less and needs to be converted to .css in tsc step
 
 const agentColors = [
@@ -26,44 +38,41 @@ const agentColors = [
   '#9f516c',
   '#00aabf',
 ];
-const simulariumController = new SimulariumController({});
 
-function ViewerWidget(): JSX.Element {
+function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
-    <div className="Widget">
-      <SimulariumViewer
-        renderStyle={RenderStyle.WEBGL2_PREFERRED}
-        backgroundColor={[0, 1, 0]}
-        height={300}
-        width={400}
-        loggerLevel="debug"
-        onTimeChange={console.log}
-        simulariumController={simulariumController}
-        onJsonDataArrived={console.log}
-        showCameraControls={false}
-        onTrajectoryFileInfoChanged={console.log}
-        selectionStateInfo={{
-          highlightedAgents: [],
-          hiddenAgents: [],
-        }}
-        onUIDisplayDataChanged={console.log}
-        loadInitialData={true}
-        hideAllAgents={false}
-        showBounds={true}
-        agentColors={agentColors}
-        showPaths={false}
-        onError={console.log}
-      />
-    </div>
+    <SimulariumViewer
+      renderStyle={RenderStyle.WEBGL2_PREFERRED}
+      backgroundColor={[0, 0, 0]}
+      height={props.height}
+      width={props.width}
+      loggerLevel="debug"
+      onTimeChange={console.log}
+      simulariumController={props.controller}
+      onJsonDataArrived={console.log}
+      showCameraControls={true}
+      onTrajectoryFileInfoChanged={console.log}
+      selectionStateInfo={{
+        highlightedAgents: [],
+        hiddenAgents: [],
+      }}
+      onUIDisplayDataChanged={(uidata) => console.log('new ui data, ', uidata)}
+      loadInitialData={true}
+      hideAllAgents={false}
+      showBounds={true}
+      agentColors={agentColors}
+      showPaths={false}
+      onError={console.log}
+    />
   );
 }
 
 // function withModelContext(Component: (props: WidgetProps) => JSX.Element) {
-//     return (props: WidgetProps) => (
-//         <WidgetModelContext.Provider value={props.model}>
-//             <Component {...props} />
-//         </WidgetModelContext.Provider>
-//     );
+//   return (props: WidgetProps) => (
+//     <WidgetModelContext.Provider value={props.model}>
+//       <Component {...props} />
+//     </WidgetModelContext.Provider>
+//   );
 // }
 
 export default ViewerWidget;
