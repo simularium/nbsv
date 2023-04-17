@@ -13,14 +13,14 @@ describe('Trajectory', () => {
     it('should be createable', () => {
       const model = createTestModel(TrajectoryModel);
       expect(model).toBeInstanceOf(TrajectoryModel);
-      expect(model.get('value')).toEqual('Hello World');
+      expect(model.get('height')).toEqual(400);
     });
 
     it('should be createable with a value', () => {
-      const state = { value: 'Foo Bar!' };
+      const state = { height: 500 };
       const model = createTestModel(TrajectoryModel, state);
       expect(model).toBeInstanceOf(TrajectoryModel);
-      expect(model.get('value')).toEqual('Foo Bar!');
+      expect(model.get('height')).toEqual(500);
     });
   });
 });

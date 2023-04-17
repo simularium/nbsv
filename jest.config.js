@@ -1,16 +1,19 @@
 module.exports = {
   automock: false,
+  testEnvironment: "jsdom",
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   preset: 'ts-jest/presets/js-with-babel',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  testPathIgnorePatterns: ['/lib/', '/node_modules/'],
-  testRegex: '/__tests__/.*.spec.ts[x]?$',
-  transformIgnorePatterns: ['/node_modules/(?!(@jupyter(lab|-widgets)/.*)/)'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
-    },
+  transform: {
+    '^.+\\.tsx$': 'babel-jest',
   },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  transformIgnorePatterns: [
+    "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+  ],
+  testRegex: '/__tests__/.*.spec.ts[x]?$',
+  globals: {
+    TextEncoder: require('util').TextEncoder,
+  }
 };
