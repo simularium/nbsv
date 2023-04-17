@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/simularium/nbsv/branch/master/graph/badge.svg)](https://codecov.io/gh/simularium/nbsv)
 
 
-Simularium Vieweer Jupyter Widget 
+Simularium Viewer Jupyter Widget 
 
 ## Installation
 
