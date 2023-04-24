@@ -1,7 +1,7 @@
 // Copyright (c) Megan Riel-Mehan
 // Distributed under the terms of the Modified BSD License.
 import {
-  // loadSimulariumFile,
+  loadSimulariumFile,
   SimulariumController,
 } from '@aics/simularium-viewer';
 import {
@@ -24,10 +24,10 @@ const defaultModelProperties = {
   height: 400,
 };
 
-const netConnectionSettings = {
-  serverIp: 'production-node1-agentviz-backend.cellexplore.net',
-  serverPort: 9002,
-};
+// const netConnectionSettings = {
+//   serverIp: 'production-node1-agentviz-backend.cellexplore.net',
+//   serverPort: 9002,
+// };
 
 export type WidgetModelState = typeof defaultModelProperties;
 
@@ -88,16 +88,8 @@ export class Viewport extends DOMWidgetView {
     if (!trajectory_as_string) {
       return;
     }
-    // const blob = new Blob([trajectory_as_string], { type: 'application/json' });
-    // const simulariumFile = await loadSimulariumFile(blob);
-    // await controller.changeFile({ simulariumFile }, 'test.siumularium');
-    const file = await controller.changeFile(
-      {
-        netConnectionSettings: netConnectionSettings,
-      },
-      'endocytosis.simularium'
-    );
-    console.log('changed file', file);
-    this.render();
+    const blob = new Blob([trajectory_as_string], { type: 'application/json' });
+    const simulariumFile = await loadSimulariumFile(blob);
+    await controller.changeFile({ simulariumFile }, 'test.siumularium');
   }
 }

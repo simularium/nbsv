@@ -16,9 +16,6 @@ export interface WidgetProps {
   width: number;
 }
 
-// import 'antd/dist/antd.css';
-// TODO: this starts as .less and needs to be converted to .css in tsc step
-
 const agentColors = [
   '#fee34d',
   '#f7b232',
@@ -41,38 +38,37 @@ const agentColors = [
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
-    <SimulariumViewer
-      renderStyle={RenderStyle.WEBGL2_PREFERRED}
-      backgroundColor={[0, 0, 0]}
-      height={props.height}
-      width={props.width}
-      loggerLevel="debug"
-      onTimeChange={console.log}
-      simulariumController={props.controller}
-      onJsonDataArrived={console.log}
-      showCameraControls={true}
-      onTrajectoryFileInfoChanged={console.log}
-      selectionStateInfo={{
-        highlightedAgents: [],
-        hiddenAgents: [],
-      }}
-      onUIDisplayDataChanged={(uidata) => console.log('new ui data, ', uidata)}
-      loadInitialData={true}
-      hideAllAgents={false}
-      showBounds={true}
-      agentColors={agentColors}
-      showPaths={false}
-      onError={console.log}
-    />
+    <div>
+      <button onClick={() => props.controller.resume()}>Play</button>
+      <button onClick={() => props.controller.pause()}>Pause</button>
+      <button onClick={() => props.controller.stop()}>stop</button>
+      <SimulariumViewer
+        renderStyle={RenderStyle.WEBGL2_PREFERRED}
+        backgroundColor={[0, 0, 0]}
+        height={props.height}
+        width={props.width}
+        loggerLevel="debug"
+        onTimeChange={console.log}
+        simulariumController={props.controller}
+        onJsonDataArrived={console.log}
+        showCameraControls={false}
+        onTrajectoryFileInfoChanged={console.log}
+        selectionStateInfo={{
+          highlightedAgents: [],
+          hiddenAgents: [],
+        }}
+        onUIDisplayDataChanged={(uidata) =>
+          console.log('new ui data, ', uidata)
+        }
+        loadInitialData={true}
+        hideAllAgents={false}
+        showBounds={true}
+        agentColors={agentColors}
+        showPaths={false}
+        onError={console.log}
+      />
+    </div>
   );
 }
-
-// function withModelContext(Component: (props: WidgetProps) => JSX.Element) {
-//   return (props: WidgetProps) => (
-//     <WidgetModelContext.Provider value={props.model}>
-//       <Component {...props} />
-//     </WidgetModelContext.Provider>
-//   );
-// }
 
 export default ViewerWidget;
