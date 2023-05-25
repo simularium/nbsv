@@ -15,7 +15,7 @@ object-assign
  * js-logger may be freely distributed under the MIT license.
  */
 
-/*! Tweakpane 3.1.7 (c) 2016 cocopon, licensed under the MIT license. */
+/*! Tweakpane 3.1.9 (c) 2016 cocopon, licensed under the MIT license. */
 
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 

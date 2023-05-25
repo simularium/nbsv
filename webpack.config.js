@@ -28,6 +28,7 @@ module.exports = [
    * the notebook.
    */
   {
+    mode: "development",
     entry: './src/extension.ts',
     output: {
       filename: 'index.js',
