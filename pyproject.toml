@@ -34,7 +34,6 @@ classifiers = [
 dependencies = [
     "ipywidgets>=7.0.0",
 ]
-version = "0.1.0.dev0"
 
 [project.optional-dependencies]
 docs = [
