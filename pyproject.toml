@@ -103,7 +103,7 @@ field = [
     { name = "release", default = "" },
 ]
 file = [
-    { src = "pyproject.toml", version_template = "version = \"{major}.{minor}.{patch}.{channel}{release}\"" },
+    { src = "pyproject.toml", version_template = "version = \"{major}.{minor}.{patch}{channel}{release}\"" },
     { src = "nbsv/_version.py" },
 ]
 
