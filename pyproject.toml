@@ -75,7 +75,7 @@ build_cmd = "build:prod"
 field = [{ name = "extra", default = "" }]
 file = [
     { src = "package.json", search = '"version": "{current_version}"' },
-    { src = "pyproject.toml", version_template = '{major}.{minor}.{patch}', search = "version: {current_version}"},
+    { src = "pyproject.toml", version_template = "{major}.{minor}.{patch}", search = "version: {current_version}"},
     { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch}, "{extra}")', search = "version_info = {current_version}" },
 ]
 
