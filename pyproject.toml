@@ -4,6 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nbsv"
+version = "0.1.0"
 description = "Simularium Viewer Jupyter Widget "
 readme = "README.md"
 license = { file = "LICENSE.txt" }
@@ -23,7 +24,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 dependencies = ["ipywidgets>=7.0.0"]
-dynamic = ["version"]
 
 [project.optional-dependencies]
 docs = [
@@ -41,9 +41,6 @@ test = ["nbval", "pytest-cov", "pytest>=7.1"]
 
 [project.urls]
 Homepage = "https://github.com/simularium/nbsv"
-
-[tool.hatch.version]
-path = "nbsv/_version.py"
 
 [tool.hatch.build]
 artifacts = [
@@ -78,6 +75,7 @@ build_cmd = "build:prod"
 field = [{ name = "extra", default = "" }]
 file = [
     { src = "package.json", search = '"version": "{current_version}"' },
+    { src = "pyproject.toml", search = '"version": "{current_version}"'},
     { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch}, "{extra}")', search = "version_info = {current_version}" },
 ]
 
