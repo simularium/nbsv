@@ -6,5 +6,5 @@
 
 public_version = (0, 1, 0)
 extra = "dev-0"
-version_info = (*public_version, extra)
-__version__ = ".".join(map(str, version_info))
+version_info = (0, 1, 0, "dev-0")
+__version__ = ".".join(map(str, (*public_version, extra)))
