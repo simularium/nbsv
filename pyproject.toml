@@ -80,7 +80,7 @@ file = [
 ]
 
 [tool.tbump.version]
-current = "0.1.0-dev2"
+current = "0.1.0-dev3"
 regex = '''
   (?P<major>\d+)
   \.
