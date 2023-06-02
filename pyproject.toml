@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nbsv"
-version = "0.1.0"
+version = "0.1.0.dev0"
 description = "Simularium Viewer Jupyter Widget "
 readme = "README.md"
 license = { file = "LICENSE.txt" }
@@ -75,12 +75,12 @@ build_cmd = "build:prod"
 field = [{ name = "extra", default = "" }]
 file = [
     { src = "package.json", search = '"version": "{current_version}"' },
-    { src = "pyproject.toml", search = '"version": "{current_version}"'},
+    { src = "pyproject.toml", version_template = '{major}.{minor}.{patch}.{extra}', search = '"version": "{current_version}"'},
     { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch}, "{extra}")', search = "version_info = {current_version}" },
 ]
 
 [tool.tbump.version]
-current = "0.1.0-dev-2"
+current = "0.1.0-dev2"
 regex = '''
   (?P<major>\d+)
   \.
