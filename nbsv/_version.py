@@ -4,6 +4,7 @@
 # Copyright (c) Megan Riel-Mehan.
 # Distributed under the terms of the Modified BSD License.
 
-version_info = (0, 1, 0)
-extra = "dev0"
-__version__ = f"'.'.join(map(str, version_info))-{extra}"
+public_version = (0, 1, 0)
+extra = "dev-0"
+version_info = (*public_version, extra)
+__version__ = ".".join(map(str, version_info))
