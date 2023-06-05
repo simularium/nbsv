@@ -63,6 +63,9 @@ instance/
 docs/_build/
 docs/source/_static/embed-bundle.js
 docs/source/_static/embed-bundle.js.map
+docs/source/_static/embed-bundle.js.*
+*.embed-bundle.js.*
+*.embed-bundle.js
 
 # PyBuilder
 target/
