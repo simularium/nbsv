@@ -23,7 +23,14 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
-dependencies = ["ipywidgets>=7.0.0"]
+dependencies = [
+    "ipydatawidgets>=4.3.2",
+    "ipywidgets>=8.0.4",
+    "jupyter-packaging>=0.12.3",
+    "jupyter>=1.0.0",
+    "jupyterlab>=3.5.2",
+    "numpy>=1.14.3",
+]
 
 [project.optional-dependencies]
 docs = [
@@ -80,7 +87,7 @@ file = [
 ]
 
 [tool.tbump.version]
-current = "0.1.0-dev3"
+current = "0.1.0"
 regex = '''
   (?P<major>\d+)
   \.
