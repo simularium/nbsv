@@ -79,11 +79,10 @@ path = "."
 build_cmd = "build:prod"
 
 [tool.tbump]
-field = [{ name = "extra", default = "" }]
 file = [
     { src = "package.json", search = '"version": "{current_version}"' },
     { src = "pyproject.toml", version_template = "{major}.{minor}.{patch}", search = 'version = "{current_version}"'},
-    { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch}, "{extra}")', search = "version_info = {current_version}" },
+    { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch})', search = "version_info = {current_version}" },
 ]
 
 [tool.tbump.version]
@@ -94,9 +93,6 @@ regex = '''
   (?P<minor>\d+)
   \.
   (?P<patch>\d+)
-  (\-
-    (?P<extra>.+)
-  )?
   '''
 
 [tool.tbump.git]
