@@ -44,7 +44,7 @@ docs = [
     "sphinx_rtd_theme",
 ]
 examples = ["simulariumio", "numpy"]
-test = ["nbval", "pytest-cov", "pytest>=7.1"]
+test = ["nbval", "pytest-cov", "pytest>=7.1", "tbump"]
 
 [project.urls]
 Homepage = "https://github.com/simularium/nbsv"
