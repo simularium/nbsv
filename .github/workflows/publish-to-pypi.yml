@@ -28,10 +28,11 @@ jobs:
           build
           --sdist
           --wheel
-          --outdir dist/
+          --outdir pydist/
           .
       - name: Publish to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
+          packages-dir: pydist/
