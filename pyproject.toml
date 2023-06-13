@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "ipydatawidgets>=4.3.2",
-    "ipywidgets>=8.0.4",
+    "ipywidgets==8.0.4",
     "jupyter-packaging>=0.12.3",
     "jupyter>=1.0.0",
     "jupyterlab>=3.5.2",
@@ -81,6 +81,7 @@ build_cmd = "build:prod"
 [tool.tbump]
 file = [
     { src = "package.json", search = '"version": "{current_version}"' },
+    { src = "nbsv/_frontend.py", search = 'module_version = "{current_version}"' },
     { src = "pyproject.toml", version_template = "{major}.{minor}.{patch}", search = 'version = "{current_version}"'},
     { src = "nbsv/_version.py", version_template = '({major}, {minor}, {patch})', search = "version_info = {current_version}" },
 ]
