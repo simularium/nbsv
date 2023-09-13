@@ -84,7 +84,7 @@ export class Viewport extends DOMWidgetView {
 
   async trajectory_changed(): Promise<void> {
     const controller = this.controller;
-    const trajectory_as_string = this.model.get('trajectory');
+    const trajectory_as_string = this.model.get('trajectory_str');
     if (!trajectory_as_string) {
       return;
     }
