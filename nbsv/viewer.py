@@ -33,6 +33,7 @@ class ViewerWidget(ipywidgets.DOMWidget):
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
     trajectory = Instance(TrajectoryData)
+    converter = Instance(TrajectoryConverter)
     trajectory_str = Unicode("").tag(sync=True)
     width = Int(500).tag(sync=True)
     height = Int(300).tag(sync=True)
@@ -61,7 +62,8 @@ class ViewerWidget(ipywidgets.DOMWidget):
     def load_trajectory(self, trajectory: TrajectoryData):
         # Update current trajectory to the provided TrajectoryData object
         self.trajectory = trajectory
-        self.trajectory_str = TrajectoryConverter(self.trajectory).to_JSON()
+        self.converter = TrajectoryConverter(self.trajectory)
+        self.trajectory_str = self.converter.to_JSON()
 
     def update_agent_data(
         self,
@@ -447,3 +449,16 @@ class ViewerWidget(ipywidgets.DOMWidget):
             new_spatial_units,
         )
         self.load_trajectory(new_traj)
+
+    def save(self, file_name: str):
+        """
+        Save simularium trajectory currently represented in the widget
+        locally at the provided file name .simularium
+
+        Parameters:
+         ----------
+        name: str
+            File name for trajectory to be saved at. No need to include the
+            .simularium extension in the name, that will be added automatically
+        """
+        self.converter.save(file_name)
