@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          path: main
 
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
       - name: Test the extension
