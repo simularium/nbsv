@@ -50,7 +50,8 @@
   },
   "dependencies": {
     "@aics/simularium-viewer": "^3.5.1",
-    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6",
+    "@jupyter-widgets/base": "^6",
+    "@jupyter-widgets/base-manager": "^1.0.2",
     "antd": "^5.4.2",
     "crypto": "1.0.1",
     "react": "^16.14.0",
@@ -63,7 +64,6 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.4",
     "@jest/globals": "^29.5.0",
-    "@jupyter-widgets/base-manager": "^1.0.2",
     "@jupyterlab/builder": "^3.6.4",
     "@lumino/application": "^2.1.0",
     "@lumino/domutils": "^2.0.0",
