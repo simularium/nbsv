@@ -63,7 +63,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.4",
     "@jest/globals": "^29.5.0",
-    "@jupyter-widgets/base-manager": "^1.0.2",
+    "@jupyter-widgets/base-manager": "1.0.6",
     "@jupyterlab/builder": "^3.6.4",
     "@lumino/application": "^2.1.0",
     "@lumino/domutils": "^2.0.0",
