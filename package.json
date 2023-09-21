@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@aics/simularium-viewer": "^3.5.1",
-    "@jupyter-widgets/base": "^6",
+    "@jupyter-widgets/base": "6.0.5",
     "antd": "^5.4.2",
     "crypto": "1.0.1",
     "react": "^16.14.0",
