@@ -26,7 +26,7 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] nbsv
 Create a dev environment:
 ```bash
 conda create -n nbsv-d -c conda-forge yarn python jupyterlab=3.6.4
-conda activate nbsv
+conda activate nbsv-d
 nvm use 18
 ```
 Note: make sure you are using the node managed by nvm and not in your conda env by checking `which node`
