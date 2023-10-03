@@ -1,6 +1,7 @@
 module.exports = {
   automock: false,
   testEnvironment: "jsdom",
+  setupFiles: ['./src/__tests__/setup.ts'],
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
