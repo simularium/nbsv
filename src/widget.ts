@@ -13,15 +13,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { MODULE_NAME, MODULE_VERSION } from './version';
-import Viewer, { WidgetProps } from './Viewer';
+import { WidgetProps } from './Viewer';
 
 // Import the CSS
 import '../css/widget.css';
+import App from './App';
 
 const defaultModelProperties = {
   trajectory: '',
   width: 400,
   height: 400,
+  time: 0,
+  firstFrameTime: 0,
+  lastFrameTime: 0,
+  isPlaying: false,
+  loading: false,
+  timeStep: 0,
+  displayTimes: {},
+  timeUnits: {},
+  isEmpty: false,
 };
 
 // const netConnectionSettings = {
@@ -71,11 +81,44 @@ export class Viewport extends DOMWidgetView {
     // this.model.on('change:trajectory', this.trajectory_changed, this);
     const width = this.model.get('width');
     const height = this.model.get('height');
+    // const time = this.model.get('time');
+    const firstFrameTime = 0;
+    // const lastFrameTime = this.model.get('lastFrameTime');
+    // const isPlaying = this.model.get('isPlaying');
+    // const loading = this.model.get('loading');
+    // const timeStep = this.model.get('timeStep');
+    // const displayTimes = this.model.get('displayTimes');
+    // const timeUnits = this.model.get('timeUnits');
+    // const isEmpty = this.model.get('isEmpty');
+
     console.log('rendering viewport', width);
-    const component = React.createElement(Viewer, {
+    // console.log('trajectory data', this.model.get('trajectory_str'));
+    // console.log(
+    //   'trajectory data parsed',
+    //   JSON.parse(this.model.get('trajectory_str'))
+    // );
+    const trajectoryData = JSON.parse(this.model.get('trajectory_str'));
+    const data = trajectoryData.trajectoryInfo;
+    const timeStep = data.timeStepSize;
+    const timeUnits = data.timeUnits;
+    console.log('timeUnits', timeUnits);
+    // const totalDuration = (data.totalSteps - 1) * data.timeStepSize;
+    const lastFrameTime = (data.totalSteps - 1) * data.timeStepSize;
+
+    console.log('trajectory data', trajectoryData);
+    const component = React.createElement(App, {
       controller: this.controller,
       width: width,
       height: height,
+      // time: time,
+      firstFrameTime: firstFrameTime,
+      lastFrameTime: lastFrameTime,
+      // isPlaying: isPlaying,
+      // loading: loading,
+      timeStep: timeStep,
+      // displayTimes: displayTimes,
+      // timeUnits: timeUnits,
+      // isEmpty: isEmpty,
     } as WidgetProps);
 
     ReactDOM.render(component, this.el);

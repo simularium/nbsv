@@ -5,6 +5,8 @@ import SimulariumViewer, {
 import React from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
+import PlayBackControls from './components/PlaybackControls';
+import { TimeUnits } from './types';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -14,6 +16,15 @@ export interface WidgetProps {
   controller: SimulariumController;
   height: number;
   width: number;
+  // time: number;
+  firstFrameTime: number;
+  lastFrameTime: number;
+  // isPlaying: boolean;
+  // loading: boolean;
+  timeStep: number;
+  // displayTimes: any;
+  timeUnits: TimeUnits;
+  // isEmpty: boolean;
 }
 
 const agentColors = [
@@ -66,6 +77,23 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         agentColors={agentColors}
         showPaths={false}
         onError={console.log}
+      />
+      <PlayBackControls
+        controller={props.controller}
+        // playHandler={() => props.controller.resume()}
+        // time={time} //state variable
+        // pauseHandler={() => props.controller.pause()}
+        // prevHandler={console.log}
+        // nextHandler={console.log}
+        firstFrameTime={props.firstFrameTime} //state variable
+        lastFrameTime={props.lastFrameTime} //state variable
+        // isPlaying={isPlaying} //state variable
+        // onTimeChange={console.log}
+        // loading={loading} //state variable
+        timeStep={props.timeStep} //state variable
+        // displayTimes={displayTimes} //state variable
+        // timeUnits={timeUnits} //state variable
+        // isEmpty={isEmpty} //state variable?
       />
     </div>
   );
