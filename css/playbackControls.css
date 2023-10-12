@@ -60,3 +60,30 @@
 /* .pbcontainer .slider .ant-slider-handle:focus {
     box-shadow: none;
 } */
+
+.time {
+    font-weight: 300;
+    background-color: #25222e;
+    color: #d8d8d8;
+    height: 26px;
+    /* min-width: 100px; */
+    padding: 1px 7px 4px 7px;
+    border-radius: 3px;
+    text-align: center;
+    margin-right: 4px;
+}
+
+.lastFrameTime {
+    padding-left: 3px;
+    color: #a0a0a0;
+}
+
+.pbcontainer .ant-input-number {
+    background-color: transparent;
+    border-radius: 0px;
+}
+
+.pbcontainer .ant-input-number input {
+    color: #d8d8d8;
+    padding: 0 3px;
+}

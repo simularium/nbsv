@@ -92,7 +92,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         // loading={loading} //state variable
         timeStep={props.timeStep} //state variable
         // displayTimes={displayTimes} //state variable
-        // timeUnits={timeUnits} //state variable
+        timeUnits={props.timeUnits} //state variable
         // isEmpty={isEmpty} //state variable?
       />
     </div>
