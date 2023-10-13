@@ -18,10 +18,12 @@ export interface WidgetProps {
   firstFrameTime: number;
   lastFrameTime: number;
   timeUnits: TimeUnits;
+  title: string;
 }
 
 function AppWidget(props: WidgetProps): JSX.Element {
   return (
+    // side panel goes here
     <Viewer
       controller={props.controller}
       height={props.height}
@@ -30,6 +32,7 @@ function AppWidget(props: WidgetProps): JSX.Element {
       lastFrameTime={props.lastFrameTime}
       timeStep={props.timeStep}
       timeUnits={props.timeUnits}
+      title={props.title}
     />
   );
 }

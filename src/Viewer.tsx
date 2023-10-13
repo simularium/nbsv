@@ -7,6 +7,7 @@ import React from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 import PlayBackControls from './components/PlaybackControls';
 import { TimeUnits } from './types';
+import ViewerTitle from './components/ViewerTitle';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -25,6 +26,7 @@ export interface WidgetProps {
   // displayTimes: any;
   timeUnits: TimeUnits;
   // isEmpty: boolean;
+  title: string;
 }
 
 const agentColors = [
@@ -50,9 +52,9 @@ const agentColors = [
 function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
     <div>
-      <button onClick={() => props.controller.resume()}>Play</button>
-      <button onClick={() => props.controller.pause()}>Pause</button>
-      <button onClick={() => props.controller.stop()}>stop</button>
+      {/* <button onClick={() => props.controller.pause()}>Pause</button>
+      <button onClick={() => props.controller.stop()}>stop</button> */}
+      <ViewerTitle title={props.title} />
       <SimulariumViewer
         renderStyle={RenderStyle.WEBGL2_PREFERRED}
         backgroundColor={[0, 0, 0]}

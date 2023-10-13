@@ -104,12 +104,14 @@ export class Viewport extends DOMWidgetView {
     console.log('timeUnits', timeUnits);
     // const totalDuration = (data.totalSteps - 1) * data.timeStepSize;
     const lastFrameTime = (data.totalSteps - 1) * data.timeStepSize;
+    const title = data.modelInfo.title;
 
     console.log('trajectory data', trajectoryData);
     const component = React.createElement(App, {
       controller: this.controller,
       width: width,
       height: height,
+      title: title,
       // time: time,
       firstFrameTime: firstFrameTime,
       lastFrameTime: lastFrameTime,
