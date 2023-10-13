@@ -193,6 +193,7 @@ PlayBackProps): JSX.Element => {
           / {lastFrameTime} {timeUnits ? timeUnits.name : 's'}
         </span>
       </div>
+      <div className="scale-bar">SCALE BAR</div>
     </div>
   );
 };
