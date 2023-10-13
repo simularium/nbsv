@@ -1,0 +1,21 @@
+.cc-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 40px;
+    bottom: 60px;
+    height: auto;
+    width: 20px;
+}
+
+.cc-container .btn {
+    border: none;
+    color: #d8d8d8;
+    background-color: #25222e;
+}
+
+.cc-container .btn:hover {
+    border: none;
+    color: #d8d8d8;
+    background-color: #4A4658;
+}

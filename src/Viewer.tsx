@@ -10,6 +10,7 @@ import { TimeUnits } from './types';
 import ViewerTitle from './components/ViewerTitle';
 
 import '../css/viewer.css';
+import CameraControls from './components/CameraControls';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -131,6 +132,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         timeUnits={props.timeUnits} //state variable
         // isEmpty={isEmpty} //state variable?
       />
+      <CameraControls title="whatever" />
     </div>
   );
 }
