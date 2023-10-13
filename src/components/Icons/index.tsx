@@ -18,8 +18,8 @@ import {
 
 // import PurpleArrowPointingRight from '../../assets/open-arrow.svg';
 // import AicsLogoWhite from '../../assets/AICS-logo-full.png';
-// import ClockwiseArrow from '../../assets/step-forward.svg';
-// import CounterClockwiseArrow from '../../assets/step-back.svg';
+import ClockwiseArrow from '../../assets/step-forward.svg';
+import CounterClockwiseArrow from '../../assets/step-back.svg';
 // import { ReactComponent as CounterClockwiseArrow } from '../../assets/step-back.svg';
 
 // import Beta from '../../assets/beta.svg';
@@ -42,9 +42,9 @@ export const LoopOutlined = <RetweetOutlined />;
 
 // export const PurpleArrow = <img src={PurpleArrowPointingRight} />;
 // export const AicsLogo = <img src={AicsLogoWhite} style={{ width: '140px' }} />;
-// export const StepForward = <img src={ClockwiseArrow} />;
-// export const StepBack = <CounterClockwiseArrow />;
-export const StepBack = <img src="../../assets/step-back.svg" />;
+export const StepForward = <ClockwiseArrow />;
+export const StepBack = <CounterClockwiseArrow />;
+// export const StepBack = <img src="../../assets/step-back.svg" />;
 export const SimpleSVG = () => (
   <svg width="100" height="100">
     <circle cx="50" cy="50" r="40" stroke="black" strokeWidth="3" fill="red" />
@@ -56,7 +56,7 @@ export default {
   StepBack,
   Play,
   Pause,
-  // StepForward,
+  StepForward,
   UploadFile,
   Loading,
   DownArrow,

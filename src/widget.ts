@@ -81,6 +81,7 @@ export class Viewport extends DOMWidgetView {
     // this.model.on('change:trajectory', this.trajectory_changed, this);
     const width = this.model.get('width');
     const height = this.model.get('height');
+    console.log('width', width, 'height', height);
     // const time = this.model.get('time');
     const firstFrameTime = 0;
     // const lastFrameTime = this.model.get('lastFrameTime');

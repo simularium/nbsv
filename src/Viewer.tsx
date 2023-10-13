@@ -9,6 +9,8 @@ import PlayBackControls from './components/PlaybackControls';
 import { TimeUnits } from './types';
 import ViewerTitle from './components/ViewerTitle';
 
+import '../css/viewer.css';
+
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
 }
@@ -51,35 +53,37 @@ const agentColors = [
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
-    <div>
+    <div className="v-container">
       {/* <button onClick={() => props.controller.pause()}>Pause</button>
       <button onClick={() => props.controller.stop()}>stop</button> */}
       <ViewerTitle title={props.title} />
-      <SimulariumViewer
-        renderStyle={RenderStyle.WEBGL2_PREFERRED}
-        backgroundColor={[0, 0, 0]}
-        height={props.height}
-        width={props.width}
-        loggerLevel="debug"
-        onTimeChange={console.log}
-        simulariumController={props.controller}
-        onJsonDataArrived={console.log}
-        showCameraControls={false}
-        onTrajectoryFileInfoChanged={console.log}
-        selectionStateInfo={{
-          highlightedAgents: [],
-          hiddenAgents: [],
-        }}
-        onUIDisplayDataChanged={(uidata) =>
-          console.log('new ui data, ', uidata)
-        }
-        loadInitialData={true}
-        hideAllAgents={false}
-        showBounds={true}
-        agentColors={agentColors}
-        showPaths={false}
-        onError={console.log}
-      />
+      <div className="viewer-container">
+        <SimulariumViewer
+          renderStyle={RenderStyle.WEBGL2_PREFERRED}
+          backgroundColor={[0, 0, 0]}
+          height={props.height}
+          width={props.width}
+          loggerLevel="debug"
+          onTimeChange={console.log}
+          simulariumController={props.controller}
+          onJsonDataArrived={console.log}
+          showCameraControls={false}
+          onTrajectoryFileInfoChanged={console.log}
+          selectionStateInfo={{
+            highlightedAgents: [],
+            hiddenAgents: [],
+          }}
+          onUIDisplayDataChanged={(uidata) =>
+            console.log('new ui data, ', uidata)
+          }
+          loadInitialData={true}
+          hideAllAgents={false}
+          showBounds={true}
+          agentColors={agentColors}
+          showPaths={false}
+          onError={console.log}
+        />
+      </div>
       <PlayBackControls
         controller={props.controller}
         // playHandler={() => props.controller.resume()}

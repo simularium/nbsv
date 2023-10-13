@@ -11,7 +11,7 @@ const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
 ): JSX.Element => {
   console.log('title log', props.title);
   return (
-    <div className="container">
+    <div className="title-container">
       <div className="title"> {props.title} </div>
     </div>
   );
