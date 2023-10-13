@@ -7,6 +7,7 @@
     justify-content: space-evenly;
     margin-bottom: 20px;
     background-color: black;
+    gap: 3px;
 }
 
 .pbcontainer .btn {

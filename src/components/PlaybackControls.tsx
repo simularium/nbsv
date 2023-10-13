@@ -144,6 +144,7 @@ PlayBackProps): JSX.Element => {
           // loading={loading}
         >
           {/* icon change if loading... */}
+          BACK
         </Button>
       </Tooltip>
       <Tooltip
@@ -167,6 +168,7 @@ PlayBackProps): JSX.Element => {
           // loading={loading}
         >
           {/* icon change if loading... */}
+          FWD
         </Button>
       </Tooltip>
       <Slider
