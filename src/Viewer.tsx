@@ -2,7 +2,7 @@ import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
 } from '@aics/simularium-viewer';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import PlayBackControls from './components/PlaybackControls';
@@ -51,7 +51,36 @@ const agentColors = [
   '#00aabf',
 ];
 
+// let currentFrame = 0;
+// let currentTime = 0;
+
+// const handleTimeChange = (timeData: any): void => {
+//   currentFrame = timeData.frameNumber;
+//   currentTime = timeData.time;
+//   // this.setState({ currentFrame, currentTime });
+//   // if (this.state.pauseOn === currentFrame) {
+//     props.controller.pause();
+//     // this.setState({ pauseOn: -1 });
+//   }
+// };
+
 function ViewerWidget(props: WidgetProps): JSX.Element {
+  const [time, setTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayingStateChange = (change: boolean) => {
+    setIsPlaying(change);
+  };
+
+  const handleTimeChange = (timeData: any): void => {
+    if (timeData.time === props.lastFrameTime) {
+      props.controller.pause();
+      props.controller.gotoTime(props.firstFrameTime);
+      setIsPlaying(false);
+    }
+    setTime(timeData.time);
+  };
+
   return (
     <div className="v-container">
       {/* <button onClick={() => props.controller.pause()}>Pause</button>
@@ -64,7 +93,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           height={props.height}
           width={props.width}
           loggerLevel="debug"
-          onTimeChange={console.log}
+          onTimeChange={handleTimeChange}
           simulariumController={props.controller}
           onJsonDataArrived={console.log}
           showCameraControls={false}
@@ -87,13 +116,14 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
       <PlayBackControls
         controller={props.controller}
         // playHandler={() => props.controller.resume()}
-        // time={time} //state variable
+        time={time} //state variable
+        handlePlayPause={handlePlayingStateChange}
         // pauseHandler={() => props.controller.pause()}
         // prevHandler={console.log}
         // nextHandler={console.log}
         firstFrameTime={props.firstFrameTime} //state variable
         lastFrameTime={props.lastFrameTime} //state variable
-        // isPlaying={isPlaying} //state variable
+        isPlaying={isPlaying} //state variable
         // onTimeChange={console.log}
         // loading={loading} //state variable
         timeStep={props.timeStep} //state variable

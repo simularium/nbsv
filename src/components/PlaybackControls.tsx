@@ -15,10 +15,12 @@ interface PlayBackProps {
   // nextHandler: () => void;
   firstFrameTime: number;
   lastFrameTime: number;
-  // isPlaying: boolean;
+  isPlaying: boolean;
+  handlePlayPause: (change: boolean) => void;
   // onTimeChange: (time: number) => void;
   // loading: boolean;
   timeStep: number;
+  time: number;
   // displayTimes: DisplayTimes;
   timeUnits: TimeUnits;
   // isEmpty: boolean;
@@ -29,7 +31,8 @@ const PlayBackControls = ({
   // playHandler,
   // pauseHandler,
   // prevHandler,
-  // isPlaying,
+  isPlaying,
+  handlePlayPause,
   // nextHandler,
   firstFrameTime,
   lastFrameTime,
@@ -37,19 +40,19 @@ const PlayBackControls = ({
   // loading,
   timeStep,
   timeUnits,
+  time,
 }: // isEmpty,
 // displayTimes,
 PlayBackProps): JSX.Element => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [displayTime, setDisplayTime] = useState(0);
 
   const playHandler = () => {
-    setIsPlaying(true);
+    handlePlayPause(true);
     controller.resume();
   };
 
   const pauseHandler = () => {
-    setIsPlaying(false);
+    handlePlayPause(false);
     controller.pause();
   };
 
@@ -79,15 +82,11 @@ PlayBackProps): JSX.Element => {
   };
 
   const frameForwardHandler = () => {
-    // const { time, timeStep } = this.props;
-    console.log('firing frameForwardHandler');
     skipToTime(displayTime + timeStep);
     setDisplayTime(displayTime + timeStep);
   };
 
   const frameBackHandler = () => {
-    // const { time, timeStep } = this.props;
-    console.log('firing frameBackHandler');
     skipToTime(displayTime - timeStep);
     setDisplayTime(displayTime - timeStep);
   };
@@ -172,7 +171,7 @@ PlayBackProps): JSX.Element => {
         </Button>
       </Tooltip>
       <Slider
-        value={displayTime}
+        value={time}
         onChange={handleScrubTime}
         className="slider"
         step={timeStep}
@@ -182,9 +181,9 @@ PlayBackProps): JSX.Element => {
       <div className="time">
         <InputNumber
           // key is necessary to re-render this component and override user input
-          key={displayTime}
+          key={time}
           size="small"
-          value={displayTime}
+          value={time}
           // onChange={handleTimeInputChange}
           // onKeyDown={handleTimeInputKeyDown}
           // disabled={loading || isEmpty || isPlaying}
