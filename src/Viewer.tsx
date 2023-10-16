@@ -132,7 +132,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         timeUnits={props.timeUnits} //state variable
         // isEmpty={isEmpty} //state variable?
       />
-      <CameraControls title="whatever" />
+      <CameraControls controller={props.controller} title="whatever" />
     </div>
   );
 }
