@@ -1,6 +1,7 @@
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
+  UIDisplayData,
 } from '@aics/simularium-viewer';
 import React, { useState } from 'react';
 
@@ -30,6 +31,7 @@ export interface WidgetProps {
   timeUnits: TimeUnits;
   // isEmpty: boolean;
   title: string;
+  setUiData: (data: UIDisplayData) => void;
 }
 
 const agentColors = [
@@ -51,19 +53,6 @@ const agentColors = [
   '#9f516c',
   '#00aabf',
 ];
-
-// let currentFrame = 0;
-// let currentTime = 0;
-
-// const handleTimeChange = (timeData: any): void => {
-//   currentFrame = timeData.frameNumber;
-//   currentTime = timeData.time;
-//   // this.setState({ currentFrame, currentTime });
-//   // if (this.state.pauseOn === currentFrame) {
-//     props.controller.pause();
-//     // this.setState({ pauseOn: -1 });
-//   }
-// };
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
   const [time, setTime] = useState(0);
@@ -103,9 +92,10 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
             highlightedAgents: [],
             hiddenAgents: [],
           }}
-          onUIDisplayDataChanged={(uidata) =>
-            console.log('new ui data, ', uidata)
-          }
+          onUIDisplayDataChanged={(uidata) => {
+            console.log('new ui data, ', uidata);
+            props.setUiData(uidata);
+          }}
           loadInitialData={true}
           hideAllAgents={false}
           showBounds={true}

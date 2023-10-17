@@ -50,9 +50,12 @@
   },
   "dependencies": {
     "@aics/simularium-viewer": "^3.5.1",
+    "@ant-design/css-animation": "^1.7.3",
     "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4 || ^5 || ^6",
     "antd": "^5.4.2",
     "crypto": "1.0.1",
+    "file-loader": "^6.2.0",
+    "raf": "^3.4.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },

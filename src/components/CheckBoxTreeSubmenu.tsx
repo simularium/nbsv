@@ -1,0 +1,67 @@
+import React from 'react';
+import { Checkbox as AntdCheckbox } from 'antd';
+import { map, noop } from 'lodash';
+import { CheckboxChangeEvent, CheckboxOptionType } from 'antd/lib/checkbox';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+const CheckboxGroup = AntdCheckbox.Group;
+
+import Checkbox from './CheckBox';
+// import { CHECKBOX_TYPE_STAR } from '../../constants';
+export const CHECKBOX_TYPE_STAR = 'star';
+export type CHECKBOX_TYPE_STAR = typeof CHECKBOX_TYPE_STAR;
+
+const checkboxType = CHECKBOX_TYPE_STAR;
+
+interface CheckboxTreeSubmenuProps {
+  checkedAgents: string[];
+  options: CheckboxOptionType[];
+  onChange: (values: CheckboxValueType[]) => void;
+  //   checkboxType?: CHECKBOX_TYPE_STAR;
+}
+import '../../css/checkBoxTreeSubmenu.css';
+
+const CheckboxTreeSubmenu = ({
+  checkedAgents,
+  options,
+  onChange,
+}: //   checkboxType,
+CheckboxTreeSubmenuProps): JSX.Element => {
+  const onCheckboxChange = ({ target }: CheckboxChangeEvent) => {
+    const allowedValues = map(options, 'value');
+    const optionIndex = checkedAgents.indexOf(target.value);
+    const value = [...checkedAgents];
+    if (optionIndex === -1) {
+      value.push(target.value);
+    } else {
+      value.splice(optionIndex, 1);
+    }
+
+    const newValue = value
+      .filter((val) => allowedValues.indexOf(val) !== -1)
+      .sort((a, b) => {
+        const indexA = options.findIndex((opt) => opt.value === a);
+        const indexB = options.findIndex((opt) => opt.value === b);
+        return indexA - indexB;
+      });
+    onChange(newValue);
+  };
+  return (
+    <CheckboxGroup
+      className="container"
+      value={checkedAgents || []}
+      onChange={onChange}
+    >
+      {options.map(({ value }) => (
+        <Checkbox
+          key={value as string}
+          value={value}
+          checkboxType={checkboxType}
+          checked={checkedAgents.includes(value as string)}
+          onChange={checkboxType ? onCheckboxChange : noop}
+        />
+      ))}
+    </CheckboxGroup>
+  );
+};
+
+export default CheckboxTreeSubmenu;
