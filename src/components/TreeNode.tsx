@@ -39,7 +39,7 @@ const TreeNode = ({
     ['active']: isExpanded,
   });
   return (
-    <div className="container">
+    <div className="treenode-container">
       <header className="header">
         {actions.length > 0 && actions.map((button) => button)}
         {children && (

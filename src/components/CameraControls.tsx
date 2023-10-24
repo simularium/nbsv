@@ -14,7 +14,6 @@ const TOOLTIP_COLOR = '#3B3649';
 const CameraControls: React.FunctionComponent<CameraControlsProps> = (
   props: CameraControlsProps
 ): JSX.Element => {
-  console.log('CameraControls log', props.title);
   return (
     <div className="cc-container">
       {/* <div className="zoomButtons"> */}

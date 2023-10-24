@@ -35,8 +35,8 @@
     cursor: pointer;
 }
 
-:global(.header-checkbox) .container,
-:global(.header-checkbox) :global(.ant-checkbox) {
+.header-checkbox .container,
+.header-checkbox .ant-checkbox {
     top: 9px;
 }
 

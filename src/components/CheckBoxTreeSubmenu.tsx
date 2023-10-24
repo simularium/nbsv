@@ -47,7 +47,7 @@ CheckboxTreeSubmenuProps): JSX.Element => {
   };
   return (
     <CheckboxGroup
-      className="container"
+      className="cbg-container"
       value={checkedAgents || []}
       onChange={onChange}
     >

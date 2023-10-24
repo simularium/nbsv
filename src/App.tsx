@@ -8,10 +8,11 @@ import React, { useState } from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 
 import Viewer from './Viewer';
-import { TimeUnits } from './types';
+import { TimeUnits, VisibilitySelectionMap } from './types';
 import SidePanel from './components/SidePanel';
 
 import '../css/app.css';
+import { getAgentsToHide, getHighlightedAgents } from './selectors';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -28,10 +29,6 @@ export interface WidgetProps {
   title: string;
 }
 
-export interface VisibilitySelectionMap {
-  [key: string]: string[];
-}
-
 function AppWidget(props: WidgetProps): JSX.Element {
   const [uidata, setUiData] = useState<UIDisplayData>([]);
   const [selectionStateInfo, setSelectionStateInfo] =
@@ -39,19 +36,43 @@ function AppWidget(props: WidgetProps): JSX.Element {
       highlightedAgents: [],
       hiddenAgents: [],
     });
-  // this may be able to be consolidated with selection state info... as visible === !hidden..
-  // for now passing to to make handleAgentCheck work and replace redux store of visible agents
-  // once i get this data
-  // i need a function that lets setVisibleAgents accept this type of argument { [key: string]: string[] }
 
-  const [visibleAgents, setVisibleAgents] = useState<VisibilitySelectionMap>(
-    {}
-  );
+  const [hiddenAgents, setHiddenAgents] = useState<VisibilitySelectionMap>({});
   const [highlightedAgents, setHighlightedAgents] =
     useState<VisibilitySelectionMap>({});
   const [agentsChecked, setAgentsChecked] = useState<VisibilitySelectionMap>(
     {}
   );
+
+  const updateSelectionStateInfo = (newInfo: SelectionStateInfo) => {
+    setSelectionStateInfo(newInfo);
+  };
+
+  const updateHiddenAgents = (newAgents: VisibilitySelectionMap) => {
+    let value: VisibilitySelectionMap = {};
+    for (const key in newAgents) {
+      if (newAgents[key].length) {
+        value = { ...hiddenAgents, ...newAgents };
+      } else {
+        const newHidden = hiddenAgents;
+        delete newHidden[key];
+        value = newHidden;
+      }
+      console.log('value in updateHiddenAgents', value);
+      setHiddenAgents(value);
+      const newHidden = getAgentsToHide(hiddenAgents, uidata);
+      console.log("useEffect's newHidden", newHidden);
+      setSelectionStateInfo({
+        highlightedAgents: getHighlightedAgents(highlightedAgents, uidata),
+        hiddenAgents: newHidden,
+      });
+    }
+  };
+
+  const updateHighlightedAgents = (newAgents: VisibilitySelectionMap) => {
+    const value = { ...highlightedAgents, ...newAgents };
+    setHighlightedAgents(value);
+  };
 
   return (
     <div className="app-container">
@@ -59,11 +80,11 @@ function AppWidget(props: WidgetProps): JSX.Element {
         title="some words"
         uiData={uidata}
         selectionStateInfo={selectionStateInfo}
-        setSelectionStateInfo={setSelectionStateInfo}
-        visibleAgents={visibleAgents}
-        setVisibleAgents={setVisibleAgents}
+        setSelectionStateInfo={updateSelectionStateInfo}
+        hiddenAgents={hiddenAgents}
+        setHiddenAgents={updateHiddenAgents}
         highlightedAgents={highlightedAgents}
-        setHighlightedAgents={setHighlightedAgents}
+        setHighlightedAgents={updateHighlightedAgents}
         agentsChecked={agentsChecked}
         setAgentsChecked={setAgentsChecked}
       />
@@ -77,6 +98,7 @@ function AppWidget(props: WidgetProps): JSX.Element {
         timeUnits={props.timeUnits}
         title={props.title}
         setUiData={setUiData}
+        selectionStateInfo={selectionStateInfo}
       />
     </div>
   );

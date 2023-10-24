@@ -1,5 +1,5 @@
-.container {
-    background-color: var(--dark-theme-sidebar-item-bg);
+.treenode-container {
+    background-color: #1E1B25;
     margin-bottom: 3px;
     padding: 0 12px;
 }
@@ -8,13 +8,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    gap: 13px;
 }
 
-.header :global(.ant-btn:hover) {
+.header .ant-btn:hover {
     color: var(--dark-theme-agent-dropdown-toggle-hover);
 }
 
-.header :global(.ant-btn), :global(.ant-btn:active), :global(.ant-btn:focus) {
+.header .ant-btn, .ant-btn:active, .ant-btn:focus {
     color: var(--dark-theme-agent-dropdown-toggle);
 }
 

@@ -1,87 +1,37 @@
 import * as React from 'react';
 
 import '../../css/checkBoxTree.css';
-import { CheckboxOptionType, Col, Row, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { map, filter, isEmpty } from 'lodash';
 import SharedCheckbox from './SharedCheckBox';
 import TreeNode from './TreeNode';
 import ColorSwatch from './ColorSwatch';
 import Checkbox from './CheckBox';
-// import { SelectionEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import CheckboxTreeSubmenu from './CheckBoxTreeSubmenu';
-// import { UIDisplayData } from '@aics/simularium-viewer';
+import { SelectionStateInfo } from '@aics/simularium-viewer';
+import {
+  AgentDisplayNode,
+  CHECKBOX_TYPE_STAR,
+  SelectionEntry,
+  VisibilitySelectionMap,
+} from '../types';
 
 const { Text } = Typography;
-
-export const CHECKBOX_TYPE_STAR = 'star';
-export type CHECKBOX_TYPE_STAR = typeof CHECKBOX_TYPE_STAR;
-
-export interface SelectionEntry {
-  name: string;
-  tags: string[];
-}
-
-interface CheckBoxWithColor extends CheckboxOptionType {
-  color: string;
-}
-
-export interface AgentDisplayNode {
-  title: string;
-  key: string;
-  children: CheckBoxWithColor[];
-  color: string;
-}
-
-interface DisplayStateEntry {
-  name: string;
-  id: string;
-  color: string;
-}
-export interface UIDisplayEntry {
-  name: string;
-  displayStates: DisplayStateEntry[];
-  color: string;
-}
-export declare type UIDisplayData = UIDisplayEntry[];
-
-export interface VisibilitySelectionMap {
-  [key: string]: string[];
-}
 
 interface CheckBoxTreeProps {
   //   uiData: UIDisplayData;
   treeData: AgentDisplayNode[];
   agentsHighlighted: SelectionEntry[];
-  visibleAgents: VisibilitySelectionMap;
-  setVisibleAgents: (agents: VisibilitySelectionMap) => void;
+  hiddenAgents: VisibilitySelectionMap;
+  setHiddenAgents: (agents: VisibilitySelectionMap) => void;
   highlightedAgents: VisibilitySelectionMap;
   setHighlightedAgents: (agents: VisibilitySelectionMap) => void;
   agentsChecked: VisibilitySelectionMap;
   setAgentsChecked: (agents: VisibilitySelectionMap) => void;
+  selectionStateInfo: SelectionStateInfo;
+  setSelectionStateInfo: (info: SelectionStateInfo) => void;
 }
-
-export const getUiDisplayDataTree = (
-  uiDisplayData: UIDisplayData
-): AgentDisplayNode[] => {
-  if (!uiDisplayData.length) {
-    return [];
-  }
-  return uiDisplayData.map((agent) => ({
-    title: agent.name,
-    key: agent.name,
-    color: agent.color,
-    children: agent.displayStates.length
-      ? [
-          ...agent.displayStates.map((state) => ({
-            label: state.name,
-            value: state.id,
-            color: state.color,
-          })),
-        ]
-      : [],
-  }));
-};
 
 const CHECKBOX_SPAN_NO = 2;
 const LABEL_SPAN_NO = 6;
@@ -89,64 +39,17 @@ const LABEL_SPAN_NO = 6;
 const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
   props: CheckBoxTreeProps
 ): JSX.Element => {
-  //   console.log('CheckBoxTree log of uiData', props.uiData);
-
-  console.log('CheckBoxTree log of treeData', props.treeData);
-
-  const handleAgentCheck = props.setVisibleAgents;
+  const handleAgentCheck = props.setHiddenAgents;
   const handleHighlight = props.setHighlightedAgents;
 
-  //payload for selectall and selectnone
-  const getSelectAllVisibilityMap = (
-    treeData: AgentDisplayNode[]
-  ): VisibilitySelectionMap => {
-    const returnData: VisibilitySelectionMap = {};
-    return treeData.reduce((acc, agent: AgentDisplayNode) => {
-      const { key } = agent;
-      acc[key] = [];
-      if (agent.children && agent.children.length) {
-        acc[key] = agent.children.map(({ value }) => value as string);
-      } else {
-        acc[key] = [key];
-      }
-      return acc;
-    }, returnData);
-  };
-
-  // Returns an agent visibility map that indicates no states should be visible
-  const getSelectNoneVisibilityMap = (
-    treeData: AgentDisplayNode[]
-  ): VisibilitySelectionMap => {
-    const returnData: VisibilitySelectionMap = {};
-    return treeData.reduce((acc, agent) => {
-      acc[agent.key] = [];
-      return acc;
-    }, returnData);
-  };
-
-  const payloadForSelectAll = getSelectAllVisibilityMap(props.treeData);
-  const payloadForSelectNone = getSelectNoneVisibilityMap(props.treeData);
-  console.log(payloadForSelectNone);
-  const agentsChecked = payloadForSelectAll;
-
-  //   const toggleAllOnOff = (checkedKeys: { [key: string]: string[] }) => {
-  //     // const { setAgentsVisible, payloadForSelectNone, payloadForSelectAll } =
-  //     //   this.props;
-  //     if (!checkedKeys.All.length) {
-  //       setAgentsVisible(payloadForSelectNone);
-  //     } else {
-  //       setAgentsVisible(payloadForSelectAll);
-  //     }
-  //   };
+  const agentsChecked = props.agentsChecked;
 
   const renderCheckAllButton = () => {
-    //   const { agentsChecked, treeData, isSharedCheckboxIndeterminate } = this.props;
     const checkedList = filter(
       map(agentsChecked, (value, key): string => (value.length ? key : ''))
     );
-    console.log('render check all button func', checkedList);
     return (
-      <div className="checkAllCheckbox">
+      <div className="check-all-checkbox">
         <SharedCheckbox
           title="All"
           showLabel={true}
@@ -241,15 +144,14 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   const renderRowWithNoChildren = (nodeData: AgentDisplayNode) => {
     // const { agentsChecked, agentsHighlighted } = this.props;
+
     const isHighlighted =
       isEmpty(props.agentsHighlighted) ||
       !props.highlightedAgents[nodeData.title]
         ? false
         : props.highlightedAgents[nodeData.title].includes(nodeData.title);
-    const isVisible =
-      isEmpty(agentsChecked) || !agentsChecked[nodeData.title]
-        ? false
-        : agentsChecked[nodeData.title].includes(nodeData.title);
+
+    const isVisible = Boolean(props.hiddenAgents[nodeData.title]);
 
     return (
       <Row className={['noChildrenRow', 'checkboxSet'].join(' ')}>
@@ -271,9 +173,9 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
             key={`${nodeData.title}-onoff`}
             checked={isVisible}
             value={nodeData.title}
-            onChange={(event) =>
-              onAgentWithNoTagsChangeVisible(event, nodeData.title)
-            }
+            onChange={(event) => {
+              onAgentWithNoTagsChangeVisible(event, nodeData.title);
+            }}
           />
         </Col>
       </Row>
@@ -289,6 +191,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
     event: CheckboxChangeEvent,
     title: string
   ) => {
+    console.log('checked or not?', event.target.checked);
     if (event.target.checked) {
       onSubHighlightChange(title, [title]);
     } else {
@@ -298,6 +201,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   const onSubCheckboxChange = (key: string, values: string[]) => {
     // const { handleAgentCheck } = this.props;
+    console.log('event key ', key, 'values', values);
     handleAgentCheck({ [key]: values });
   };
 
@@ -305,6 +209,10 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
     event: CheckboxChangeEvent,
     title: string
   ) => {
+    console.log(
+      'onAgentWithNoTagsChangeVisible checked or not',
+      event.target.checked
+    );
     if (event.target.checked) {
       onSubCheckboxChange(title, [title]);
     } else {
@@ -314,7 +222,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   return (
     <div className="checkbox-container">
-      <Row className="colLabels">
+      <Row className="col-labels">
         <Col span={CHECKBOX_SPAN_NO} offset={4}>
           <label className="starIcon" />S
         </Col>

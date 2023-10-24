@@ -1,5 +1,7 @@
 .sp-container {
-    width: 200px;
-    height: 100%;
-    background: lightslategray;
+    width: 280px;
+    /* height: 100%; */
+    /* TODO: responsive height? */
+    height: 529px;
+    background: #141219;;
 }

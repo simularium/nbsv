@@ -1,5 +1,6 @@
 import SimulariumViewer, {
   RenderStyle,
+  SelectionStateInfo,
   SimulariumController,
   UIDisplayData,
 } from '@aics/simularium-viewer';
@@ -32,6 +33,7 @@ export interface WidgetProps {
   // isEmpty: boolean;
   title: string;
   setUiData: (data: UIDisplayData) => void;
+  selectionStateInfo: SelectionStateInfo;
 }
 
 const agentColors = [
@@ -70,7 +72,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     }
     setTime(timeData.time);
   };
-
+  console.log('selectionstateinfo in viewer widget', props.selectionStateInfo);
   return (
     <div className="v-container">
       {/* <button onClick={() => props.controller.pause()}>Pause</button>
@@ -88,10 +90,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           onJsonDataArrived={console.log}
           showCameraControls={false}
           onTrajectoryFileInfoChanged={console.log}
-          selectionStateInfo={{
-            highlightedAgents: [],
-            hiddenAgents: [],
-          }}
+          selectionStateInfo={props.selectionStateInfo}
           onUIDisplayDataChanged={(uidata) => {
             console.log('new ui data, ', uidata);
             props.setUiData(uidata);
