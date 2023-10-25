@@ -3,7 +3,7 @@ import {
   SimulariumController,
   UIDisplayData,
 } from '@aics/simularium-viewer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 
@@ -54,18 +54,11 @@ function AppWidget(props: WidgetProps): JSX.Element {
       if (newAgents[key].length) {
         value = { ...hiddenAgents, ...newAgents };
       } else {
-        const newHidden = hiddenAgents;
-        delete newHidden[key];
-        value = newHidden;
+        const newHiddenAgents = { ...hiddenAgents };
+        delete newHiddenAgents[key];
+        value = newHiddenAgents;
       }
-      console.log('value in updateHiddenAgents', value);
       setHiddenAgents(value);
-      const newHidden = getAgentsToHide(hiddenAgents, uidata);
-      console.log("useEffect's newHidden", newHidden);
-      setSelectionStateInfo({
-        highlightedAgents: getHighlightedAgents(highlightedAgents, uidata),
-        hiddenAgents: newHidden,
-      });
     }
   };
 
@@ -73,6 +66,13 @@ function AppWidget(props: WidgetProps): JSX.Element {
     const value = { ...highlightedAgents, ...newAgents };
     setHighlightedAgents(value);
   };
+
+  useEffect(() => {
+    setSelectionStateInfo({
+      highlightedAgents: getHighlightedAgents(highlightedAgents, uidata),
+      hiddenAgents: getAgentsToHide(hiddenAgents, uidata),
+    });
+  }, [hiddenAgents, highlightedAgents]);
 
   return (
     <div className="app-container">
