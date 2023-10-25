@@ -9,11 +9,9 @@ import ColorSwatch from './ColorSwatch';
 import Checkbox from './CheckBox';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import CheckboxTreeSubmenu from './CheckBoxTreeSubmenu';
-import { SelectionStateInfo } from '@aics/simularium-viewer';
 import {
   AgentDisplayNode,
   CHECKBOX_TYPE_STAR,
-  SelectionEntry,
   VisibilitySelectionMap,
 } from '../types';
 
@@ -22,15 +20,12 @@ const { Text } = Typography;
 interface CheckBoxTreeProps {
   //   uiData: UIDisplayData;
   treeData: AgentDisplayNode[];
-  agentsHighlighted: SelectionEntry[];
   hiddenAgents: VisibilitySelectionMap;
   setHiddenAgents: (agents: VisibilitySelectionMap) => void;
   highlightedAgents: VisibilitySelectionMap;
   setHighlightedAgents: (agents: VisibilitySelectionMap) => void;
   agentsChecked: VisibilitySelectionMap;
   setAgentsChecked: (agents: VisibilitySelectionMap) => void;
-  selectionStateInfo: SelectionStateInfo;
-  setSelectionStateInfo: (info: SelectionStateInfo) => void;
 }
 
 const CHECKBOX_SPAN_NO = 2;
@@ -145,12 +140,12 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
   const renderRowWithNoChildren = (nodeData: AgentDisplayNode) => {
     // const { agentsChecked, agentsHighlighted } = this.props;
 
-    const isHighlighted =
-      isEmpty(props.agentsHighlighted) ||
-      !props.highlightedAgents[nodeData.title]
-        ? false
-        : props.highlightedAgents[nodeData.title].includes(nodeData.title);
-
+    // const isHighlighted =
+    //   isEmpty(props.agentsHighlighted) ||
+    //   !props.highlightedAgents[nodeData.title]
+    //     ? false
+    //     : props.highlightedAgents[nodeData.title].includes(nodeData.title);
+    const isHighlighted = Boolean(props.highlightedAgents[nodeData.title]);
     const isVisible = Boolean(props.hiddenAgents[nodeData.title]);
 
     return (

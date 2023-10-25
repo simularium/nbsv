@@ -2,15 +2,12 @@ import * as React from 'react';
 
 import '../../css/sidePanel.css';
 import CheckBoxTree from './CheckBoxTree';
-import { SelectionStateInfo } from '@aics/simularium-viewer';
 import { UIDisplayData, VisibilitySelectionMap } from '../types';
 import { getUiDisplayDataTree } from '../selectors';
 
 interface SidePanelProps {
   title: string;
   uiData: UIDisplayData;
-  selectionStateInfo: SelectionStateInfo;
-  setSelectionStateInfo: (info: SelectionStateInfo) => void;
   hiddenAgents: VisibilitySelectionMap;
   setHiddenAgents: (agents: VisibilitySelectionMap) => void;
   highlightedAgents: VisibilitySelectionMap;
@@ -29,15 +26,12 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
       {/* <div className="title"> some words </div> */}
       <CheckBoxTree
         treeData={treeData}
-        agentsHighlighted={props.selectionStateInfo.highlightedAgents}
         hiddenAgents={props.hiddenAgents}
         setHiddenAgents={props.setHiddenAgents}
         highlightedAgents={props.highlightedAgents}
         setHighlightedAgents={props.setHighlightedAgents}
         agentsChecked={props.agentsChecked}
         setAgentsChecked={props.setAgentsChecked}
-        selectionStateInfo={props.selectionStateInfo}
-        setSelectionStateInfo={props.setSelectionStateInfo}
       />
     </div>
   );

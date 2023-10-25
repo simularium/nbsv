@@ -44,10 +44,6 @@ function AppWidget(props: WidgetProps): JSX.Element {
     {}
   );
 
-  const updateSelectionStateInfo = (newInfo: SelectionStateInfo) => {
-    setSelectionStateInfo(newInfo);
-  };
-
   const updateHiddenAgents = (newAgents: VisibilitySelectionMap) => {
     let value: VisibilitySelectionMap = {};
     for (const key in newAgents) {
@@ -79,8 +75,6 @@ function AppWidget(props: WidgetProps): JSX.Element {
       <SidePanel
         title="some words"
         uiData={uidata}
-        selectionStateInfo={selectionStateInfo}
-        setSelectionStateInfo={updateSelectionStateInfo}
         hiddenAgents={hiddenAgents}
         setHiddenAgents={updateHiddenAgents}
         highlightedAgents={highlightedAgents}
