@@ -14,6 +14,10 @@ import {
   CHECKBOX_TYPE_STAR,
   VisibilitySelectionMap,
 } from '../types';
+import {
+  getSelectAllVisibilityMap,
+  getSelectNoneVisibilityMap,
+} from '../selectors';
 
 const { Text } = Typography;
 
@@ -26,6 +30,7 @@ interface CheckBoxTreeProps {
   setHighlightedAgents: (agents: VisibilitySelectionMap) => void;
   agentsChecked: VisibilitySelectionMap;
   setAgentsChecked: (agents: VisibilitySelectionMap) => void;
+  toggleAllAgents: (agents: VisibilitySelectionMap) => void;
 }
 
 const CHECKBOX_SPAN_NO = 2;
@@ -39,10 +44,30 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   const agentsChecked = props.agentsChecked;
 
+  const payloadForSelectNone = getSelectNoneVisibilityMap(props.treeData);
+  const payloadForSelectAll = getSelectAllVisibilityMap(props.treeData);
+
+  const toggleAllOnOff = (agents: { [key: string]: string[] }) => {
+    const toggleOn = Object.values(agents).some((value) => value.length > 0);
+    if (toggleOn) {
+      console.log('select all');
+      props.toggleAllAgents(payloadForSelectAll);
+    } else {
+      console.log('select none');
+      props.toggleAllAgents(payloadForSelectNone);
+    }
+  };
+
   const renderCheckAllButton = () => {
-    const checkedList = filter(
-      map(agentsChecked, (value, key): string => (value.length ? key : ''))
+    // const checkedList = filter(
+    //   map(agentsChecked, (value, key): string => (value.length ? key : ''))
+    // );
+    const hiddenList = filter(
+      map(props.hiddenAgents, (value, key): string => (value.length ? key : ''))
     );
+
+    console.log('hidden list', hiddenList);
+
     return (
       <div className="check-all-checkbox">
         <SharedCheckbox
@@ -50,14 +75,15 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
           showLabel={true}
           options={map(props.treeData, 'key' as string)}
           //   onTopLevelCheck={this.toggleAllOnOff}
-          onTopLevelCheck={console.log}
+          onTopLevelCheck={toggleAllOnOff}
           //   indeterminate={isSharedCheckboxIndeterminate}
           indeterminate={getIsSharedCheckboxIndeterminate(
             props.treeData,
-            agentsChecked
+            props.hiddenAgents
           )}
-          checkedList={checkedList}
-          isHeader={false}
+          checkedList={hiddenList}
+          // hiddenList={hiddenList}
+          isHeader={true}
         />
       </div>
     );
@@ -81,15 +107,19 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
       const visibleStates = agentVisibilityMap[agent.key];
 
       if (visibleStates === undefined) {
-        // This should theoretically never happen
-        console.warn(
-          `Skipping agent ${agent.key} in getIsSharedCheckboxIndeterminate because it doesn't exist in agentVisibilityMap`
-        );
+        // This should theoretically never happen: well it happens now :)
+        // console.warn(
+        //   `Skipping agent ${agent.key} in getIsSharedCheckboxIndeterminate because it doesn't exist in agentVisibilityMap`
+        // );
         continue;
       }
 
-      if (!visibleStates.length) {
-        numInvisibleAgents++;
+      if (visibleStates.length) {
+        let i = 0;
+        while (i < visibleStates.length) {
+          numInvisibleAgents++;
+          i++;
+        }
       } else if (visibleStates.length < agent.children.length) {
         return true;
       }
@@ -111,40 +141,49 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
     handleHighlight(checkedKeys);
   };
 
-  const renderSharedCheckboxes = (nodeData: AgentDisplayNode) => (
-    <Row key="actions" className="checkboxSet">
-      <Col span={12}>
-        <SharedCheckbox
-          title={nodeData.title}
-          showLabel={false}
-          checkboxType={CHECKBOX_TYPE_STAR}
-          options={map(nodeData.children, 'value' as string)}
-          onTopLevelCheck={onTopLevelHighlightChange}
-          checkedList={props.highlightedAgents[nodeData.title] || []}
-          isHeader={true}
-        />
-      </Col>
-      <Col span={12}>
-        <SharedCheckbox
-          title={nodeData.title}
-          showLabel={false}
-          options={map(nodeData.children, 'value' as string)}
-          onTopLevelCheck={onTopLevelCheck}
-          checkedList={props.agentsChecked[nodeData.title] || []}
-          isHeader={true}
-        />
-      </Col>
-    </Row>
-  );
+  const renderSharedCheckboxes = (nodeData: AgentDisplayNode) => {
+    // TODO these should correspond to particular parts of the data tree, this is placeholder work
+    const hiddenList = filter(
+      map(props.hiddenAgents, (value, key): string => (value.length ? key : ''))
+    );
+    const highlightedList = filter(
+      map(props.highlightedAgents, (value, key): string =>
+        value.length ? key : ''
+      )
+    );
+
+    return (
+      <Row key="actions" className="checkboxSet">
+        <Col span={12}>
+          <SharedCheckbox
+            title={nodeData.title}
+            showLabel={false}
+            checkboxType={CHECKBOX_TYPE_STAR}
+            options={map(nodeData.children, 'value' as string)}
+            onTopLevelCheck={onTopLevelHighlightChange}
+            // checkedList={props.highlightedAgents[nodeData.title] || []}
+            isHeader={true}
+            //TODO: this is a place holder for now
+            checkedList={highlightedList}
+          />
+        </Col>
+        <Col span={12}>
+          <SharedCheckbox
+            title={nodeData.title}
+            showLabel={false}
+            options={map(nodeData.children, 'value' as string)}
+            onTopLevelCheck={onTopLevelCheck}
+            // checkedList={props.agentsChecked[nodeData.title] || []}
+            isHeader={true}
+            //TODO: this is a place holder for now
+            checkedList={hiddenList}
+          />
+        </Col>
+      </Row>
+    );
+  };
 
   const renderRowWithNoChildren = (nodeData: AgentDisplayNode) => {
-    // const { agentsChecked, agentsHighlighted } = this.props;
-
-    // const isHighlighted =
-    //   isEmpty(props.agentsHighlighted) ||
-    //   !props.highlightedAgents[nodeData.title]
-    //     ? false
-    //     : props.highlightedAgents[nodeData.title].includes(nodeData.title);
     const isHighlighted = Boolean(props.highlightedAgents[nodeData.title]);
     const isVisible = Boolean(props.hiddenAgents[nodeData.title]);
 
@@ -166,7 +205,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
           <Checkbox
             className={'header-checkbox'}
             key={`${nodeData.title}-onoff`}
-            checked={isVisible}
+            checked={!isVisible}
             value={nodeData.title}
             onChange={(event) => {
               onAgentWithNoTagsChangeVisible(event, nodeData.title);
@@ -186,7 +225,6 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
     event: CheckboxChangeEvent,
     title: string
   ) => {
-    console.log('checked or not?', event.target.checked);
     if (event.target.checked) {
       onSubHighlightChange(title, [title]);
     } else {
@@ -196,7 +234,6 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   const onSubCheckboxChange = (key: string, values: string[]) => {
     // const { handleAgentCheck } = this.props;
-    console.log('event key ', key, 'values', values);
     handleAgentCheck({ [key]: values });
   };
 
@@ -204,11 +241,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
     event: CheckboxChangeEvent,
     title: string
   ) => {
-    console.log(
-      'onAgentWithNoTagsChangeVisible checked or not',
-      event.target.checked
-    );
-    if (event.target.checked) {
+    if (!event.target.checked) {
       onSubCheckboxChange(title, [title]);
     } else {
       onSubCheckboxChange(title, []);

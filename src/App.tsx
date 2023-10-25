@@ -58,6 +58,17 @@ function AppWidget(props: WidgetProps): JSX.Element {
     }
   };
 
+  const toggleAllAgents = (agents?: VisibilitySelectionMap) => {
+    for (const key in agents) {
+      if (agents[key].length) {
+        setHiddenAgents(agents);
+        return;
+      } else {
+        setHiddenAgents({});
+      }
+    }
+  };
+
   const updateHighlightedAgents = (newAgents: VisibilitySelectionMap) => {
     const value = { ...highlightedAgents, ...newAgents };
     setHighlightedAgents(value);
@@ -81,6 +92,7 @@ function AppWidget(props: WidgetProps): JSX.Element {
         setHighlightedAgents={updateHighlightedAgents}
         agentsChecked={agentsChecked}
         setAgentsChecked={setAgentsChecked}
+        toggleAllAgents={toggleAllAgents}
       />
       <Viewer
         controller={props.controller}

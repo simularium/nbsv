@@ -72,7 +72,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     }
     setTime(timeData.time);
   };
-  console.log('selectionstateinfo in viewer widget', props.selectionStateInfo);
+  // console.log('selectionstateinfo in viewer widget', props.selectionStateInfo);
   return (
     <div className="v-container">
       {/* <button onClick={() => props.controller.pause()}>Pause</button>

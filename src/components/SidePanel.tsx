@@ -14,6 +14,7 @@ interface SidePanelProps {
   setHighlightedAgents: (agents: VisibilitySelectionMap) => void;
   agentsChecked: VisibilitySelectionMap;
   setAgentsChecked: (agents: VisibilitySelectionMap) => void;
+  toggleAllAgents: (agents: VisibilitySelectionMap) => void;
 }
 
 const SidePanel: React.FunctionComponent<SidePanelProps> = (
@@ -32,6 +33,7 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
         setHighlightedAgents={props.setHighlightedAgents}
         agentsChecked={props.agentsChecked}
         setAgentsChecked={props.setAgentsChecked}
+        toggleAllAgents={props.toggleAllAgents}
       />
     </div>
   );

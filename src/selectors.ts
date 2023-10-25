@@ -53,32 +53,24 @@ export const getAgentsToHide = (
   hiddenAgents: VisibilitySelectionMap,
   allAgents: UIDisplayData
 ): SelectionEntry[] => {
-  // console.log('in getAgentsToHide', hiddenAgents, allAgents);
   const init: SelectionEntry[] = [];
   const result = reduce(
     allAgents,
     (acc, agent) => {
       // Theoretically, this block should never be hit because `agentVisibilityMap`
       // should always contain all the agents in `agentDisplayData`
-      // console.log('agent.name: ', agent.name, 'hiddenAgents: ', hiddenAgents);
       if (!hiddenAgents[agent.name]) {
-        // console.log('hitting theoretically impossible block');
         return acc;
       }
 
       if (!agent.displayStates.length) {
         // if no tags and nothing is on, include agent name
-        // console.log('no tags and nothing on before length check');
-        // console.log('hiddenAgents[agent.name]: ', hiddenAgents[agent.name]);
-        // if (!hiddenAgents[agent.name].length) {
-        // console.log('agt, notags, name:', agent.name);
         acc.push({
           name: agent.name,
           tags: [],
         });
         // }
       } else {
-        // console.log('agt, tags?, name:', agent.name);
         const hiddenTags = agent.displayStates
           .filter((tag) => !hiddenAgents[agent.name].includes(tag.id))
           .map((displayState) => displayState.id);
@@ -98,7 +90,6 @@ export const getAgentsToHide = (
     },
     init
   );
-  console.log('result of getAgentsToHide', result);
   return result;
 };
 
@@ -122,4 +113,32 @@ export const getUiDisplayDataTree = (
         ]
       : [],
   }));
+};
+
+// Returns an agent visibility map that indicates all states should be visible
+export const getSelectAllVisibilityMap = (
+  treeData: AgentDisplayNode[]
+): VisibilitySelectionMap => {
+  const returnData: VisibilitySelectionMap = {};
+  return treeData.reduce((acc, agent: AgentDisplayNode) => {
+    const { key } = agent;
+    acc[key] = [];
+    if (agent.children && agent.children.length) {
+      acc[key] = agent.children.map(({ value }) => value as string);
+    } else {
+      acc[key] = [key];
+    }
+    return acc;
+  }, returnData);
+};
+
+// Returns an agent visibility map that indicates no states should be visible
+export const getSelectNoneVisibilityMap = (
+  treeData: AgentDisplayNode[]
+): VisibilitySelectionMap => {
+  const returnData: VisibilitySelectionMap = {};
+  return treeData.reduce((acc, agent) => {
+    acc[agent.key] = [];
+    return acc;
+  }, returnData);
 };

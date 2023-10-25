@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import classNames from 'classnames';
+// import { isUndefined } from 'lodash';
 
-// import { CHECKBOX_TYPE_STAR } from '../../constants';
-const CHECKBOX_TYPE_STAR = 'star';
-export type CHECKBOX_TYPE_STAR = typeof CHECKBOX_TYPE_STAR;
-import { isUndefined } from 'lodash';
-
-import '../../css/sharedCheckBoxTree.css';
 import Checkbox from './CheckBox';
+import { CHECKBOX_TYPE_STAR } from '../types';
 
+import '../../css/sharedCheckBox.css';
 interface SharedCheckboxProps {
   options: string[];
   onTopLevelCheck: any;
@@ -36,16 +33,16 @@ export default class SharedCheckbox extends React.Component<SharedCheckboxProps>
     const {
       showLabel,
       title,
-      checkedList,
+      // checkedList,
       options,
       checkboxType,
       indeterminate,
       isHeader,
     } = this.props;
 
-    const isIndeterminate = !isUndefined(indeterminate)
-      ? indeterminate
-      : !!checkedList.length && checkedList.length < options.length;
+    // const isIndeterminate = !isUndefined(indeterminate)
+    //   ? indeterminate
+    //   : !!checkedList.length && checkedList.length < options.length;
     const checkboxClassNames = classNames([
       'container',
       { ['header']: isHeader, ['header-checkbox']: isHeader },
@@ -53,12 +50,12 @@ export default class SharedCheckbox extends React.Component<SharedCheckboxProps>
 
     return (
       <Checkbox
-        indeterminate={isIndeterminate}
+        indeterminate={indeterminate}
         onChange={this.onCheckAllChange}
-        checked={checkedList.length === options.length}
-        style={{
-          margin: 'auto',
-        }}
+        checked={this.props.checkedList.length === options.length}
+        // style={{
+        //   margin: 'auto',
+        // }}
         className={checkboxClassNames}
         checkboxType={checkboxType}
         checkboxLevel={title === 'All' ? 'top' : 'shared'}
