@@ -14,12 +14,15 @@ import {
   LinkOutlined,
   DownloadOutlined,
   RetweetOutlined,
+  InfoOutlined,
+  StarFilled,
+  StarOutlined,
 } from '@ant-design/icons';
 
 // import PurpleArrowPointingRight from '../../assets/open-arrow.svg';
 // import AicsLogoWhite from '../../assets/AICS-logo-full.png';
-import ClockwiseArrow from '../../assets/step-forward.svg';
-import CounterClockwiseArrow from '../../assets/step-back.svg';
+// import ClockwiseArrow from '../../assets/step-forward.svg';
+// import CounterClockwiseArrow from '../../assets/step-back.svg';
 // import { ReactComponent as CounterClockwiseArrow } from '../../assets/step-back.svg';
 
 // import Beta from '../../assets/beta.svg';
@@ -39,11 +42,14 @@ export const Warn = <WarningOutlined />;
 export const Link = <LinkOutlined />;
 export const Download = <DownloadOutlined size={32} />;
 export const LoopOutlined = <RetweetOutlined />;
+export const Info = <InfoOutlined />;
+export const Star = <StarOutlined style={{ color: '#d3d3d3' }} />;
+export const StarSolid = <StarFilled style={{ color: '#d3d3d3' }} />;
 
 // export const PurpleArrow = <img src={PurpleArrowPointingRight} />;
 // export const AicsLogo = <img src={AicsLogoWhite} style={{ width: '140px' }} />;
-export const StepForward = <ClockwiseArrow />;
-export const StepBack = <CounterClockwiseArrow />;
+// export const StepForward = <ClockwiseArrow />;
+// export const StepBack = <CounterClockwiseArrow />;
 // export const StepBack = <img src="../../assets/step-back.svg" />;
 export const SimpleSVG = () => (
   <svg width="100" height="100">
@@ -53,10 +59,10 @@ export const SimpleSVG = () => (
 // export const BetaTag = <img src={Beta} style={{ width: '42px' }} />;
 
 export default {
-  StepBack,
+  // StepBack,
   Play,
   Pause,
-  StepForward,
+  // StepForward,
   UploadFile,
   Loading,
   DownArrow,
@@ -74,4 +80,7 @@ export default {
   Link,
   Download,
   LoopOutlined,
+  Info,
+  Star,
+  StarSolid,
 };
