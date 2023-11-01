@@ -7,6 +7,7 @@ const LEFT_PANEL_TOOLTIP_COLOR = '#3b3649';
 const LEFT_PANEL_TOOLTIP_DELAY = 1; // in seconds
 
 import '../../css/starCheckBox.css';
+import { Star, StarSolid } from './Icons';
 
 const StarCheckbox = ({
   checked,
@@ -17,7 +18,7 @@ const StarCheckbox = ({
 }: CheckboxProps): JSX.Element => {
   const parentClassnames = className ? className.split(' ') : [];
   const wrapperClassnames = classNames([...parentClassnames, 'wrapper']);
-  const checkboxClassNames = classNames(['icon-moon', 'checkbox'], {
+  const checkboxClassNames = classNames(['checkbox'], {
     ['checked']: checked,
     ['indeterminate']: indeterminate,
   });
@@ -39,6 +40,7 @@ const StarCheckbox = ({
             }
             value={value}
           />
+          {checked ? StarSolid : Star}
         </Tooltip>
         <span className={checkboxClassNames} />
       </span>
