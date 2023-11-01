@@ -4,6 +4,7 @@ import { Button, InputNumber, Slider, Tooltip } from 'antd';
 import '../../css/playbackControls.css';
 import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 import { TimeUnits } from '../types';
+import { Pause, Play } from './Icons';
 
 const TOOLTIP_COLOR = '#3B3649';
 
@@ -155,7 +156,8 @@ PlayBackProps): JSX.Element => {
           className="btn"
           onClick={isPlaying ? () => pauseHandler : playHandler}
         >
-          {isPlaying ? 'Pause' : 'Play'}
+          {isPlaying ? Pause : Play}
+
           {/* icon change if loading... */}
         </Button>
       </Tooltip>
