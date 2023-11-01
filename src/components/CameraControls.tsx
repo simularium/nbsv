@@ -3,6 +3,7 @@ import * as React from 'react';
 import '../../css/cameraControls.css';
 import { Button, Tooltip } from 'antd';
 import { SimulariumController } from '@aics/simularium-viewer';
+import { Reset, ZoomIn, ZoomOut } from './Icons';
 
 interface CameraControlsProps {
   title: string;
@@ -24,12 +25,9 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
       >
         <Button
           className="btn"
-          //   icon={Icons.ZoomIn}
+          icon={ZoomIn}
           onClick={props.controller.zoomIn}
-        >
-          {' '}
-          I{' '}
-        </Button>
+        ></Button>
       </Tooltip>
       <Tooltip
         placement="left"
@@ -38,23 +36,17 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
       >
         <Button
           className="btn"
-          // icon={Icons.ZoomOut}
+          icon={ZoomOut}
           onClick={props.controller.zoomOut}
-        >
-          {' '}
-          O{' '}
-        </Button>
+        ></Button>
       </Tooltip>
       {/* </div> */}
       <Tooltip placement="left" title="Home view (H)" color={TOOLTIP_COLOR}>
         <Button
           className="btn"
-          //   icon={Icons.Reset}
+          icon={Reset}
           onClick={props.controller.resetCamera}
-        >
-          {' '}
-          H{' '}
-        </Button>
+        ></Button>
       </Tooltip>
     </div>
   );
