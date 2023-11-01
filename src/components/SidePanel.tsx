@@ -4,6 +4,8 @@ import '../../css/sidePanel.css';
 import CheckBoxTree from './CheckBoxTree';
 import { UIDisplayData, VisibilitySelectionMap } from '../types';
 import { getUiDisplayDataTree } from '../selectors';
+// import TreeNode from './TreeNode';
+import { Card } from 'antd';
 
 interface SidePanelProps {
   title: string;
@@ -24,7 +26,9 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   const treeData = getUiDisplayDataTree(props.uiData);
   return (
     <div className="sp-container">
-      {/* <div className="title"> some words </div> */}
+      <Card className="title-card" bordered={false}>
+        {'Agents'}
+      </Card>
       <CheckBoxTree
         treeData={treeData}
         hiddenAgents={props.hiddenAgents}
