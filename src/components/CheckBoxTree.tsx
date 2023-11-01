@@ -34,7 +34,7 @@ interface CheckBoxTreeProps {
 }
 
 const CHECKBOX_SPAN_NO = 2;
-const LABEL_SPAN_NO = 6;
+// const LABEL_SPAN_NO = 6;
 
 const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
   props: CheckBoxTreeProps
@@ -83,7 +83,7 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
           )}
           checkedList={hiddenList}
           // hiddenList={hiddenList}
-          isHeader={true}
+          isHeader={false}
         />
       </div>
     );
@@ -250,17 +250,6 @@ const CheckBoxTree: React.FunctionComponent<CheckBoxTreeProps> = (
 
   return (
     <div className="checkbox-container">
-      <Row className="col-labels">
-        <Col span={CHECKBOX_SPAN_NO} offset={4}>
-          <label className="starIcon" />S
-        </Col>
-        <Col span={CHECKBOX_SPAN_NO}>
-          <label>s</label>
-        </Col>
-        <Col flex={LABEL_SPAN_NO} offset={1}>
-          <label>t</label>
-        </Col>
-      </Row>
       <TreeNode headerContent={renderCheckAllButton()} />
       {props.treeData.map((nodeData) => {
         return (
