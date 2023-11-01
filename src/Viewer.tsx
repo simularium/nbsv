@@ -49,7 +49,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         backgroundColor={[0, 0, 0]}
         height={props.height}
         width={props.width}
-        loggerLevel="debug"
+        loggerLevel=""
         onTimeChange={console.log}
         simulariumController={props.controller}
         onJsonDataArrived={console.log}
