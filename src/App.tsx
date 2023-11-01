@@ -70,8 +70,17 @@ function AppWidget(props: WidgetProps): JSX.Element {
   };
 
   const updateHighlightedAgents = (newAgents: VisibilitySelectionMap) => {
-    const value = { ...highlightedAgents, ...newAgents };
-    setHighlightedAgents(value);
+    let value: VisibilitySelectionMap = {};
+    for (const key in newAgents) {
+      if (newAgents[key].length) {
+        value = { ...highlightedAgents, ...newAgents };
+      } else {
+        const newhighlightedAgents = { ...highlightedAgents };
+        delete newhighlightedAgents[key];
+        value = newhighlightedAgents;
+      }
+      setHighlightedAgents(value);
+    }
   };
 
   useEffect(() => {
