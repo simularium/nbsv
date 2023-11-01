@@ -55,6 +55,7 @@
 
 .checkbox-container .ant-checkbox-inner {
     border-color: #979797;
+    border-radius: 0px;
 }
 
 .checkbox-container .ant-checkbox-indeterminate .ant-checkbox-inner::after {
@@ -64,8 +65,14 @@
 
 .check-all-checkbox {
     width: 100%;
-    padding: 10px 0;
+    padding: 10px 0 10px 20px;;
     display: flex;
+}
+
+.check-all-checkbox span {
+    vertical-align: middle;
+    display: inline-block;
+    color: #d3d3d3 !important;
 }
 
 .no-children-row {
@@ -96,4 +103,8 @@
 
 .ant-checkbox-checked .ant-checkbox-inner:after {
   border-color: black !important;
+}
+
+.checkbox-container header {
+    margin-left: 40px;
 }

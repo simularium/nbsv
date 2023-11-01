@@ -66,24 +66,3 @@
     border-collapse: separate;
     transition: all 0.3s;
 }
-
-.checkbox:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    content: "\e901";
-    color: var(--warm-gray)
-}
-
-.indeterminate:after {
-    content: "\e900";
-    color: var(--white-two);
-}
-
-.checked:after {
-    content: "\e902";
-    color: var(--white-two);
-}
