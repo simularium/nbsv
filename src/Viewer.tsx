@@ -5,6 +5,7 @@ import SimulariumViewer, {
 import React from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
+import CameraControls from './components/CameraControls';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -14,6 +15,7 @@ export interface WidgetProps {
   controller: SimulariumController;
   height: number;
   width: number;
+  title: string;
 }
 
 const agentColors = [
@@ -67,6 +69,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         showPaths={false}
         onError={console.log}
       />
+      <CameraControls controller={props.controller} title={props.title} />
     </div>
   );
 }
