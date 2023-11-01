@@ -77,7 +77,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     <div className="v-container">
       {/* <button onClick={() => props.controller.pause()}>Pause</button>
       <button onClick={() => props.controller.stop()}>stop</button> */}
-      <ViewerTitle title={props.title} />
+      <ViewerTitle title={props.title} trajectoryInfo="THE INFO" />
       <div className="viewer-container">
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
