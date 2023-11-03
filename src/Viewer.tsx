@@ -58,6 +58,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         selectionStateInfo={{
           highlightedAgents: [],
           hiddenAgents: [],
+          colorChanges: [],
         }}
         onUIDisplayDataChanged={(uidata) =>
           console.log('new ui data, ', uidata)
