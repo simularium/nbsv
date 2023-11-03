@@ -25,7 +25,7 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] nbsv
 
 Create a dev environment:
 ```bash
-conda create -n nbsv-d -c conda-forge yarn python jupyterlab=3.6.4
+conda create -n nbsv -c conda-forge yarn python jupyterlab=3.6.4
 conda activate nbsv
 nvm use 18
 ```
@@ -43,7 +43,8 @@ If you use JupyterLab to develop then you can watch the source directory and run
 terminals to watch for changes in the extension's source and automatically rebuild the widget.
 
 ```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
+# Watch the source directory in one terminal, automatically rebuilding when needed.
+# Note: You may need to run this in a terminal with elevated permissions (Run as Administrator)
 yarn run watch
 # Run JupyterLab in another terminal
 jupyter lab
