@@ -4,7 +4,7 @@ import { Button, Tooltip } from 'antd';
 import { SimulariumController } from '@aics/simularium-viewer';
 import { Reset, ZoomIn, ZoomOut } from './Icons';
 
-import '../../css/cameraControls.css';
+import '../../css/camera_controls.css';
 
 interface CameraControlsProps {
   title: string;
