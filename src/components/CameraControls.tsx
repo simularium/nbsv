@@ -7,7 +7,6 @@ import { Reset, ZoomIn, ZoomOut } from './Icons';
 import '../../css/camera_controls.css';
 
 interface CameraControlsProps {
-  title: string;
   controller: SimulariumController;
 }
 
