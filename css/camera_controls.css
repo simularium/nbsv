@@ -15,6 +15,6 @@
 
 .cc-container .btn:hover {
     border: none;
-    color: var(--white-one);
+    color: var(--white-one) !important;
     background-color: var(--gray-one);
 }
