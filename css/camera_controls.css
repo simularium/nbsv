@@ -9,12 +9,12 @@
 
 .cc-container .btn {
     border: none;
-    color: #d8d8d8;
-    background-color: #25222e;
+    color: var(--white-one);
+    background-color: var(--black-one);
 }
 
 .cc-container .btn:hover {
     border: none;
-    color: #d8d8d8;
-    background-color: #4A4658;
+    color: var(--white-one);
+    background-color: var(--gray-one);
 }
