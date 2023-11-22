@@ -10,7 +10,7 @@
 .cc-container .btn {
     border: none;
     color: var(--white-one);
-    background-color: var(--black-one);
+    background-color: var(--dark-one);
 }
 
 .cc-container .btn:hover {
