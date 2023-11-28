@@ -1,0 +1,30 @@
+.title-container {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  color: #d8d8d8;
+  display: flex;
+}
+
+.info-button {
+    padding-left: 7px;
+}
+
+.info-button svg {
+  border-radius: 50%;
+  background-color: black;
+  color: white;
+}
+
+.info-button svg:hover {
+  color: #E7E4F2;
+}
+
+.info-button svg:active {
+  color: #B59FF6;
+}
