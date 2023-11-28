@@ -43,7 +43,6 @@ const agentColors = [
 function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
     <div>
-      {/* trajectoryInfo string below is a placeholder */}
       <ViewerTitle modelInfo={props.modelInfo} />
       <SimulariumViewer
         renderStyle={RenderStyle.WEBGL2_PREFERRED}
