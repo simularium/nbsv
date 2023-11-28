@@ -8,29 +8,26 @@ interface ViewerTitleProps {
   modelInfo: ModelInfo;
 }
 
-const hasMetaData = (modelInfo: ModelInfo): boolean => {
-  for (const key in modelInfo) {
-    if (
-      Object.prototype.hasOwnProperty.call(modelInfo, key) &&
-      key !== 'title' &&
-      modelInfo[key as keyof ModelInfo] !== undefined
-    ) {
-      return true;
-    }
-  }
-  return false;
-};
-
 const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
   props: ViewerTitleProps
 ): JSX.Element => {
+  const hasMetaData = (): boolean => {
+    for (const key in props.modelInfo) {
+      if (
+        key !== 'title' &&
+        props.modelInfo[key as keyof ModelInfo] !== undefined
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <div className="title-container">
       <div className="title">
         {props.modelInfo.title}
-        {hasMetaData(props.modelInfo) ? (
-          <div className="info-button"> {Info} </div>
-        ) : null}
+        {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
       </div>
     </div>
   );
