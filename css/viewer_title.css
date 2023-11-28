@@ -1,7 +1,7 @@
 .title-container {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 400;
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
 }
@@ -16,7 +16,6 @@
 }
 
 .info-button svg {
-  border-radius: 50%;
   background-color: black;
   color: white;
 }
