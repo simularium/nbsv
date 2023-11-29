@@ -75,9 +75,6 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         />
       </div>
       <CameraControls controller={props.controller} />
-      <button onClick={() => props.controller.resume()}>Play</button>
-      <button onClick={() => props.controller.pause()}>Pause</button>
-      <button onClick={() => props.controller.stop()}>stop</button>
     </div>
   );
 }
