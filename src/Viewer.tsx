@@ -44,32 +44,34 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   return (
     <div>
       <ViewerTitle modelInfo={props.modelInfo} />
-      <SimulariumViewer
-        renderStyle={RenderStyle.WEBGL2_PREFERRED}
-        backgroundColor={[0, 0, 0]}
-        height={props.height}
-        width={props.width}
-        loggerLevel="off"
-        onTimeChange={console.log}
-        simulariumController={props.controller}
-        onJsonDataArrived={console.log}
-        showCameraControls={false}
-        onTrajectoryFileInfoChanged={console.log}
-        selectionStateInfo={{
-          highlightedAgents: [],
-          hiddenAgents: [],
-          colorChanges: [],
-        }}
-        onUIDisplayDataChanged={(uidata) =>
-          console.log('new ui data, ', uidata)
-        }
-        loadInitialData={true}
-        hideAllAgents={false}
-        showBounds={true}
-        agentColors={agentColors}
-        showPaths={false}
-        onError={console.log}
-      />
+      <div className="viewer-container">
+        <SimulariumViewer
+          renderStyle={RenderStyle.WEBGL2_PREFERRED}
+          backgroundColor={[0, 0, 0]}
+          height={props.height}
+          width={props.width}
+          loggerLevel="off"
+          onTimeChange={console.log}
+          simulariumController={props.controller}
+          onJsonDataArrived={console.log}
+          showCameraControls={false}
+          onTrajectoryFileInfoChanged={console.log}
+          selectionStateInfo={{
+            highlightedAgents: [],
+            hiddenAgents: [],
+            colorChanges: [],
+          }}
+          onUIDisplayDataChanged={(uidata) =>
+            console.log('new ui data, ', uidata)
+          }
+          loadInitialData={true}
+          hideAllAgents={false}
+          showBounds={true}
+          agentColors={agentColors}
+          showPaths={false}
+          onError={console.log}
+        />
+      </div>
       <CameraControls controller={props.controller} />
       <button onClick={() => props.controller.resume()}>Play</button>
       <button onClick={() => props.controller.pause()}>Pause</button>
