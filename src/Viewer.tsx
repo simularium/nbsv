@@ -9,6 +9,8 @@ import CameraControls from './components/CameraControls';
 import ViewerTitle from './components/ViewerTitle';
 import { ModelInfo } from './constants';
 
+import '../css/viewer.css';
+
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
 }
