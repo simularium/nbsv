@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { Info } from './Icons';
-import '../../css/viewer_title.css';
 import { ModelInfo } from '../constants';
 
+import '../../css/viewer_title.css';
 interface ViewerTitleProps {
   modelInfo: ModelInfo;
 }
