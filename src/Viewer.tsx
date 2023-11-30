@@ -5,6 +5,7 @@ import SimulariumViewer, {
 import React from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
+import CameraControls from './components/CameraControls';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -47,7 +48,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         backgroundColor={[0, 0, 0]}
         height={props.height}
         width={props.width}
-        loggerLevel="debug"
+        loggerLevel="off"
         onTimeChange={console.log}
         simulariumController={props.controller}
         onJsonDataArrived={console.log}
@@ -56,6 +57,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         selectionStateInfo={{
           highlightedAgents: [],
           hiddenAgents: [],
+          colorChanges: [],
         }}
         onUIDisplayDataChanged={(uidata) =>
           console.log('new ui data, ', uidata)
@@ -67,6 +69,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         showPaths={false}
         onError={console.log}
       />
+      <CameraControls controller={props.controller} />
     </div>
   );
 }
