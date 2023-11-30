@@ -4,12 +4,15 @@
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 7px
 }
 
 .title {
   color: var(--white-one);
   display: flex;
+}
+
+.info-button {
+  padding-left: 7px;
 }
 
 .info-button svg {
