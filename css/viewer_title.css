@@ -8,19 +8,19 @@
 }
 
 .title {
-  color: #d8d8d8;
+  color: var(--white-one);
   display: flex;
 }
 
 .info-button svg {
-  background-color: black;
-  color: white;
+  background-color: var(--black-one);
+  color: var(--white-one);
 }
 
 .info-button svg:hover {
-  color: #E7E4F2;
+  color: var(--light-purple);
 }
 
 .info-button svg:active {
-  color: #B59FF6;
+  color: var(--purple-one);
 }
