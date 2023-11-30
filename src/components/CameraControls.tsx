@@ -23,6 +23,7 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
         color={TOOLTIP_COLOR}
       >
         <Button
+          id={'zoomin-button'}
           className="btn"
           icon={ZoomIn}
           onClick={props.controller.zoomIn}
@@ -34,6 +35,7 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
         color={TOOLTIP_COLOR}
       >
         <Button
+          id={'zoomout-button'}
           className="btn"
           icon={ZoomOut}
           onClick={props.controller.zoomOut}
@@ -41,6 +43,7 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
       </Tooltip>
       <Tooltip placement="left" title="Home view (H)" color={TOOLTIP_COLOR}>
         <Button
+          id={'reset-button'}
           className="btn"
           icon={Reset}
           onClick={props.controller.resetCamera}

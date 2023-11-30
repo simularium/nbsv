@@ -1,7 +1,10 @@
+@import url('colors.css');
+
 .custom-widget {
-  background-color: black;
+  background-color: var(--white-one);
   padding: 0px 2px;
-  color: black;
+  color: var(--black-one);
+  margin: 20px;
   height: 300px;
   height: 100%;
   width: 100%;
