@@ -73,14 +73,10 @@ export class Viewport extends DOMWidgetView {
     const height = this.model.get('height');
     console.log('rendering viewport', width);
 
-    const trajectoryData = JSON.parse(this.model.get('trajectory_str'));
-    const modelInfo = trajectoryData.trajectoryInfo.modelInfo;
-
     const component = React.createElement(Viewer, {
       controller: this.controller,
       width: width,
       height: height,
-      modelInfo: modelInfo,
     } as WidgetProps);
 
     ReactDOM.render(component, this.el);
