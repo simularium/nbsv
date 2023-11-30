@@ -27,6 +27,7 @@ const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
     <div className="title-container">
       <div className="title">
         {props.modelInfo.title}
+        {/* TODO clicking Info icon will render meta data panel */}
         {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
       </div>
     </div>
