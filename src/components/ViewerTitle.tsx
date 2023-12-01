@@ -12,7 +12,7 @@ const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
   props: ViewerTitleProps
 ): JSX.Element => {
   const hasMetaData = (): boolean => {
-    for (const key in props.modelInfo) {
+    for (const key in props) {
       if (
         key !== 'title' &&
         props.modelInfo[key as keyof ModelInfo] !== undefined
