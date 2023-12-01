@@ -30,7 +30,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
 
   return (
     <div>
-      <ViewerTitle modelInfo={modelInfo} />
+      <ViewerTitle {...modelInfo} />
       <div className="viewer-container">
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
