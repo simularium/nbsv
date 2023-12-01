@@ -16,8 +16,10 @@ const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
 
   const hasMetaData = (): boolean => {
     for (const key in props) {
-      if (props[key as keyof ViewerTitleProps] !== undefined) {
-        return true;
+      if (key !== 'trajectoryTitle') {
+        if (props[key as keyof ViewerTitleProps] !== undefined) {
+          return true;
+        }
       }
     }
     return false;
