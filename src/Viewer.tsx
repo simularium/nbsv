@@ -23,14 +23,16 @@ export interface WidgetProps {
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
   const [modelInfo, setModelInfo] = useState<ModelInfo>({});
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string>('');
 
   const handleTrajectoryData = (data: any) => {
+    setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
   };
 
   return (
     <div>
-      <ViewerTitle {...modelInfo} />
+      <ViewerTitle {...modelInfo} trajectoryTitle={trajectoryTitle} />
       <div className="viewer-container">
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
