@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
-import ViewerTitle from './components/ViewerTitle';
+import ViewerTitle from './components/ModelDisplayData';
 import { ModelInfo, agentColors } from './constants';
 
 import '../css/viewer.css';
