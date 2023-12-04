@@ -5,19 +5,19 @@ import { ModelInfo } from '../constants';
 
 import '../../css/viewer_title.css';
 
-interface ViewerTitleProps extends ModelInfo {
+interface ModelDisplayDataProps extends ModelInfo {
   trajectoryTitle?: string;
 }
 
-const ViewerTitle: React.FunctionComponent<ViewerTitleProps> = (
-  props: ViewerTitleProps
+const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
+  props: ModelDisplayDataProps
 ): JSX.Element => {
   const { title, trajectoryTitle } = props;
 
   const hasMetaData = (): boolean => {
     for (const key in props) {
       if (key !== 'trajectoryTitle') {
-        if (props[key as keyof ViewerTitleProps] !== undefined) {
+        if (props[key as keyof ModelDisplayDataProps] !== undefined) {
           return true;
         }
       }
