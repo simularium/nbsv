@@ -8,7 +8,10 @@ import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ViewerTitle from './components/ModelDisplayData';
 import { agentColors } from './constants';
-import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
+import {
+  ModelInfo,
+  TrajectoryFileInfo,
+} from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
 
@@ -26,9 +29,9 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const [modelInfo, setModelInfo] = useState<ModelInfo>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string>('');
 
-  const handleTrajectoryData = (data: any) => {
-    setTrajectoryTitle(data.trajectoryTitle);
-    setModelInfo(data.modelInfo);
+  const handleTrajectoryData = (data: TrajectoryFileInfo) => {
+    setTrajectoryTitle(data.trajectoryTitle as string);
+    setModelInfo(data.modelInfo as ModelInfo);
   };
 
   return (
