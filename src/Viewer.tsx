@@ -7,9 +7,10 @@ import React, { useState } from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ViewerTitle from './components/ModelDisplayData';
-import { ModelInfo, agentColors } from './constants';
+import { agentColors } from './constants';
 
 import '../css/viewer.css';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
