@@ -1,4 +1,3 @@
-// TODO TrajectoryInfoV3 will export this type and we can remove this interface
 export interface ModelInfo {
   authors?: string;
   description?: string;
