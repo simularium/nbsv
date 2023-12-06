@@ -26,12 +26,14 @@ export interface WidgetProps {
 }
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
-  const [modelInfo, setModelInfo] = useState<ModelInfo>({});
-  const [trajectoryTitle, setTrajectoryTitle] = useState<string>('');
+  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
+    ''
+  );
 
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
-    setTrajectoryTitle(data.trajectoryTitle as string);
-    setModelInfo(data.modelInfo as ModelInfo);
+    setTrajectoryTitle(data.trajectoryTitle);
+    setModelInfo(data.modelInfo);
   };
 
   return (
