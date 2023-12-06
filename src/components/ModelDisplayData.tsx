@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { Info } from './Icons';
-import { ModelInfo } from '../constants';
 
 import '../../css/model_display_data.css';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 interface ModelDisplayDataProps extends ModelInfo {
   trajectoryTitle?: string;

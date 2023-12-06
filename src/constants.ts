@@ -1,15 +1,3 @@
-export interface ModelInfo {
-  authors?: string;
-  description?: string;
-  doi?: string;
-  inputDataUrl?: string;
-  rawOutputDataUrl?: string;
-  sourceCodeLicenseUrl?: string;
-  sourceCodeUrl?: string;
-  title?: string;
-  version?: string;
-}
-
 export const agentColors = [
   '#fee34d',
   '#f7b232',
