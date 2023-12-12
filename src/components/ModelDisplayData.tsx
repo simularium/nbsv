@@ -28,7 +28,7 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
   return (
     <div className="title-container">
       <div className="title">
-        {trajectoryTitle || title}
+        {trajectoryTitle || title || "<Untitled trajectory>"}
         {/* TODO clicking Info icon will render meta data panel */}
         {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
       </div>
