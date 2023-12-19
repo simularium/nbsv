@@ -1,0 +1,29 @@
+.title-container {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  color: var(--white-one);
+  display: flex;
+}
+
+.info-button {
+  padding-left: 7px;
+}
+
+.info-button svg {
+  background-color: var(--black-one);
+  color: var(--white-one);
+}
+
+.info-button svg:hover {
+  color: var(--light-purple);
+}
+
+.info-button svg:active {
+  color: var(--purple-one);
+}

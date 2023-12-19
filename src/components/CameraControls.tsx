@@ -1,7 +1,7 @@
 import * as React from 'react';
-
 import { Button, Tooltip } from 'antd';
 import { SimulariumController } from '@aics/simularium-viewer';
+
 import { Reset, ZoomIn, ZoomOut } from './Icons';
 
 import '../../css/camera_controls.css';

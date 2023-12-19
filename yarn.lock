@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aics/simularium-viewer@npm:^3.6.3":
-  version: 3.6.3
-  resolution: "@aics/simularium-viewer@npm:3.6.3"
+"@aics/simularium-viewer@npm:^3.6.4":
+  version: 3.6.4
+  resolution: "@aics/simularium-viewer@npm:3.6.4"
   dependencies:
     "@fortawesome/fontawesome-free": ^5.15.2
     "@fortawesome/fontawesome-svg-core": ~1.2.34
@@ -31,7 +31,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0
     react-dom: ^16.9.0
-  checksum: 40ffb2fc77b1d3622c36c3c62a94465056ce44ba1639ba626a19280c7097d0c88fe813281a675e707d2c996079a424f7a27472682c8f7cdf2de9e41f88f88d79
+  checksum: 9e8c176f640a3f35910b6a384734d01766d2c83a9f5c1727906c3e3cd7facb7e9436eb5a051e9493a8aaa3c1c2f975b92e3cfcb31c6cd7882ad5f0c6de75f3be
   languageName: node
   linkType: hard
 
@@ -7818,7 +7818,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "nbsv@workspace:."
   dependencies:
-    "@aics/simularium-viewer": ^3.6.3
+    "@aics/simularium-viewer": ^3.6.4
     "@ant-design/icons": 4.0.0
     "@babel/core": ^7.5.0
     "@babel/plugin-transform-runtime": ^7.21.4

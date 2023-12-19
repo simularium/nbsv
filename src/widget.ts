@@ -71,7 +71,7 @@ export class Viewport extends DOMWidgetView {
     // this.model.on('change:trajectory', this.trajectory_changed, this);
     const width = this.model.get('width');
     const height = this.model.get('height');
-    console.log('rendering viewport', width);
+
     const component = React.createElement(Viewer, {
       controller: this.controller,
       width: width,
