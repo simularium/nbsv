@@ -1,4 +1,29 @@
-.viewer-container {
+.container {
   display: flex;
-  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.side-panel {
+  background-color: var(--dark-two);
+  min-width: 280px;
+}
+
+.viewer-container {
+  position: relative;
+  width: 100%;
+}
+
+.viewer-header {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.viewer-controls {
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+  padding-bottom: 20px;
 }
