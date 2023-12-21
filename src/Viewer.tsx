@@ -116,7 +116,9 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           onError={console.log}
         />
       </div>
-      <CameraControls controller={props.controller} />
+      <div className="viewer-controls">
+        <CameraControls controller={props.controller} />
+      </div>
     </div>
   );
 }
