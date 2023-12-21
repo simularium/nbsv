@@ -68,18 +68,12 @@ export class Viewport extends DOMWidgetView {
 
   render(): void {
     this.el.classList.add('custom-widget');
-    // this.model.on('change:trajectory', this.trajectory_changed, this);
-    const width = this.model.get('width');
-    const height = this.model.get('height');
 
     const component = React.createElement(Viewer, {
       controller: this.controller,
-      width: width,
-      height: height,
     } as WidgetProps);
 
     ReactDOM.render(component, this.el);
-    this.controller.visGeometry?.resize(width, height);
   }
 
   async trajectory_changed(): Promise<void> {
