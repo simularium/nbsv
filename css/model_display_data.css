@@ -16,7 +16,7 @@
 }
 
 .info-button svg {
-  background-color: var(--black-one);
+  background-color: var(--dark-three);
   color: var(--white-one);
 }
 
@@ -27,3 +27,106 @@
 .info-button svg:active {
   color: var(--purple-one);
 }
+
+/* metadata panel styling */
+.meta-data-panel {
+  width: 480px;
+  background-color: var(--purple-two);
+  color: var(--dark-three);
+  /* padding-bottom: 24px; */
+  /* padding: 16px; */
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+}
+
+.meta-data-header {
+  display: flex;
+  padding: 12px 16px 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta-data-body {
+  display: flex;
+  padding: 8px 16px 12px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.header-title {
+  margin: 0px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+
+.description {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.authors {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.doi {
+  font-size: 10px;
+  font-weight: 400;
+  padding-left: 20px;
+}
+
+.version {
+  color: var(--white-one);
+  background-color: var(--dark-three);
+  padding: 5px;
+  position: absolute;
+  font-size: 16px;
+  top: 8px;
+  right: 16px;
+  border-radius: 5px;
+  padding: 4px 8px 4px 8px;
+}
+
+.close-button {
+  background-color: transparent;
+  width: 24px;
+  color: var(--dark-three);
+  border: none;
+  cursor: pointer;
+  mask-image: radial-gradient(circle, white 100%, black 100%);
+}
+
+.close-button:hover {
+  background-color: var(--dark-three);
+  color: var(--purple-two);
+}
+
+.meta-data-links {
+  background-color: var(--white-two);
+  color: var(--dark-three);
+  /* margin: 10px; */
+  padding: 10px;
+  font-size: 11px;
+  font-weight: 400;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 8px;
+  border-radius: 5px;
+}
+
+.meta-data-links a {
+  color: var(--gray-three);
+  text-decoration: none;
+  font-size: 10px;
+}
+
+/* .meta-data-links a:hover {
+  text-decoration: underline;
+} */
