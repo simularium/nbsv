@@ -28,7 +28,6 @@ const ModelDisplayData: React.FunctionComponent<ModelDisplayDataProps> = (
   return (
     <div className="mdd-container">
       {trajectoryTitle || title || '<Untitled trajectory>'}
-      {/* TODO clicking Info icon will render meta data panel */}
       {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
     </div>
   );
