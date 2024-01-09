@@ -1,4 +1,4 @@
-.cc-container {
+.camera-controls-container {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -7,7 +7,7 @@
     gap: 3px;
 }
 
-.cc-container .btn {
+.camera-controls-container .btn {
     border: none;
     color: var(--white-one);
     background-color: var(--dark-one);

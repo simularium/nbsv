@@ -26,7 +26,7 @@ const ModelDisplayData: React.FunctionComponent<ModelDisplayDataProps> = (
   };
 
   return (
-    <div className="mdd-container">
+    <div className="model-display-data-container">
       {trajectoryTitle || title || '<Untitled trajectory>'}
       {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
     </div>
