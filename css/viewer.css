@@ -5,17 +5,6 @@
   overflow: hidden;
 }
 
-.side-panel {
-  background-color: var(--dark-two);
-  min-width: 280px;
-}
-
 .viewer-container {
   position: relative;
-}
-
-.viewer-header {
-  position: absolute;
-  width: 100%;
-  z-index: 10;
 }

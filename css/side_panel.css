@@ -1,12 +1,17 @@
+.sp-container {
+  background-color: var(--dark-two);
+  min-width: 280px;
+}
+
 .sp-container .title-card {
-    border-radius: 0px;
-    background-color: var(--dark-three);
-    color: var(--gray-two);
-    margin-right: 10px;
+  border-radius: 0px;
+  background-color: var(--dark-three);
+  color: var(--gray-two);
+  margin-right: 10px;
 }
 
 .sp-container .ant-card-body {
-    padding: 12px 0px 16px 21px;
-    margin-bottom: 3px;
-    font-weight: 300;
+  padding: 12px 0px 16px 21px;
+  margin-bottom: 3px;
+  font-weight: 300;
 }

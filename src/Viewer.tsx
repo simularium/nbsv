@@ -77,15 +77,9 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
 
   return (
     <div ref={containerRef} className="container">
-      {showSidePanel && (
-        <div className="side-panel">
-          <SidePanel />
-        </div>
-      )}
+      {showSidePanel && <SidePanel />}
       <div className="viewer-container">
-        <div className="viewer-header">
-          <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
-        </div>
+        <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
           backgroundColor={[0, 0, 0]}
