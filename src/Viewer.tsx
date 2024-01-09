@@ -43,17 +43,15 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         (entries: ResizeObserverEntry[]) => {
           for (const entry of entries) {
             // get the size of viewer container
-            const { width } = entry.contentRect;
-            let { height } = entry.contentRect;
-            // hide side panel if viewer is too small
-            setShowSidePanel(width > 300);
-            // TODO, more elegant fix? a bug was causing the viewer size to grow uncontrollably...
-            if (height > 529) {
-              height = 529;
+            let { width } = entry.contentRect;
+            const { height } = entry.contentRect;
+            // hide side panel if space is small
+            setShowSidePanel(width > 580);
+            if (showSidePanel) {
+              width = width - 280;
             }
             // pass size to viewer
             setDimensions({ width, height });
-            console.log('ResizeObserver values', height, width);
           }
         }
       );
@@ -71,7 +69,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         observerRef.current = null;
       }
     };
-  }, [viewerRef]);
+  }, [viewerRef, showSidePanel]);
 
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
