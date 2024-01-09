@@ -33,12 +33,12 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   // Decided to hide side panel when width is low enough that viewer is too small to be functional
   const [showSidePanel, setShowSidePanel] = useState(true);
 
-  const viewerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
-    if (!observerRef.current && viewerRef.current) {
+    if (!observerRef.current && containerRef.current) {
       observerRef.current = new ResizeObserver(
         (entries: ResizeObserverEntry[]) => {
           for (const entry of entries) {
@@ -56,20 +56,20 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         }
       );
       // observe the viewer container
-      observerRef.current.observe(viewerRef.current);
+      observerRef.current.observe(containerRef.current);
     }
 
     // Cleanup function
     return () => {
       if (observerRef.current) {
-        if (viewerRef.current) {
-          observerRef.current.unobserve(viewerRef.current);
+        if (containerRef.current) {
+          observerRef.current.unobserve(containerRef.current);
         }
         observerRef.current.disconnect();
         observerRef.current = null;
       }
     };
-  }, [viewerRef, showSidePanel]);
+  }, [containerRef, showSidePanel]);
 
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
@@ -77,13 +77,13 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   };
 
   return (
-    <div className="container">
+    <div ref={containerRef} className="container">
       {showSidePanel && (
         <div className="side-panel">
           <SidePanel />
         </div>
       )}
-      <div ref={viewerRef} className="viewer-container">
+      <div className="viewer-container">
         <div className="viewer-header">
           <ViewerTitle {...modelInfo} trajectoryTitle={trajectoryTitle} />
         </div>
