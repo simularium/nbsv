@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
-import ViewerTitle from './components/ModelDisplayData';
+import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import { agentColors } from './constants';
 import {
@@ -30,7 +30,6 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     ''
   );
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
-  // Decided to hide side panel when width is low enough that viewer is too small to be functional
   const [showSidePanel, setShowSidePanel] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +54,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           }
         }
       );
-      // observe the viewer container
+      // observe the container size
       observerRef.current.observe(containerRef.current);
     }
 
@@ -85,7 +84,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
       )}
       <div className="viewer-container">
         <div className="viewer-header">
-          <ViewerTitle {...modelInfo} trajectoryTitle={trajectoryTitle} />
+          <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         </div>
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}

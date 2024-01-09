@@ -1,12 +1,9 @@
-.title-container {
+.mdd-container {
   font-size: 20px;
   font-weight: 400;
   margin-top: 20px;
   display: flex;
   justify-content: center;
-}
-
-.title {
   color: var(--white-one);
   display: flex;
 }
