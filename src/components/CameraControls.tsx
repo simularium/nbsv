@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Tooltip } from 'antd';
 import { SimulariumController } from '@aics/simularium-viewer';
 
-import { Reset, ZoomIn, ZoomOut } from './Icons';
+import { Reset, ZoomIn, ZoomOut, PurpleArrow } from './Icons';
 
 import '../../css/camera_controls.css';
 
@@ -47,6 +47,13 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
           className="btn"
           icon={Reset}
           onClick={props.controller.resetCamera}
+        ></Button>
+      </Tooltip>
+      <Tooltip placement="left" title="Test Purple Arrow">
+        <Button
+          id={'purple-tag'}
+          className="btn"
+          icon={PurpleArrow}
         ></Button>
       </Tooltip>
     </div>
