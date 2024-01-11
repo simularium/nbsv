@@ -13,7 +13,7 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   return (
     <div className="sp-container">
       <Card className="title-card" bordered={false}>
-        {'Agents'}
+        Agents
       </Card>
     </div>
   );
