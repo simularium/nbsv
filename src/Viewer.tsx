@@ -3,6 +3,7 @@ import SimulariumViewer, {
   SimulariumController,
 } from '@aics/simularium-viewer';
 import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
@@ -24,11 +25,22 @@ export interface WidgetProps {
   controller: SimulariumController;
 }
 
+export interface PublicationData {
+  data: any;
+  title: string;
+  journal: string;
+  year: string;
+  url: string;
+}
+
 function ViewerWidget(props: WidgetProps): JSX.Element {
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
+  const [publicationData, setPublicationData] =
+    useState<PublicationData | null>(null);
+
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   // Decided to hide side panel when width is low enough that viewer is too small to be functional
   const [showSidePanel, setShowSidePanel] = useState(true);
@@ -73,9 +85,37 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     };
   }, [viewerRef]);
 
+  const fetchAndDisplayPublicationData = async (doi: string) => {
+    // const testdoi = '10.7554/eLife.82863.sa0';
+    // try {
+    //   const response = await axios.get(`http://doi.org/${testdoi}`, {
+    //     headers: { Accept: 'application/json' },
+    //   });
+    try {
+      const response = await axios.get(`http://doi.org/${doi}`, {
+        headers: { Accept: 'application/json' },
+      });
+
+      const data = response.data;
+      console.log('fetched data: ', data);
+      setPublicationData({
+        data: data,
+        title: data.title,
+        journal: data['container-title'],
+        year: data.published['date-parts'][0][0],
+        url: data.URL,
+      });
+    } catch (error) {
+      console.error('Error fetching DOI data:', error);
+    }
+  };
+
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
+    if (data.modelInfo?.doi) {
+      fetchAndDisplayPublicationData(data.modelInfo.doi);
+    }
   };
 
   return (
@@ -87,7 +127,11 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
       )}
       <div ref={viewerRef} className="viewer-container">
         <div className="viewer-header">
-          <ViewerTitle {...modelInfo} trajectoryTitle={trajectoryTitle} />
+          <ViewerTitle
+            {...modelInfo}
+            trajectoryTitle={trajectoryTitle}
+            publicationData={publicationData}
+          />
         </div>
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
