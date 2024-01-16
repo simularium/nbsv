@@ -1,12 +1,14 @@
 import * as React from 'react';
 
-import { Close, Info } from './Icons';
+import { Close, CloseHover, Info } from './Icons';
 
 import '../../css/model_display_data.css';
 import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
+import { PublicationData } from '../Viewer';
 
 interface ModelDisplayDataProps extends ModelInfo {
   trajectoryTitle?: string;
+  publicationData: PublicationData | null;
 }
 
 const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
@@ -17,7 +19,7 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
   const {
     description,
     authors,
-    doi,
+    publicationData,
     version,
     sourceCodeUrl,
     inputDataUrl,
@@ -29,6 +31,7 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
   const hasLinks = inputDataUrl || sourceCodeLicenseUrl || rawOutputDataUrl;
 
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false);
+  const [hoverOnClose, setHoverOnClose] = React.useState<boolean>(false);
 
   const hasMetaData = (): boolean => {
     for (const key in props) {
@@ -49,17 +52,31 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
     <div className="meta-data-panel">
       <div className="meta-data-header">
         <h3 className="header-title"> About this Simulation </h3>
-        <button className="close-button" onClick={handleInfoButtonClick}>
-          {' '}
-          {Close}{' '}
+        <button
+          className="close-button"
+          onClick={handleInfoButtonClick}
+          onMouseEnter={() => setHoverOnClose(true)}
+          onMouseLeave={() => setHoverOnClose(false)}
+        >
+          {hoverOnClose ? CloseHover : Close}
         </button>
       </div>
       <div className="meta-data-body">
         {version && <div className="version">v{version}</div>}
         <p className="description">{description}</p>
-        <div className="authors">
-          {authors}
-          {doi && <div className="doi">| {doi}</div>}{' '}
+        <div className="authors-journal">
+          <div className="authors">{authors}</div>
+          {publicationData && (
+            <a
+              href={publicationData.url}
+              className="publication-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {publicationData.title}. <i>{publicationData.journal}</i> (
+              <i>{publicationData.year}</i>)
+            </a>
+          )}
         </div>
 
         {hasLinks && (
