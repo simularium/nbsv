@@ -8,6 +8,7 @@ import axios from 'axios';
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ViewerTitle from './components/ModelDisplayData';
+import MetaDataPanel from './components/MetaDataPanel';
 import SidePanel from './components/SidePanel';
 import { agentColors } from './constants';
 import {
@@ -44,6 +45,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   // Decided to hide side panel when width is low enough that viewer is too small to be functional
   const [showSidePanel, setShowSidePanel] = useState(true);
+  const [showMetaDataPanel, setShowMetaDataPanel] = useState(true);
 
   const viewerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -118,6 +120,19 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     }
   };
 
+  const hasMetaData = (() => {
+    for (const key in modelInfo) {
+      if (modelInfo[key as keyof ModelInfo] !== undefined) {
+        return true;
+      }
+    }
+    return false;
+  })();
+
+  const showMetaDataPanelHandler = (value: boolean) => {
+    setShowMetaDataPanel(value);
+  };
+
   return (
     <div className="container">
       {showSidePanel && (
@@ -126,11 +141,19 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
         </div>
       )}
       <div ref={viewerRef} className="viewer-container">
+        {showMetaDataPanel && (
+          <MetaDataPanel
+            {...modelInfo}
+            publicationData={publicationData}
+            showPanel={showMetaDataPanelHandler}
+          />
+        )}
         <div className="viewer-header">
           <ViewerTitle
-            {...modelInfo}
+            hasMetaData={hasMetaData}
             trajectoryTitle={trajectoryTitle}
-            publicationData={publicationData}
+            title={modelInfo?.title}
+            showPanel={showMetaDataPanelHandler}
           />
         </div>
         <SimulariumViewer

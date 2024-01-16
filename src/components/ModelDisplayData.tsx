@@ -1,14 +1,15 @@
 import * as React from 'react';
 
-import { Close, CloseHover, Info } from './Icons';
+import { Info } from './Icons';
 
 import '../../css/model_display_data.css';
-import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
-import { PublicationData } from '../Viewer';
 
-interface ModelDisplayDataProps extends ModelInfo {
+interface ModelDisplayDataProps {
   trajectoryTitle?: string;
-  publicationData: PublicationData | null;
+  title?: string;
+  hasMetaData: boolean;
+  // publicationData: PublicationData | null;
+  showPanel: (value: boolean) => void;
 }
 
 const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
@@ -17,114 +18,116 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
   // const { title, trajectoryTitle } = props;
 
   const {
-    description,
-    authors,
-    publicationData,
-    version,
-    sourceCodeUrl,
-    inputDataUrl,
-    sourceCodeLicenseUrl,
-    rawOutputDataUrl,
+    // description,
+    // authors,
+    // publicationData,
+    // version,
+    // sourceCodeUrl,
+    // inputDataUrl,
+    // sourceCodeLicenseUrl,
+    // rawOutputDataUrl,
     title,
     trajectoryTitle,
+    hasMetaData,
+    showPanel,
   } = props;
-  const hasLinks = inputDataUrl || sourceCodeLicenseUrl || rawOutputDataUrl;
+  // const hasLinks = inputDataUrl || sourceCodeLicenseUrl || rawOutputDataUrl;
 
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false);
-  const [hoverOnClose, setHoverOnClose] = React.useState<boolean>(false);
+  // const [hoverOnClose, setHoverOnClose] = React.useState<boolean>(false);
 
-  const hasMetaData = (): boolean => {
-    for (const key in props) {
-      if (key !== 'trajectoryTitle') {
-        if (props[key as keyof ModelDisplayDataProps] !== undefined) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
+  // const hasMetaData = (): boolean => {
+  //   for (const key in props) {
+  //     if (key !== 'trajectoryTitle') {
+  //       if (props[key as keyof ModelDisplayDataProps] !== undefined) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // };
 
   const handleInfoButtonClick = () => {
     setShowMetaData(!showMetaData);
+    showPanel(true);
   };
 
-  const MetaDataPanel = (
-    <div className="meta-data-panel">
-      <div className="meta-data-header">
-        <h3 className="header-title"> About this Simulation </h3>
-        <button
-          className="close-button"
-          onClick={handleInfoButtonClick}
-          onMouseEnter={() => setHoverOnClose(true)}
-          onMouseLeave={() => setHoverOnClose(false)}
-        >
-          {hoverOnClose ? CloseHover : Close}
-        </button>
-      </div>
-      <div className="meta-data-body">
-        {version && <div className="version">v{version}</div>}
-        <p className="description">{description}</p>
-        <div className="authors-journal">
-          <div className="authors">{authors}</div>
-          {publicationData && (
-            <a
-              href={publicationData.url}
-              className="publication-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {publicationData.title}. <i>{publicationData.journal}</i> (
-              <i>{publicationData.year}</i>)
-            </a>
-          )}
-        </div>
+  // const MetaDataPanel = (
+  //   <div className="meta-data-panel">
+  //     <div className="meta-data-header">
+  //       <h3 className="header-title"> About this Simulation </h3>
+  //       <button
+  //         className="close-button"
+  //         onClick={handleInfoButtonClick}
+  //         onMouseEnter={() => setHoverOnClose(true)}
+  //         onMouseLeave={() => setHoverOnClose(false)}
+  //       >
+  //         {hoverOnClose ? CloseHover : Close}
+  //       </button>
+  //     </div>
+  //     <div className="meta-data-body">
+  //       {version && <div className="version">v{version}</div>}
+  //       <p className="description">{description}</p>
+  //       <div className="authors-journal">
+  //         <div className="authors">{authors}</div>
+  //         {publicationData && (
+  //           <a
+  //             href={publicationData.url}
+  //             className="publication-link"
+  //             target="_blank"
+  //             rel="noopener noreferrer"
+  //           >
+  //             {publicationData.title}. <i>{publicationData.journal}</i> (
+  //             <i>{publicationData.year}</i>)
+  //           </a>
+  //         )}
+  //       </div>
 
-        {hasLinks && (
-          <div className="meta-data-links">
-            {sourceCodeUrl && (
-              <div>
-                <div> Link to software used to generate data </div>
-                <a href={sourceCodeUrl} className="italic-link">
-                  {sourceCodeUrl}
-                </a>
-              </div>
-            )}
-            {sourceCodeLicenseUrl && (
-              <div>
-                <div>Link to third party licensing requirements</div>
-                <div>
-                  <a href={sourceCodeLicenseUrl} className="italic-link">
-                    {sourceCodeLicenseUrl}
-                  </a>
-                </div>
-              </div>
-            )}
-            {rawOutputDataUrl && (
-              <div>
-                <div>Link to visualized output</div>
-                <div>
-                  <a href={rawOutputDataUrl} className="italic-link">
-                    {rawOutputDataUrl}
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  //       {hasLinks && (
+  //         <div className="meta-data-links">
+  //           {sourceCodeUrl && (
+  //             <div>
+  //               <div> Link to software used to generate data </div>
+  //               <a href={sourceCodeUrl} className="italic-link">
+  //                 {sourceCodeUrl}
+  //               </a>
+  //             </div>
+  //           )}
+  //           {sourceCodeLicenseUrl && (
+  //             <div>
+  //               <div>Link to third party licensing requirements</div>
+  //               <div>
+  //                 <a href={sourceCodeLicenseUrl} className="italic-link">
+  //                   {sourceCodeLicenseUrl}
+  //                 </a>
+  //               </div>
+  //             </div>
+  //           )}
+  //           {rawOutputDataUrl && (
+  //             <div>
+  //               <div>Link to visualized output</div>
+  //               <div>
+  //                 <a href={rawOutputDataUrl} className="italic-link">
+  //                   {rawOutputDataUrl}
+  //                 </a>
+  //               </div>
+  //             </div>
+  //           )}
+  //         </div>
+  //       )}
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <div className="title-container">
       <div className="title">
         {trajectoryTitle || title || '<Untitled trajectory>'}
-        {hasMetaData() ? (
+        {hasMetaData ? (
           <div className="info-button" onMouseDown={handleInfoButtonClick}>
             {Info}
           </div>
         ) : null}
-        {showMetaData ? MetaDataPanel : null}
       </div>
     </div>
   );
