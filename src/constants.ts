@@ -17,3 +17,8 @@ export const agentColors = [
   '#9f516c',
   '#00aabf',
 ];
+
+export interface TimeUnits {
+  magnitude: number;
+  name: string;
+}
