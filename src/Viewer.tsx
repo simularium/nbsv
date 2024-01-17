@@ -47,45 +47,43 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const [showSidePanel, setShowSidePanel] = useState(true);
   const [showMetaDataPanel, setShowMetaDataPanel] = useState(true);
 
-  const viewerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
-    if (!observerRef.current && viewerRef.current) {
+    if (!observerRef.current && containerRef.current) {
       observerRef.current = new ResizeObserver(
         (entries: ResizeObserverEntry[]) => {
           for (const entry of entries) {
             // get the size of viewer container
-            const { width } = entry.contentRect;
-            let { height } = entry.contentRect;
-            // hide side panel if viewer is too small
-            setShowSidePanel(width > 300);
-            // TODO, more elegant fix? a bug was causing the viewer size to grow uncontrollably...
-            if (height > 529) {
-              height = 529;
+            let { width } = entry.contentRect;
+            const { height } = entry.contentRect;
+            // hide side panel if space is small
+            setShowSidePanel(width > 580);
+            if (showSidePanel) {
+              width = width - 280;
             }
             // pass size to viewer
             setDimensions({ width, height });
-            console.log('ResizeObserver values', height, width);
           }
         }
       );
-      // observe the viewer container
-      observerRef.current.observe(viewerRef.current);
+      // observe the container size
+      observerRef.current.observe(containerRef.current);
     }
 
     // Cleanup function
     return () => {
       if (observerRef.current) {
-        if (viewerRef.current) {
-          observerRef.current.unobserve(viewerRef.current);
+        if (containerRef.current) {
+          observerRef.current.unobserve(containerRef.current);
         }
         observerRef.current.disconnect();
         observerRef.current = null;
       }
     };
-  }, [viewerRef]);
+  }, [containerRef, showSidePanel]);
 
   const fetchAndDisplayPublicationData = async (doi: string) => {
     // const testdoi = '10.7554/eLife.82863.sa0';
@@ -134,13 +132,13 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   };
 
   return (
-    <div className="container">
+    <div ref={containerRef} className="container">
       {showSidePanel && (
         <div className="side-panel">
           <SidePanel />
         </div>
       )}
-      <div ref={viewerRef} className="viewer-container">
+      <div className="viewer-container">
         {showMetaDataPanel && (
           <MetaDataPanel
             {...modelInfo}
@@ -183,9 +181,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           onError={console.log}
         />
       </div>
-      <div className="viewer-controls">
-        <CameraControls controller={props.controller} />
-      </div>
+      <CameraControls controller={props.controller} />
     </div>
   );
 }

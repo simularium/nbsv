@@ -16,7 +16,7 @@ const CameraControls: React.FunctionComponent<CameraControlsProps> = (
   props: CameraControlsProps
 ): JSX.Element => {
   return (
-    <div className="cc-container">
+    <div className="camera-controls-container">
       <Tooltip
         placement="left"
         title="Zoom in ( &uarr; )"
