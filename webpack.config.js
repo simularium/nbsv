@@ -11,7 +11,10 @@ const rules = [
   },
   { test: /\.js$/, loader: 'source-map-loader' },
   { test: /\.css$/, use: ['style-loader', 'css-loader']},
-  { test:  /\.(png|jpg|gif|svg)$/i, use: ['file-loader']}
+  {
+    test: /\.svg$/,
+    use: 'file-loader'
+  }
 ];
 
 // Packages that shouldn't be bundled but loaded at runtime
