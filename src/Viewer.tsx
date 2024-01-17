@@ -45,7 +45,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   // Decided to hide side panel when width is low enough that viewer is too small to be functional
   const [showSidePanel, setShowSidePanel] = useState(true);
-  const [showMetaDataPanel, setShowMetaDataPanel] = useState(true);
+  const [showMetaDataPanel, setShowMetaDataPanel] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
