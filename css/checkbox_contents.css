@@ -1,0 +1,44 @@
+.checkboxtree {
+  color: var(--gray-two);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.item-row {
+  background-color: var(--dark-three);
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 240px;
+  gap: 6px;
+  padding: 12px 11px 12px 11px;
+}
+
+.custom-checkbox {
+  margin: 3px;
+}
+
+.custom-checkbox svg {
+  height: 16px;
+  width: 16px;
+}
+
+.checkbox {
+  height: 16px;
+  width: 16px;
+}
+
+.color-swatch {
+  width: 12px;
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: var(--white-one) !important;
+    background-color: var(--white-one) !important;
+}

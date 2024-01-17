@@ -1,0 +1,41 @@
+.checkboxtree {
+
+  color: var(--gray-two);
+  font-size: 14px;
+  display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+}
+
+.item-row {
+  background-color: var(--dark-three);
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 240px;
+  gap: 6px;
+  padding: 12px 11px 12px 11px;
+}
+
+.check-all {
+    display: flex;
+    margin-left: 86px;
+}
+
+.checkbox {
+  /* Styles for checkboxes if needed */
+}
+
+.color-swatch {
+  width: 12px;
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.item-name {
+  /* margin-left: 5px; */
+  /* Additional styles for the item name if needed */
+}

@@ -1,6 +1,8 @@
 import SimulariumViewer, {
   RenderStyle,
+  SelectionStateInfo,
   SimulariumController,
+  UIDisplayData,
 } from '@aics/simularium-viewer';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -15,6 +17,7 @@ import {
 } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
+import { VisibilitySelectionMap } from './components/CheckBoxTree';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -31,6 +34,17 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   );
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   const [showSidePanel, setShowSidePanel] = useState(true);
+  const [currentHiddenAgents, setCurrentHiddenAgents] =
+    useState<VisibilitySelectionMap>({});
+  const [currentHighlightedAgents, setCurrentHighlightedAgents] =
+    useState<VisibilitySelectionMap>({});
+  const [selectionStateInfoForViewer, setSelectionStateInfoForViewer] =
+    useState<SelectionStateInfo>({
+      highlightedAgents: [],
+      hiddenAgents: [],
+      colorChange: null,
+    });
+  const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -43,7 +57,8 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
-            const { height } = entry.contentRect;
+            // const { height } = entry.contentRect;
+            const height = 529;
             // hide side panel if space is small
             setShowSidePanel(width > 580);
             if (showSidePanel) {
@@ -71,13 +86,53 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   }, [containerRef, showSidePanel]);
 
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
+    console.log('trajectory data', data);
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
   };
 
+  const updateSelectionStateInfoForViewer = (data: SelectionStateInfo) => {
+    console.log('data in Selectionstate info handler', data);
+    setSelectionStateInfoForViewer(data);
+  };
+
+  const handleUIDisplayDataChanged = (uidata: any) => {
+    console.log('uidata', uidata);
+    setUIDisplayData(uidata);
+  };
+
+  useEffect(() => {
+    setSelectionStateInfoForViewer((prevState) => ({
+      ...prevState,
+      highlightedAgents: Object.keys(currentHighlightedAgents).map((key) => ({
+        name: key,
+        tags: currentHighlightedAgents[key],
+      })),
+    }));
+  }, [currentHighlightedAgents]);
+
+  useEffect(() => {
+    setSelectionStateInfoForViewer((prevState) => ({
+      ...prevState,
+      hiddenAgents: Object.keys(currentHiddenAgents).map((key) => ({
+        name: key,
+        tags: currentHiddenAgents[key],
+      })),
+    }));
+  }, [currentHiddenAgents]);
+
   return (
     <div ref={containerRef} className="container">
-      {showSidePanel && <SidePanel />}
+      {showSidePanel && (
+        <SidePanel
+          updateSelectionStateInfo={updateSelectionStateInfoForViewer}
+          uiDisplayData={uiDisplayData}
+          currentHiddenAgents={currentHiddenAgents}
+          currentHighlightedAgents={currentHighlightedAgents}
+          setCurrentHiddenAgents={setCurrentHiddenAgents}
+          setCurrentHighlightedAgents={setCurrentHighlightedAgents}
+        />
+      )}
       <div className="viewer-container">
         <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer
@@ -91,14 +146,8 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           onJsonDataArrived={console.log}
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
-          selectionStateInfo={{
-            highlightedAgents: [],
-            hiddenAgents: [],
-            colorChange: null,
-          }}
-          onUIDisplayDataChanged={(uidata) =>
-            console.log('new ui data, ', uidata)
-          }
+          selectionStateInfo={selectionStateInfoForViewer}
+          onUIDisplayDataChanged={handleUIDisplayDataChanged}
           loadInitialData={true}
           hideAllAgents={false}
           showBounds={true}
