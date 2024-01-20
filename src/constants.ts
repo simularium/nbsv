@@ -18,10 +18,11 @@ export const agentColors = [
   '#00aabf',
 ];
 
-export enum HiddenOrHighlightedState {
-  Active,
-  Inactive,
-  Indeterminate,
+//todo get from viewer
+export interface DisplayStateEntry {
+  name: string;
+  id: string;
+  color: string;
 }
 
 // maps names/display states for viewer viz status (hidden/highligted or not)
@@ -29,18 +30,25 @@ export enum HiddenOrHighlightedState {
 export interface ViewerVisibilityMap {
   [key: string]: string[];
 }
-
-// maps agent/subagent name to current ui viz status
+// types for matching agent/subagent names to current ui viz status
 // (hidden, visible, indeterminate) - used for visibility and highlighting
+export enum HiddenOrHighlightedState {
+  Active,
+  Inactive,
+  Indeterminate,
+}
 export interface UIVisibilityMap {
   [key: string]: HiddenOrHighlightedState;
 }
 
-//todo get from viewer
-export interface DisplayStateEntry {
-  name: string;
-  id: string;
-  color: string;
+export interface SubAgentDisplayMaps {
+  hidden: UIVisibilityMap;
+  highlight: UIVisibilityMap;
+}
+
+export interface TopLevelDisplayStatus {
+  hidden: HiddenOrHighlightedState;
+  highlight: HiddenOrHighlightedState;
 }
 
 export enum DisplayAction {
