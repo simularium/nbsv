@@ -6,7 +6,7 @@ import { PlaybackData, PlaybackState } from '../constants';
 import { FrameBack, FrameForward, Pause, Play } from './Icons';
 import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 
-const TOOLTIP_COLOR = '#3B3649';
+const TOOLTIP_COLOR = '#3b3649';
 interface PlayBackProps {
   playbackState: PlaybackState;
   setPlaybackState: (playbackState: PlaybackState) => void;
@@ -33,7 +33,7 @@ const getDisplayTimes = (
   playbackState: PlaybackState,
   playbackData: PlaybackData
 ): DisplayTimes => {
-  const { currentTime: currentTime } = playbackState;
+  const { currentTime } = playbackState;
   const { timeUnits, firstFrameTime, lastFrameTime, timeStep } = playbackData;
   return {
     roundedTime: roundTimeForDisplay(currentTime * timeUnits.magnitude),
@@ -47,48 +47,61 @@ const getDisplayTimes = (
   };
 };
 
+// Determine the width of the input box based on a likely max number of characters
+const getTimeInputWidth = (displayTimes: DisplayTimes): string => {
+  const { roundedFirstFrameTime, roundedLastFrameTime, roundedTimeStep } =
+    displayTimes;
+  return `${
+    Math.max(
+      roundedFirstFrameTime.toString().length,
+      roundedLastFrameTime.toString().length,
+      roundedTimeStep.toString().length
+    ) + 1.5
+  }ch`;
+};
+
 const PlayBackControls = (props: PlayBackProps): JSX.Element => {
-  const { playbackState, setPlaybackState, playbackData, controller } = props;
-  const [timeInput, setTimeInput] = useState(0);
+  const { controller, playbackData, playbackState, setPlaybackState } = props;
+  const [timeInput, setTimeInput] = useState<number>(0);
 
   const { timeUnits, firstFrameTime, lastFrameTime, timeStep } = playbackData;
   const { isPlaying, currentTime } = playbackState;
 
-  const isStepForwardDisabled = currentTime + timeStep >= lastFrameTime;
-  const isStepBackDisabled = firstFrameTime + timeStep > currentTime;
+  const nextFrameUnavailable = currentTime + timeStep >= lastFrameTime;
+  const previousFrameUnavailable = firstFrameTime + timeStep > currentTime;
 
   const displayTimes = getDisplayTimes(playbackState, playbackData);
+  const timeInputWidth = getTimeInputWidth(displayTimes);
 
-  // use effect listener on current time, if current time is end, call reset playback
+  // useeffect to reset playback state when the last frame is reached
   useEffect(() => {
-    if (currentTime + timeStep >= lastFrameTime) {
-      controller.gotoTime(firstFrameTime);
-      setPlaybackState({
-        currentTime: firstFrameTime,
-        isPlaying: false,
-      });
-    }
-  }, [currentTime]);
+    controller.gotoTime(firstFrameTime);
+    setPlaybackState({
+      currentTime: firstFrameTime,
+      isPlaying: false,
+    });
+  }, [nextFrameUnavailable]);
 
-  // Determine the width of the input box based on a likely max number of characters
-  const getTimeInputWidth = (): string => {
-    const { roundedFirstFrameTime, roundedLastFrameTime, roundedTimeStep } =
-      displayTimes;
-    return `${
-      Math.max(
-        roundedFirstFrameTime.toString().length,
-        roundedLastFrameTime.toString().length,
-        roundedTimeStep.toString().length
-      ) + 1.5
-    }ch`;
+  const skipToTime = (time: number) => {
+    const isTimePastLastFrame =
+      compareTimes(time, lastFrameTime, timeStep) === 1;
+    const isTimeBeforeFirstFrame =
+      compareTimes(time, firstFrameTime, timeStep) === -1;
+    if (isTimePastLastFrame || isTimeBeforeFirstFrame) {
+      return;
+    }
+    controller.gotoTime(time);
   };
 
   const playHandler = (timeOverride?: number) => {
-    const { currentTime } = playbackState;
-    const newTime = timeOverride !== undefined ? timeOverride : currentTime;
-    const timeIsBeyondLastFrameTime = newTime + timeStep >= lastFrameTime;
+    const timeOverrideProvided = timeOverride !== undefined;
+    const newTime = timeOverrideProvided ? timeOverride : currentTime;
+    // this is the same as nextFrameUnavailable, but computing it here
+    // prevents a looping bug where playback gets stuck oscillating between
+    // first and last frame
+    const nextFrameIsPastLastFrame = newTime + timeStep >= lastFrameTime;
     controller.pause();
-    if (timeIsBeyondLastFrameTime) {
+    if (nextFrameIsPastLastFrame) {
       setPlaybackState({
         isPlaying: false,
         currentTime: firstFrameTime,
@@ -110,12 +123,10 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
   };
 
   const gotoNextFrame = () => {
-    const { currentTime } = playbackState;
     controller.gotoTime(currentTime + timeStep);
   };
 
   const goToPreviousFrame = () => {
-    const { currentTime } = playbackState;
     controller.gotoTime(currentTime - timeStep);
   };
 
@@ -125,25 +136,10 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
     }
   };
 
-  const skipToTime = (time: number) => {
-    const isTimeGreaterThanLastFrameTime =
-      compareTimes(time, lastFrameTime, timeStep) === 1;
-    const isTimeLessThanFirstFrameTime =
-      compareTimes(time, firstFrameTime, timeStep) === -1;
-    if (isTimeGreaterThanLastFrameTime || isTimeLessThanFirstFrameTime) {
-      return;
-    }
-    controller.gotoTime(time);
-  };
-
   const handleTimeInputKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
     if (event.key === 'Enter' || event.key === 'Tab') {
-      // User input will be aligned with the displayed time values, which were multiplied
-      // by timeUnits.magnitude in the getDisplayTimes selector, so we have to undo the
-      // multiplication before requesting the time. timeUnits.magnitude is 1 for a vast
-      // majority of the time so it shouldn't make a difference most times.
       if (typeof timeInput === 'number') {
         setPlaybackState({
           ...playbackState,
@@ -159,7 +155,6 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
   };
 
   const handleSliderChange = (sliderValue: number | [number, number]): void => {
-    const { isPlaying } = playbackState;
     skipToTime(sliderValue as number);
     if (isPlaying) {
       controller.pause();
@@ -167,7 +162,6 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
   };
 
   const handleSliderAfterChange = (value: number): void => {
-    const { isPlaying } = playbackState;
     if (isPlaying) {
       playHandler(value);
     } else {
@@ -182,7 +176,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           id={'back-button'}
           className="btn"
           onClick={goToPreviousFrame}
-          disabled={isStepBackDisabled}
+          disabled={previousFrameUnavailable}
         >
           {FrameBack}
         </Button>
@@ -211,7 +205,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           id={'next-button'}
           className="btn"
           onClick={gotoNextFrame}
-          disabled={isStepForwardDisabled}
+          disabled={nextFrameUnavailable}
         >
           {FrameForward}
         </Button>
@@ -235,7 +229,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           onChange={handleTimeInputChange}
           onKeyDown={handleTimeInputKeyDown}
           disabled={isPlaying}
-          style={{ width: getTimeInputWidth() }}
+          style={{ width: timeInputWidth }}
         />
         <span className="lastFrameTime">
           / {displayTimes.roundedLastFrameTime}
