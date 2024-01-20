@@ -100,7 +100,7 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
         >
           {hiddenStateIcon[hiddenStatus]}
         </div>
-        <span className="item-name">{name}</span>
+        <span>{name}</span>
       </div>
     </>
   );
