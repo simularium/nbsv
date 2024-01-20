@@ -22,6 +22,7 @@ import {
 } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
+import ScaleBar from './components/ScaleBar';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -31,13 +32,12 @@ export interface ViewerProps {
   controller: SimulariumController;
 }
 
-export interface PlaybackState {
-  currentTime: number;
-  isPlaying: boolean;
-}
-
 function ViewerWidget(props: ViewerProps): JSX.Element {
+  // UI display state
+  const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
+  const [showSidePanel, setShowSidePanel] = useState(true);
   const controller = props.controller;
+  // trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
@@ -58,11 +58,10 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     name: '',
     magnitude: 1,
   });
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
 
   // this seems redundant, but there is commentary in other parts of the code base
   // about not assuming this is 0 in the future
-  // so I'm declaring it instead of using 0
-  // throughout the code so we are flexible in the future
   const firstFrameTime = 0;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,10 +110,23 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     setTimeUnits(data.timeUnits);
     setTimeStep(data.timeStepSize);
     setLastFrameTime((data.totalSteps - 1) * data.timeStepSize);
+    setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
     setPlaybackState({
       isPlaying: false,
       currentTime: 0,
     });
+  };
+
+  const getScaleBarLabel = (spatialUnits: {
+    magnitude: number;
+    name: string;
+  }): string => {
+    const tickIntervalLength = controller.tickIntervalLength;
+    let scaleBarLabelNumber = tickIntervalLength * spatialUnits.magnitude;
+    scaleBarLabelNumber = parseFloat(scaleBarLabelNumber.toPrecision(2));
+    const scaleBarLabelUnit = spatialUnits.name;
+
+    return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
   // use effect listener on current time, if current time is end, call reset playback
@@ -275,24 +287,28 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
-        <PlayBackControls
-          playbackState={playbackState}
-          timeUnits={timeUnits}
-          firstFrameTime={firstFrameTime}
-          lastFrameTime={lastFrameTime}
-          timeStep={timeStep}
-          displayTimes={displayTimes}
-          playHandler={playHandler}
-          pauseHandler={pauseHandler}
-          prevHandler={goToPreviousFrame}
-          nextHandler={gotoNextFrame}
-          handleSliderChange={handleSliderChange}
-          handleSliderAfterChange={handleSliderAfterChange}
-          handleTimeInputChange={handleTimeInputChange}
-          handleTimeInputKeyDown={handleTimeInputKeyDown}
-        />
+        <div className="scalebar-controls">
+          <PlayBackControls
+            playbackState={playbackState}
+            timeUnits={timeUnits}
+            firstFrameTime={firstFrameTime}
+            lastFrameTime={lastFrameTime}
+            timeStep={timeStep}
+            displayTimes={displayTimes}
+            playHandler={playHandler}
+            pauseHandler={pauseHandler}
+            prevHandler={goToPreviousFrame}
+            nextHandler={gotoNextFrame}
+            handleSliderChange={handleSliderChange}
+            handleSliderAfterChange={handleSliderAfterChange}
+            handleTimeInputChange={handleTimeInputChange}
+            handleTimeInputKeyDown={handleTimeInputKeyDown}
+            scaleBarLabel={scaleBarLabel}
+          />
+          <ScaleBar label={scaleBarLabel} />
+          <CameraControls controller={props.controller} />
+        </div>
       </div>
-      <CameraControls controller={props.controller} />
     </div>
   );
 }

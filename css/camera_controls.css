@@ -1,9 +1,6 @@
 .camera-controls-container {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    right: 40px;
-    bottom: 20px;
     gap: 3px;
 }
 
