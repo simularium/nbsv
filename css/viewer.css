@@ -11,7 +11,7 @@
   flex-direction: column;
 }
 
-.scalebar-controls {
+.controls {
   align-items: flex-end;
   display: flex;
   gap: 30px;

@@ -1,7 +1,6 @@
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
-  compareTimes,
 } from '@aics/simularium-viewer';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -10,14 +9,13 @@ import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import PlayBackControls from './components/PlaybackControls';
-import { PlaybackState, TimeUnits, agentColors } from './constants';
+import { PlaybackData, PlaybackState, agentColors } from './constants';
 import {
   ModelInfo,
   TrajectoryFileInfo,
 } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
-import ScaleBar from './components/ScaleBar';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -27,36 +25,34 @@ export interface ViewerProps {
   controller: SimulariumController;
 }
 
+const initialPlaybackData: PlaybackData = {
+  timeStep: 0,
+  lastFrameTime: 0,
+  firstFrameTime: 0,
+  timeUnits: {
+    name: '',
+    magnitude: 1,
+  },
+};
+
 function ViewerWidget(props: ViewerProps): JSX.Element {
-  // UI display state
+  // UI and viewer states
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   const [showSidePanel, setShowSidePanel] = useState(true);
-  const controller = props.controller;
-  // trajectory data
-  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
-  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
-    ''
-  );
-  const [timeStep, setTimeStep] = useState<number>(0);
-  const [lastFrameTime, setLastFrameTime] = useState<number>(0);
   const [playbackState, setPlaybackState] = useState<PlaybackState>({
     currentTime: 0,
     isPlaying: false,
   });
-  const [timeInput, setTimeInput] = useState(0);
-  const [timeUnits, setTimeUnits] = useState<TimeUnits>({
-    name: '',
-    magnitude: 1,
-  });
-  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
-
-  // this seems redundant, but there is commentary in other parts of the code base
-  // about not assuming this is 0 in the future
-  const firstFrameTime = 0;
+  // Trajectory data
+  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
+  const [trajTitle, setTrajTitle] = useState<string | undefined>('');
+  const [playbackData, setPlaybackData] =
+    useState<PlaybackData>(initialPlaybackData);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
+  // Resize observer
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
     if (!observerRef.current && containerRef.current) {
@@ -93,164 +89,28 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     };
   }, [containerRef, showSidePanel]);
 
+  // Viewer callbacks
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     console.log('handleTrajectoryData', data);
-    setTrajectoryTitle(data.trajectoryTitle);
+    setTrajTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
-    setTimeUnits(data.timeUnits);
-    setTimeStep(data.timeStepSize);
-    setLastFrameTime((data.totalSteps - 1) * data.timeStepSize);
-    setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
-    setPlaybackState({
-      isPlaying: false,
-      currentTime: 0,
+    setPlaybackData({
+      timeStep: data.timeStepSize,
+      lastFrameTime: (data.totalSteps - 1) * data.timeStepSize,
+      firstFrameTime: 0,
+      timeUnits: data.timeUnits,
     });
   };
 
-  const getScaleBarLabel = (spatialUnits: {
-    magnitude: number;
-    name: string;
-  }): string => {
-    const tickIntervalLength = controller.tickIntervalLength;
-    let scaleBarLabelNumber = tickIntervalLength * spatialUnits.magnitude;
-    scaleBarLabelNumber = parseFloat(scaleBarLabelNumber.toPrecision(2));
-    const scaleBarLabelUnit = spatialUnits.name;
-
-    return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
-  };
-
-  // use effect listener on current time, if current time is end, call reset playback
-  useEffect(() => {
-    if (playbackState.currentTime + timeStep >= lastFrameTime) {
-      controller.gotoTime(firstFrameTime);
-      setPlaybackState({
-        currentTime: firstFrameTime,
-        isPlaying: false,
-      });
-    }
-  }, [playbackState.currentTime]);
-
   const handleTimeChange = (timeData: any): void => {
     setPlaybackState({ ...playbackState, currentTime: timeData.time });
-  };
-
-  const skipToTime = (time: number) => {
-    const isTimeGreaterThanLastFrameTime =
-      compareTimes(time, lastFrameTime, timeStep) === 1;
-    const isTimeLessThanFirstFrameTime =
-      compareTimes(time, firstFrameTime, timeStep) === -1;
-    if (isTimeGreaterThanLastFrameTime || isTimeLessThanFirstFrameTime) {
-      return;
-    }
-    controller.gotoTime(time);
-  };
-
-  const playHandler = (timeOverride?: number) => {
-    const { currentTime } = playbackState;
-    const newTime = timeOverride !== undefined ? timeOverride : currentTime;
-    const timeIsBeyondLastFrameTime = newTime + timeStep >= lastFrameTime;
-    controller.pause();
-    if (timeIsBeyondLastFrameTime) {
-      setPlaybackState({
-        isPlaying: false,
-        currentTime: firstFrameTime,
-      });
-      controller.gotoTime(firstFrameTime);
-    } else {
-      setPlaybackState({
-        isPlaying: true,
-        currentTime: newTime,
-      });
-      controller.playFromTime(newTime);
-      controller.resume();
-    }
-  };
-
-  const pauseHandler = () => {
-    controller.pause();
-    setPlaybackState({ ...playbackState, isPlaying: false });
-  };
-
-  const gotoNextFrame = () => {
-    const { currentTime } = playbackState;
-    controller.gotoTime(currentTime + timeStep);
-  };
-
-  const goToPreviousFrame = () => {
-    const { currentTime } = playbackState;
-    controller.gotoTime(currentTime - timeStep);
-  };
-
-  // Called after every keystroke
-  const handleTimeInputChange = (userInput: number | null): void => {
-    if (userInput !== null) {
-      setTimeInput(userInput as number);
-    }
-  };
-
-  const handleTimeInputKeyDown = (event: KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === 'Tab') {
-      // User input will be aligned with the displayed time values, which were multiplied
-      // by timeUnits.magnitude in the getDisplayTimes selector, so we have to undo the
-      // multiplication before requesting the time. timeUnits.magnitude is 1 for a vast
-      // majority of the time so it shouldn't make a difference most times.
-      if (typeof timeInput === 'number') {
-        setPlaybackState({
-          ...playbackState,
-          currentTime: timeInput / timeUnits.magnitude,
-        });
-        skipToTime(timeInput / timeUnits.magnitude);
-      }
-    }
-    if (event.key === 'Escape') {
-      const inputNumberComponent = event.target as HTMLElement;
-      inputNumberComponent.blur();
-    }
-  };
-
-  const handleSliderChange = (sliderValue: number | [number, number]): void => {
-    const { isPlaying } = playbackState;
-    skipToTime(sliderValue as number);
-    if (isPlaying) {
-      controller.pause();
-    }
-  };
-
-  const handleSliderAfterChange = (value: number): void => {
-    const { isPlaying } = playbackState;
-    if (isPlaying) {
-      playHandler(value);
-    } else {
-      setPlaybackState({ ...playbackState, currentTime: value });
-    }
-  };
-
-  const roundTimeForDisplay = (time: number) => {
-    if (time === 0) {
-      return 0;
-    }
-
-    return parseFloat(time.toPrecision(3));
-  };
-
-  const displayTimes = {
-    roundedTime: roundTimeForDisplay(
-      playbackState.currentTime * timeUnits.magnitude
-    ),
-    roundedFirstFrameTime: roundTimeForDisplay(
-      firstFrameTime * timeUnits.magnitude
-    ),
-    roundedLastFrameTime: roundTimeForDisplay(
-      lastFrameTime * timeUnits.magnitude
-    ),
-    roundedTimeStep: roundTimeForDisplay(timeStep * timeUnits.magnitude),
   };
 
   return (
     <div ref={containerRef} className="container">
       {showSidePanel && <SidePanel />}
       <div className="viewer-container">
-        <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
+        <ModelDisplayData {...modelInfo} trajectoryTitle={trajTitle} />
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
           backgroundColor={[0, 0, 0]}
@@ -277,25 +137,13 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
-        <div className="scalebar-controls">
+        <div className="controls">
           <PlayBackControls
             playbackState={playbackState}
-            timeUnits={timeUnits}
-            firstFrameTime={firstFrameTime}
-            lastFrameTime={lastFrameTime}
-            timeStep={timeStep}
-            displayTimes={displayTimes}
-            playHandler={playHandler}
-            pauseHandler={pauseHandler}
-            prevHandler={goToPreviousFrame}
-            nextHandler={gotoNextFrame}
-            handleSliderChange={handleSliderChange}
-            handleSliderAfterChange={handleSliderAfterChange}
-            handleTimeInputChange={handleTimeInputChange}
-            handleTimeInputKeyDown={handleTimeInputKeyDown}
-            scaleBarLabel={scaleBarLabel}
+            setPlaybackState={setPlaybackState}
+            playbackData={playbackData}
+            controller={props.controller}
           />
-          <ScaleBar label={scaleBarLabel} />
           <CameraControls controller={props.controller} />
         </div>
       </div>
