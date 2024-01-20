@@ -4,7 +4,6 @@ import {
   MinusOutlined,
   HomeOutlined,
   InfoCircleFilled,
-  ItalicOutlined,
   StepBackwardOutlined,
   StepForwardOutlined,
   CaretRightOutlined,
@@ -15,7 +14,6 @@ export const Reset = <HomeOutlined />;
 export const ZoomIn = <PlusOutlined />;
 export const ZoomOut = <MinusOutlined />;
 export const Info = <InfoCircleFilled />;
-export const ScaleBarIcon = <ItalicOutlined />;
 export const FrameBack = <StepBackwardOutlined />;
 export const FrameForward = <StepForwardOutlined />;
 export const Pause = <PauseOutlined />;
