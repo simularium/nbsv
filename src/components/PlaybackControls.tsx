@@ -2,8 +2,9 @@ import React from 'react';
 import { Button, InputNumber, Slider, Tooltip } from 'antd';
 
 import '../../css/playback_controls.css';
-import { PlaybackState } from '../Viewer';
+import { PlaybackState } from '../constants';
 import { TimeUnits } from '../constants';
+import { FrameBack, FrameForward, Pause, Play } from './Icons';
 
 const TOOLTIP_COLOR = '#3B3649';
 interface PlayBackProps {
@@ -21,6 +22,7 @@ interface PlayBackProps {
   handleSliderAfterChange: (time: any) => void;
   handleTimeInputChange: (event: any) => void;
   handleTimeInputKeyDown: (event: any) => void;
+  scaleBarLabel: string;
 }
 
 interface DisplayTimes {
@@ -67,14 +69,15 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
   };
 
   return (
-    <div className="pb-container">
+    <div className="playback-controls">
       <Tooltip placement="top" title="Skip 1 frame back" color={TOOLTIP_COLOR}>
         <Button
+          id={'back-button'}
           className="btn"
           onClick={prevHandler}
           disabled={isStepBackDisabled}
         >
-          BACK
+          {FrameBack}
         </Button>
       </Tooltip>
       <Tooltip
@@ -83,6 +86,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
         color={TOOLTIP_COLOR}
       >
         <Button
+          id={'play-button'}
           className="btn"
           onClick={
             isPlaying
@@ -92,16 +96,17 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
                 }
           }
         >
-          {isPlaying ? 'Pause' : 'Play'}
+          {isPlaying ? Pause : Play}
         </Button>
       </Tooltip>
       <Tooltip placement="top" title="Skip 1 frame ahead" color={TOOLTIP_COLOR}>
         <Button
+          id={'next-button'}
           className="btn"
           onClick={nextHandler}
           disabled={isStepForwardDisabled}
         >
-          FWD
+          {FrameForward}
         </Button>
       </Tooltip>
       <Slider
@@ -113,7 +118,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
         min={firstFrameTime}
         max={lastFrameTime}
       />
-      <div className="time">
+      <div className="time-input-display">
         <InputNumber
           // key is necessary to re-render this component and override user input
           key={displayTimes.roundedTime}
@@ -130,7 +135,6 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           {timeUnits ? timeUnits.name : 's'}
         </span>
       </div>
-      <div></div>
     </div>
   );
 };

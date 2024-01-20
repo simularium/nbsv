@@ -1,70 +1,79 @@
-.pb-container {
-    display: flex;
-    gap: 3px;
-    margin-left: 80px;
-    margin-bottom: 43px;
-    width: 80%;
+.playback-controls {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 18px;
+  width: 100%;
 }
 
-.pb-container .btn {
-    background-color: var(--dark-one);
-    border: none;
-    color: var(--white-one);
+.playback-controls .btn {
+  background-color: var(--dark-one);
+  border: none;
+  color: var(--white-one);
 }
 
-.pb-container .btn:hover {
-    background-color: var(--gray-one);
-    border: none;
-    color: var(--white-one);
+.playback-controls .btn:hover {
+  background-color: var(--gray-one);
+  border: none;
+  color: var(--white-one);
 }
 
-.pb-container .slider {
-    flex: 3;
-    margin: auto 12px;
+.playback-controls .slider {
+  flex: 3;
+  margin: auto 12px;
 }
 
-.pb-container .slider .ant-slider-track {
-    background-color: var(--white-one);
+.playback-controls .slider .ant-slider-track {
+  background-color: var(--white-one);
 }
 
-.pb-container .slider .ant-slider-track,
-.pb-container .slider .ant-slider-rail {
-    border-radius: 3px;
+.playback-controls .slider .ant-slider-track,
+.playback-controls .slider .ant-slider-rail {
+  border-radius: 3px;
 }
 
 .ant-slider-rail {
-    background-color: var(--dark-four) !important;
+  background-color: var(--dark-four) !important;
 }
 
-.ant-slider-handle, .ant-slider-handle::before, .ant-slider-handle::after {
-    background-color: var(--white-one);
-    border-radius: 50%;
-    box-shadow: none !important;
-    inset-block-start: 0px;
+.ant-slider-handle,
+.ant-slider-handle::before,
+.ant-slider-handle::after {
+  background-color: var(--white-one);
+  border-radius: 50%;
+  box-shadow: none !important;
+  inset-block-start: 0px;
 }
 
-.time {
-    background-color: var(--dark-one);
-    border-radius: 3px;
-    height: 26px;
-    padding: 4px 5px 4px 5px;
+.time-input-display {
+  background-color: var(--dark-one);
+  border-radius: 3px;
+  height: 26px;
+  padding: 4px 5px 4px 5px;
 }
 
 .lastFrameTime {
-    color: var(--gray-three);
-    padding-left: 3px;
+  color: var(--gray-three);
+  padding-left: 3px;
 }
 
-.pb-container .ant-input-number {
-    background-color: transparent;
-    border-radius: 0px;
+.playback-controls .ant-input-number {
+  background-color: transparent;
+  border-radius: 0px;
 }
 
-.pb-container .ant-input-number input {
-    color: var(--white-one);
-    padding: 0 3px;
+.playback-controls .ant-input-number input {
+  color: var(--white-one);
+  padding: 0 3px;
 }
 
-.pb-container .scale-bar {
-    color: var(--gray-three);
+.playback-controls .scale-bar {
+  color: var(--gray-three);
+}
+
+#back-button:hover,
+#play-button:hover,
+#next-button:hover {
+  border: none;
+  color: var(--white-one);
+  background-color: var(--gray-one);
 }
