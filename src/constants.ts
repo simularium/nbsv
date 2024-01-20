@@ -22,3 +22,8 @@ export interface TimeUnits {
   magnitude: number;
   name: string;
 }
+
+export interface PlaybackState {
+  currentTime: number;
+  isPlaying: boolean;
+}
