@@ -1,18 +1,21 @@
-.caret-placeholder {
-    visibility: hidden;
-    width: 14px;
-    height: 10px;
-    margin-right: 5px;
-}
-
 .caret-icon {
   margin-right: 5px;
 }
+.caret-placeholder {
+  height: 10px;
+  margin-right: 5px;
+  width: 14px;
+  visibility: hidden;
+}
 
-/* 
-Viewer
-SidePanel
-AgentDisplayStateTree
-AgentDisplayStateWrapper
-CheckBowRow
- */
+.color-swatch {
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 10px;
+  width: 12px;
+}
+
+.custom-checkbox {
+  color: var(--white-one);
+  background-color: var(--dark-one);
+}

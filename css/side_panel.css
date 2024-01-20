@@ -13,9 +13,9 @@
 }
 
 .sp-container .agent-title {
-  color: var(--gray-two);
   background-color: var(--dark-one);
   border-radius: 0px;
+  color: var(--gray-two);
   margin-right: 5px;
   padding: 12px 0px 16px 21px;
 }
@@ -47,11 +47,6 @@
   gap: 3px;
 }
 
-.check-all {
-  display: flex;
-  margin-left: 81px;
-}
-
 .item-row {
   align-items: center;
   background-color: var(--dark-three);
@@ -63,22 +58,12 @@
   width: 240px;
 }
 
-.color-swatch {
-  height: 16px;
-  margin-left: 5px;
-  margin-right: 10px;
-  width: 12px;
-}
-
-/* checkbox style rules are defined 
-here as its the first instance of a checkbox
-and propogate down to check box row */
-.custom-checkbox {
-  color: var(--white-one);
-  background-color: var(--dark-one);
-}
-
 .checkbox svg {
   height: 16px;
   width: 16px;
+}
+
+.check-all {
+  display: flex;
+  margin-left: 81px;
 }
