@@ -1,0 +1,18 @@
+.caret-placeholder {
+    visibility: hidden;
+    width: 14px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.caret-icon {
+  margin-right: 5px;
+}
+
+/* 
+Viewer
+SidePanel
+AgentDisplayStateTree
+AgentDisplayStateWrapper
+CheckBowRow
+ */

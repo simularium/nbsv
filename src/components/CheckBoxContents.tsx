@@ -1,86 +1,248 @@
 import * as React from 'react';
-import classNames from 'classnames';
 
-import '../../css/checkbox_contents.css';
-
-import { CaretDown, CaretRight, Star, StarFilledIcon } from './Icons';
+import CheckBoxRow from './CheckBoxRow';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
-
-// TODO placeholder, side panel will receive many props when rendering checkboxes
+import { useEffect } from 'react';
+import {
+  DisplayAction,
+  HiddenOrHighlightedState,
+  UIVisibilityMap,
+  ViewerVisibilityMap,
+  ViewerVisibilityStates,
+} from '../constants';
 interface CheckBoxContentsProps {
-  //   uiDisplayData: UIDisplayData;
-  item: UIDisplayEntry;
-  handleHighlight: (key: string, values?: string[]) => void;
-  handleCheck: (key: string, values?: string[]) => void;
-  currentHiddenAgents: VisibilitySelectionMap;
-  currentHighlightedAgents: VisibilitySelectionMap;
-  allHidden: boolean;
-  noneHidden: boolean;
-
-  //   setCurrentHiddenAgents: (hiddenAgents: VisibilitySelectionMap) => void;
-  //   setCurrentHighlightedAgents: (
-  //     highlightedAgents: VisibilitySelectionMap
-  //   ) => void;
+  agent: UIDisplayEntry;
+  currentVisibilityStates: ViewerVisibilityStates;
+  setCurrentVisibilityStates: (
+    visibilityStates: ViewerVisibilityStates
+  ) => void;
 }
 
-export interface VisibilitySelectionMap {
-  [key: string]: string[];
+// This is the highest level component that is agent specific,
+// so it contains state variables, listeners, and handlers for
+// the agents and subagents in relation to hiding and highlighting.
+// Tried to strike a balance between readability and conciseness.
+// There is no stylesheet for this component as its basically a data layer.
+
+interface SubAgentDisplayMaps {
+  hidden: UIVisibilityMap;
+  highlight: UIVisibilityMap;
+}
+
+interface TopLevelDisplayStatus {
+  hidden: HiddenOrHighlightedState;
+  highlight: HiddenOrHighlightedState;
 }
 
 const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
   props: CheckBoxContentsProps
 ): JSX.Element => {
-  const {
-    item,
-    handleHighlight,
-    handleCheck,
-    currentHiddenAgents,
-    currentHighlightedAgents,
-    noneHidden,
-  } = props;
+  const { agent, currentVisibilityStates, setCurrentVisibilityStates } = props;
+  const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
+  const { Hide, Highlight } = DisplayAction;
 
-  const [showSubAgents, setShowSubAgents] = React.useState(false);
+  const [showSubAgentRows, setShowSubAgentsRows] =
+    React.useState<boolean>(false);
+  const [subAgentDisplayMaps, setSubAgentDisplayMaps] =
+    React.useState<SubAgentDisplayMaps>({ hidden: {}, highlight: {} });
+  const [topLevelDisplayStatus, setTopLevelDisplayStatus] =
+    React.useState<TopLevelDisplayStatus>({
+      hidden: Inactive,
+      highlight: Inactive,
+    });
 
-  const amIVisible = () => {
-    if (Object.keys(currentHiddenAgents).some((key) => key === item.name)) {
-      return false;
+  const displayStates = agent.displayStates.map((entry) => entry.name);
+
+  // Set default states for subagents on load
+  // Name and number of subagents aren't known when
+  // declaring maps above
+  useEffect(() => {
+    updateSubAgentDisplayMaps();
+  }, []);
+
+  // Listener/setters for changes to hidden/highlighted agents/subagents
+  useEffect(() => {
+    updateTopLevelDisplayStatus();
+    if (displayStates.length > 0) {
+      updateSubAgentDisplayMaps();
     }
-    return true;
+  }, [currentVisibilityStates]);
+
+  // display status update functions
+  const updateTopLevelDisplayStatus = () => {
+    let newDisplayStatus = { ...topLevelDisplayStatus };
+    for (const key in currentVisibilityStates) {
+      const viewerStatusMap =
+        currentVisibilityStates[key as keyof ViewerVisibilityStates];
+      let status: HiddenOrHighlightedState = Inactive;
+      if (Object.keys(viewerStatusMap).includes(agent.name)) {
+        if (
+          viewerStatusMap[agent.name].length === displayStates.length ||
+          viewerStatusMap[agent.name].length === 0
+        ) {
+          status = Active;
+        } else {
+          status = Indeterminate;
+        }
+      }
+      if (key === Hide) {
+        newDisplayStatus = {
+          ...newDisplayStatus,
+          hidden: status,
+        };
+      }
+      if (key === Highlight) {
+        newDisplayStatus = {
+          ...newDisplayStatus,
+          highlight: status,
+        };
+      }
+    }
+    setTopLevelDisplayStatus(newDisplayStatus);
   };
 
-  const isVisible = noneHidden || amIVisible();
+  const updateSubAgentDisplayMaps = () => {
+    const newSubAgentDisplayMaps = {
+      hidden: getSubAgentDisplayStateMap(
+        subAgentDisplayMaps[Hide],
+        currentVisibilityStates.hidden
+      ),
+      highlight: getSubAgentDisplayStateMap(
+        subAgentDisplayMaps[Highlight],
+        currentVisibilityStates.highlight
+      ),
+    };
+    setSubAgentDisplayMaps(newSubAgentDisplayMaps);
+  };
+
+  const getSubAgentDisplayStateMap = (
+    UIStatusMap: UIVisibilityMap,
+    viewerStatusMap: ViewerVisibilityMap
+  ) => {
+    const newSubAgentMap = { ...UIStatusMap };
+    agent.displayStates.forEach((state) => {
+      let subAgentStatus = Inactive;
+      if (viewerStatusMap[agent.name] !== undefined) {
+        if (
+          viewerStatusMap[agent.name].includes(state.name) ||
+          viewerStatusMap[agent.name].length === 0
+        ) {
+          subAgentStatus = Active;
+        }
+      }
+      newSubAgentMap[state.name] = subAgentStatus;
+    });
+    return newSubAgentMap;
+  };
+
+  // get payloads for hidden/highlight status changes
+  const getPayloadTopLevelDisplayAction = (
+    key: string,
+    topLevelStatus: HiddenOrHighlightedState,
+    currentAgentSelectionMap: ViewerVisibilityMap
+  ) => {
+    const newSelection = { ...currentAgentSelectionMap };
+    const hideAll = topLevelStatus !== Inactive;
+    let values: string[] = [];
+    if (!hideAll && displayStates.length > 0) {
+      values = [...displayStates];
+    }
+    if (currentAgentSelectionMap[key]) {
+      delete newSelection[key];
+    } else {
+      newSelection[key] = [...values];
+    }
+    return newSelection;
+  };
+
+  const getPayloadSubAgentDisplayAction = (
+    key: string,
+    // subAgentStatus: HiddenOrHighlightedState,
+    currentAgentSelectionMap: ViewerVisibilityMap
+  ) => {
+    const newSelection = { ...currentAgentSelectionMap };
+    let itemEntry: string[] = [];
+
+    if (currentAgentSelectionMap[agent.name] !== undefined) {
+      itemEntry = currentAgentSelectionMap[agent.name];
+
+      if (itemEntry.includes(key)) {
+        newSelection[agent.name] = itemEntry.filter((value) => value !== key);
+        if (newSelection[agent.name].length === 0) {
+          delete newSelection[agent.name];
+          return newSelection;
+        }
+      }
+    }
+    newSelection[agent.name] = [...itemEntry, key];
+    return newSelection;
+  };
+
+  // handles hide/highlight actions for toplevel or subagents
+  const handleDisplayAction = (
+    key: string,
+    topLevel: boolean,
+    hideOrHighlight: DisplayAction
+  ) => {
+    const selectionMap = currentVisibilityStates[hideOrHighlight];
+    let newValue: ViewerVisibilityMap = {};
+    if (topLevel) {
+      const currentTopLevelDisplayStatus =
+        topLevelDisplayStatus[hideOrHighlight];
+      newValue = getPayloadTopLevelDisplayAction(
+        key,
+        currentTopLevelDisplayStatus,
+        selectionMap
+      );
+    } else {
+      newValue = getPayloadSubAgentDisplayAction(key, selectionMap);
+    }
+    if (hideOrHighlight === Hide) {
+      setCurrentVisibilityStates({
+        ...currentVisibilityStates,
+        hidden: newValue,
+      });
+    } else if (hideOrHighlight === Highlight) {
+      setCurrentVisibilityStates({
+        ...currentVisibilityStates,
+        highlight: newValue,
+      });
+    }
+  };
+
+  // display state handler
+  const handleShowSubAgentRows = (value: boolean) => {
+    setShowSubAgentsRows(value);
+  };
 
   return (
-    <div className="item-row">
-      {item.displayStates.length >= 0 && (
-        <span
-          className="caret-icon"
-          onClick={() => {
-            setShowSubAgents(!showSubAgents);
-          }}
-        >
-          {showSubAgents ? CaretDown : CaretRight}
-        </span>
-      )}
-      <div
-        className={classNames('custom-checkbox', 'checkbox')}
-        onClick={() => handleHighlight(item.name)}
-      >
-        {currentHighlightedAgents[item.name] ? StarFilledIcon : Star}
-      </div>
-      <div
-        className="color-swatch"
-        style={{ backgroundColor: item.color }}
-      ></div>
-      <input
-        type="checkbox"
-        className="checkbox"
-        onClick={() => handleCheck(item.name)}
-        checked
+    <div>
+      <CheckBoxRow
+        agent={agent}
+        isTopLevel={true}
+        hiddenStatus={topLevelDisplayStatus[Hide]}
+        highlightStatus={topLevelDisplayStatus[Highlight]}
+        hasSubAgents={displayStates.length > 0}
+        showSubAgentRows={showSubAgentRows}
+        handleShowSubAgentRows={handleShowSubAgentRows}
+        handleDisplayAction={handleDisplayAction}
       />
-      <span className="item-name">
-        {item.name} {isVisible ? 'Visible' : 'Hidden'}
-      </span>
+      {showSubAgentRows && (
+        <>
+          {agent.displayStates.map((state) => (
+            <CheckBoxRow
+              agent={state}
+              isTopLevel={false}
+              hasSubAgents={false}
+              hiddenStatus={subAgentDisplayMaps[Hide][state.name]}
+              highlightStatus={subAgentDisplayMaps[Highlight][state.name]}
+              showSubAgentRows={showSubAgentRows}
+              handleShowSubAgentRows={handleShowSubAgentRows}
+              handleDisplayAction={handleDisplayAction}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

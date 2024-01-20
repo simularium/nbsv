@@ -10,14 +10,13 @@ import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
-import { agentColors } from './constants';
+import { ViewerVisibilityStates, agentColors } from './constants';
 import {
   ModelInfo,
   TrajectoryFileInfo,
 } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
-import { VisibilitySelectionMap } from './components/CheckBoxTree';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -28,27 +27,32 @@ export interface WidgetProps {
 }
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
+  // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
+  const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
+  // UI state
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
   const [showSidePanel, setShowSidePanel] = useState(true);
-  const [currentHiddenAgents, setCurrentHiddenAgents] =
-    useState<VisibilitySelectionMap>({});
-  const [currentHighlightedAgents, setCurrentHighlightedAgents] =
-    useState<VisibilitySelectionMap>({});
+  const [currentVisibilityStates, setCurrentVisibilityStates] =
+    useState<ViewerVisibilityStates>({
+      hidden: {},
+      highlight: {},
+    });
+  // Viewer state
   const [selectionStateInfoForViewer, setSelectionStateInfoForViewer] =
     useState<SelectionStateInfo>({
       highlightedAgents: [],
       hiddenAgents: [],
       colorChange: null,
     });
-  const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
+  // Resize listener
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
     if (!observerRef.current && containerRef.current) {
@@ -85,52 +89,40 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
     };
   }, [containerRef, showSidePanel]);
 
+  // Callbacks for viewer props
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
-    console.log('trajectory data', data);
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
   };
 
-  const updateSelectionStateInfoForViewer = (data: SelectionStateInfo) => {
-    console.log('data in Selectionstate info handler', data);
-    setSelectionStateInfoForViewer(data);
-  };
-
   const handleUIDisplayDataChanged = (uidata: any) => {
-    console.log('uidata', uidata);
     setUIDisplayData(uidata);
   };
 
+  // Listener/setter for selection state info
   useEffect(() => {
     setSelectionStateInfoForViewer((prevState) => ({
       ...prevState,
-      highlightedAgents: Object.keys(currentHighlightedAgents).map((key) => ({
+      highlightedAgents: Object.keys(currentVisibilityStates.highlight).map(
+        (key) => ({
+          name: key,
+          tags: currentVisibilityStates.highlight[key],
+        })
+      ),
+      hiddenAgents: Object.keys(currentVisibilityStates.hidden).map((key) => ({
         name: key,
-        tags: currentHighlightedAgents[key],
+        tags: currentVisibilityStates.hidden[key],
       })),
     }));
-  }, [currentHighlightedAgents]);
-
-  useEffect(() => {
-    setSelectionStateInfoForViewer((prevState) => ({
-      ...prevState,
-      hiddenAgents: Object.keys(currentHiddenAgents).map((key) => ({
-        name: key,
-        tags: currentHiddenAgents[key],
-      })),
-    }));
-  }, [currentHiddenAgents]);
+  }, [currentVisibilityStates]);
 
   return (
     <div ref={containerRef} className="container">
       {showSidePanel && (
         <SidePanel
-          updateSelectionStateInfo={updateSelectionStateInfoForViewer}
           uiDisplayData={uiDisplayData}
-          currentHiddenAgents={currentHiddenAgents}
-          currentHighlightedAgents={currentHighlightedAgents}
-          setCurrentHiddenAgents={setCurrentHiddenAgents}
-          setCurrentHighlightedAgents={setCurrentHighlightedAgents}
+          currentVisibilityStates={currentVisibilityStates}
+          setCurrentVisibilityStates={setCurrentVisibilityStates}
         />
       )}
       <div className="viewer-container">

@@ -1,45 +1,84 @@
 .sp-container {
   background-color: var(--dark-two);
-  min-width: 280px;
   display: flex;
   flex-direction: column;
+  font-size: 16px;
   gap: 3px;
-  overflow-y: scroll;
-  overflow-x: hidden;
   max-height: 529px;
-  scrollbar-color: #888 var(--dark-three); /* thumb and track color */
-  scrollbar-width: thin; /* 'auto', 'thin', or 'none' */
+  min-width: 285px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: var(--gray-three) var(--dark-three); /* thumb and track color */
+  scrollbar-width: thin;
 }
 
-.sp-container .title-card {
-  border-radius: 0px;
-  background-color: var(--dark-three);
+.sp-container .agent-title {
   color: var(--gray-two);
-  margin-right: 10px;
-}
-
-.sp-container .ant-card-body {
+  background-color: var(--dark-one);
+  border-radius: 0px;
+  margin-right: 5px;
   padding: 12px 0px 16px 21px;
-  margin-bottom: 3px;
-  font-weight: 300;
 }
 
 .sp-container::-webkit-scrollbar {
-    width: 6px;
-    height: 10px;
+  height: 10px;
+  width: 10px;
 }
 
 .sp-container::-webkit-scrollbar-track {
-    background: var(--dark-three);
+  background: var(--dark-three);
 }
 
 .sp-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-    border: 2px solid var(--dark-three)1;
+  background: var(--gray-three);
+  border-radius: 10px;
+  border: 2px solid var(--dark-three) 1;
 }
 
 .sp-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  background: var(--gray-three);
+}
+
+.checkboxtree {
+  color: var(--gray-two);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 3px;
+}
+
+.check-all {
+  display: flex;
+  margin-left: 81px;
+}
+
+.item-row {
+  align-items: center;
+  background-color: var(--dark-three);
+  display: flex;
+  gap: 6px;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding: 12px 11px 12px 20px;
+  width: 240px;
+}
+
+.color-swatch {
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 10px;
+  width: 12px;
+}
+
+/* checkbox style rules are defined 
+here as its the first instance of a checkbox
+and propogate down to check box row */
+.custom-checkbox {
+  color: var(--white-one);
+  background-color: var(--dark-one);
+}
+
+.checkbox svg {
+  height: 16px;
+  width: 16px;
 }

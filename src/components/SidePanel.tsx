@@ -1,58 +1,93 @@
 import * as React from 'react';
-import { Card } from 'antd';
+import classNames from 'classnames';
+import { isEqual } from 'underscore';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
-import CheckBoxTree, { VisibilitySelectionMap } from './CheckBoxTree';
+import {
+  HiddenOrHighlightedState,
+  ViewerVisibilityMap,
+  ViewerVisibilityStates,
+} from '../constants';
+import { VisibleCheck, HiddenCheck, IndeterminateCheck } from './Icons';
+import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
 
-// TODO placeholder, side panel will receive many props when rendering checkboxes
 interface SidePanelProps {
-  updateSelectionStateInfo: (selectionStateInfo: any) => void;
   uiDisplayData: UIDisplayData;
-  currentHiddenAgents: VisibilitySelectionMap;
-  currentHighlightedAgents: VisibilitySelectionMap;
-  setCurrentHiddenAgents: (hiddenAgents: VisibilitySelectionMap) => void;
-  setCurrentHighlightedAgents: (
-    highlightedAgents: VisibilitySelectionMap
+  currentVisibilityStates: ViewerVisibilityStates;
+  setCurrentVisibilityStates: (
+    visibilityStates: ViewerVisibilityStates
   ) => void;
 }
 
 const SidePanel: React.FunctionComponent<SidePanelProps> = (
   props: SidePanelProps
 ): JSX.Element => {
-  const {
-    uiDisplayData,
-    currentHiddenAgents,
-    currentHighlightedAgents,
-    setCurrentHiddenAgents,
-    setCurrentHighlightedAgents,
-  } = props;
+  const { uiDisplayData, currentVisibilityStates, setCurrentVisibilityStates } =
+    props;
+
+  const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
+  const [hiddenState, setHiddenState] =
+    React.useState<HiddenOrHighlightedState>(Inactive);
+  const hiddenStateIcon = {
+    [Inactive]: VisibleCheck,
+    [Active]: HiddenCheck,
+    [Indeterminate]: IndeterminateCheck,
+  };
+
+  React.useEffect(() => {
+    let newHiddenState: HiddenOrHighlightedState = Indeterminate;
+    if (Object.keys(currentVisibilityStates.hidden).length === 0) {
+      newHiddenState = Inactive;
+    } else if (isEqual(currentVisibilityStates.hidden, payloadForHideAll)) {
+      newHiddenState = Active;
+    }
+    setHiddenState(newHiddenState);
+  }, [currentVisibilityStates.hidden]);
+
+  const payloadForHideAll = (() => {
+    let payload: ViewerVisibilityMap = {};
+    if (hiddenState === Inactive) {
+      payload = uiDisplayData.reduce<ViewerVisibilityMap>((acc, item) => {
+        acc[item.name] = [];
+        return acc;
+      }, {});
+    }
+    return payload;
+  })();
+
+  const handleHideAll = () => {
+    setCurrentVisibilityStates({
+      ...currentVisibilityStates,
+      hidden: payloadForHideAll,
+    });
+  };
 
   console.log('uidisplaydata in side panel', uiDisplayData);
   return (
     <div className="sp-container">
-      <Card className="title-card" bordered={false}>
-        Agents
-      </Card>
-      <CheckBoxTree
-        uiDisplayData={uiDisplayData}
-        currentHiddenAgents={currentHiddenAgents}
-        currentHighlightedAgents={currentHighlightedAgents}
-        setCurrentHiddenAgents={setCurrentHiddenAgents}
-        setCurrentHighlightedAgents={setCurrentHighlightedAgents}
-        // handleAgentCheck={turnAgentsOnByDisplayKey}
-        // agentsChecked={agentVisibilityMap}
-        // handleHighlight={highlightAgentsByDisplayKey}
-        // agentsHighlighted={agentHighlightMap}
-        // setAgentsVisible={setAgentsVisible}
-        // payloadForSelectAll={payloadForSelectAll}
-        // payloadForSelectNone={payloadForSelectNone}
-        // isSharedCheckboxIndeterminate={isSharedCheckboxIndeterminate}
-        // recentColors={recentColors}
-        // setColorChange={setColorChange}
-        // setRecentColors={setRecentColors}
-      />
+      <div className="agent-title">Agents</div>
+      <div className="checkboxtree">
+        <div className="item-row">
+          <div
+            className={classNames('checkbox', 'check-all')}
+            onClick={() => handleHideAll()}
+          >
+            {hiddenStateIcon[hiddenState]}
+          </div>
+          <span>All agent types</span>
+        </div>
+        {uiDisplayData.map((agent) => (
+          <>
+            <CheckBoxContents
+              agent={agent}
+              currentVisibilityStates={currentVisibilityStates}
+              setCurrentVisibilityStates={setCurrentVisibilityStates}
+            />
+          </>
+        ))}
+      </div>
     </div>
   );
 };
