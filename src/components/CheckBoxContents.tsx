@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import {
   DisplayAction,
   HiddenOrHighlightedState,
+  SubAgentDisplayMaps,
+  TopLevelDisplayStatus,
   UIVisibilityMap,
   ViewerVisibilityMap,
   ViewerVisibilityStates,
@@ -23,16 +25,6 @@ interface CheckBoxContentsProps {
 // the agents and subagents in relation to hiding and highlighting.
 // Tried to strike a balance between readability and conciseness.
 // There is no stylesheet for this component as its basically a data layer.
-
-interface SubAgentDisplayMaps {
-  hidden: UIVisibilityMap;
-  highlight: UIVisibilityMap;
-}
-
-interface TopLevelDisplayStatus {
-  hidden: HiddenOrHighlightedState;
-  highlight: HiddenOrHighlightedState;
-}
 
 const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
   props: CheckBoxContentsProps
