@@ -7,10 +7,11 @@ const rules = [
   {
     test: /\.(tsx|jsx)$/,
     exclude: /node_modules/,
-    use: ["babel-loader"],
+    use: ['babel-loader'],
   },
   { test: /\.js$/, loader: 'source-map-loader' },
-  { test: /\.css$/, use: ['style-loader', 'css-loader']}
+  { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+  { test: /\.(svg)$/, use: ['file-loader'] },
 ];
 
 // Packages that shouldn't be bundled but loaded at runtime

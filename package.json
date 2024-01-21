@@ -11,7 +11,8 @@
   "files": [
     "lib/**/*.js",
     "dist/*.js",
-    "css/*.css"
+    "css/*.css",
+    "assets/*.svg"
   ],
   "homepage": "https://github.com/simularium/nbsv",
   "bugs": {
@@ -55,6 +56,8 @@
     "antd": "^5.4.2",
     "crypto": "1.0.1",
     "jest-cli": "^29.7.0",
+    "mini-svg-data-uri": "^1.4.4",
+    "raw-loader": "^4.0.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
@@ -84,6 +87,7 @@
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "file-loader": "^6.2.0",
     "fs-extra": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
