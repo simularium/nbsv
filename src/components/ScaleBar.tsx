@@ -11,9 +11,9 @@ interface ScaleBarProps {
 const ScaleBar = (scaleBarProps: ScaleBarProps): JSX.Element => {
   const { label } = scaleBarProps;
   const scaleBarNode = label ? (
-    <div className="scale-bar-container">
-      <div className="text">{label}</div>
-      <div className="icon">{ScaleBarIcon}</div>
+    <div className="scale-bar">
+      {label}
+      {ScaleBarIcon}
     </div>
   ) : (
     <div />
