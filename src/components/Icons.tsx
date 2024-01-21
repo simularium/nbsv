@@ -12,6 +12,14 @@ import {
 } from '@ant-design/icons';
 import scaleBarSVG from '../../assets/scale-bar.svg';
 
+const createImageElementFromSVG = (
+  svg: string,
+  style?: React.CSSProperties
+) => {
+  const uri = miniSVGDataURI(svg);
+  return <img src={uri} style={style} />;
+};
+
 export const Reset = <HomeOutlined />;
 export const ZoomIn = <PlusOutlined />;
 export const ZoomOut = <MinusOutlined />;
@@ -20,9 +28,9 @@ export const FrameBack = <StepBackwardOutlined />;
 export const FrameForward = <StepForwardOutlined />;
 export const Pause = <PauseOutlined />;
 export const Play = <CaretRightOutlined />;
-export const ScaleBarIcon = (
-  <img src={miniSVGDataURI(scaleBarSVG)} style={{ width: '60px' }} />
-);
+export const ScaleBarIcon = createImageElementFromSVG(scaleBarSVG, {
+  width: '60px',
+});
 
 export default {
   Reset,
