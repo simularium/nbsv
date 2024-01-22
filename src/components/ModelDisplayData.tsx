@@ -9,7 +9,7 @@ interface ModelDisplayDataProps extends ModelInfo {
   trajectoryTitle?: string;
 }
 
-const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
+const ModelDisplayData: React.FunctionComponent<ModelDisplayDataProps> = (
   props: ModelDisplayDataProps
 ): JSX.Element => {
   const { title, trajectoryTitle } = props;
@@ -26,14 +26,11 @@ const ViewerTitle: React.FunctionComponent<ModelDisplayDataProps> = (
   };
 
   return (
-    <div className="title-container">
-      <div className="title">
-        {trajectoryTitle || title || '<Untitled trajectory>'}
-        {/* TODO clicking Info icon will render meta data panel */}
-        {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
-      </div>
+    <div className="model-display-data-container">
+      {trajectoryTitle || title || '<Untitled trajectory>'}
+      {hasMetaData() ? <div className="info-button"> {Info} </div> : null}
     </div>
   );
 };
 
-export default ViewerTitle;
+export default ModelDisplayData;

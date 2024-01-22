@@ -1,14 +1,13 @@
-.title-container {
-  font-size: 20px;
-  font-weight: 400;
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.title {
+.model-display-data-container {
   color: var(--white-one);
   display: flex;
+  font-size: 20px;
+  font-weight: 400;
+  justify-content: center;
+  margin-top: 20px;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
 }
 
 .info-button {
