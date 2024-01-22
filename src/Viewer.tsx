@@ -8,7 +8,13 @@ import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
-import { agentColors } from './constants';
+import {
+  MIN_WIDTH_TO_SHOW_SIDE_PANEL,
+  SIDE_PANEL_WIDTH,
+  VIEWER_HEIGHT,
+  VIEWER_INITIAL_WIDTH,
+  agentColors,
+} from './constants';
 import {
   ModelInfo,
   TrajectoryFileInfo,
@@ -29,7 +35,10 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
-  const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
+  const [dimensions, setDimensions] = useState({
+    width: VIEWER_INITIAL_WIDTH,
+    height: VIEWER_HEIGHT,
+  });
   const [showSidePanel, setShowSidePanel] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,9 +54,9 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
             let { width } = entry.contentRect;
             const { height } = entry.contentRect;
             // hide side panel if space is small
-            setShowSidePanel(width > 580);
+            setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
-              width = width - 280;
+              width = width - SIDE_PANEL_WIDTH;
             }
             // pass size to viewer
             setDimensions({ width, height });
