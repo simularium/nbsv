@@ -1,19 +1,26 @@
+import React, { useEffect, useRef, useState } from 'react';
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
+  TrajectoryFileInfo,
 } from '@aics/simularium-viewer';
-import React, { useEffect, useRef, useState } from 'react';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import PlayBackControls from './components/PlaybackControls';
-import { PlaybackData, PlaybackState, agentColors } from './constants';
+import ScaleBar from './components/ScaleBar';
 import {
-  ModelInfo,
-  TrajectoryFileInfo,
-} from '@aics/simularium-viewer/type-declarations/simularium/types';
+  MIN_WIDTH_TO_SHOW_SIDE_PANEL,
+  SIDE_PANEL_WIDTH,
+  VIEWER_HEIGHT,
+  VIEWER_INITIAL_WIDTH,
+  agentColors,
+  PlaybackData,
+  PlaybackState,
+} from './constants';
 
 import '../css/viewer.css';
 
@@ -37,22 +44,26 @@ const initialPlaybackData: PlaybackData = {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   // UI and viewer states
-  const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
+  const [dimensions, setDimensions] = useState({
+    width: VIEWER_INITIAL_WIDTH,
+    height: VIEWER_HEIGHT,
+  });
   const [showSidePanel, setShowSidePanel] = useState(true);
   const [playbackState, setPlaybackState] = useState<PlaybackState>({
     currentTime: 0,
     isPlaying: false,
   });
+  const controller = props.controller;
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajTitle, setTrajTitle] = useState<string | undefined>('');
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
   const [playbackData, setPlaybackData] =
     useState<PlaybackData>(initialPlaybackData);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
-  // Resize observer
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
     if (!observerRef.current && containerRef.current) {
@@ -61,12 +72,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
-            // const { height } = entry.contentRect;
-            const height = 529;
+            const { height } = entry.contentRect;
             // hide side panel if space is small
-            setShowSidePanel(width > 580);
+            setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
-              width = width - 280;
+              width = width - SIDE_PANEL_WIDTH;
             }
             // pass size to viewer
             setDimensions({ width, height });
@@ -94,12 +104,25 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     console.log('handleTrajectoryData', data);
     setTrajTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
+    setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
     setPlaybackData({
       timeStep: data.timeStepSize,
       lastFrameTime: (data.totalSteps - 1) * data.timeStepSize,
       firstFrameTime: 0,
       timeUnits: data.timeUnits,
     });
+  };
+
+  const getScaleBarLabel = (spatialUnits: {
+    magnitude: number;
+    name: string;
+  }): string => {
+    const tickIntervalLength = controller.tickIntervalLength;
+    let scaleBarLabelNumber = tickIntervalLength * spatialUnits.magnitude;
+    scaleBarLabelNumber = parseFloat(scaleBarLabelNumber.toPrecision(2));
+    const scaleBarLabelUnit = spatialUnits.name;
+
+    return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
   const handleTimeChange = (timeData: any): void => {
@@ -137,14 +160,15 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
-        <div className="controls">
+        <div className="scalebar-controls">
           <PlayBackControls
             playbackState={playbackState}
             setPlaybackState={setPlaybackState}
             playbackData={playbackData}
-            controller={props.controller}
+            controller={controller}
           />
-          <CameraControls controller={props.controller} />
+          <ScaleBar label={scaleBarLabel} />
+          <CameraControls controller={controller} />
         </div>
       </div>
     </div>

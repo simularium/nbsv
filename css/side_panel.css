@@ -3,15 +3,10 @@
   min-width: 280px;
 }
 
-.sp-container .title-card {
+.sp-container .agent-title {
+  background-color: var(--dark-one);
   border-radius: 0px;
-  background-color: var(--dark-three);
   color: var(--gray-two);
-  margin-right: 10px;
-}
-
-.sp-container .ant-card-body {
+  margin-right: 5px;
   padding: 12px 0px 16px 21px;
-  margin-bottom: 3px;
-  font-weight: 300;
 }
