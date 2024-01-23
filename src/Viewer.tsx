@@ -33,7 +33,10 @@ export interface ViewerProps {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   // UI display state
-  const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
+  const [dimensions, setDimensions] = useState({
+    width: VIEWER_INITIAL_WIDTH,
+    height: VIEWER_HEIGHT,
+  });
   const [showSidePanel, setShowSidePanel] = useState(true);
   const controller = props.controller;
   // trajectory data
@@ -54,8 +57,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
-            // const { height } = entry.contentRect;
-            const height = 529;
+            const { height } = entry.contentRect;
             // hide side panel if space is small
             setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
@@ -83,7 +85,6 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   }, [containerRef, showSidePanel]);
 
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
-    console.log('handleTrajectoryData', data);
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
     setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
