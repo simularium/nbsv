@@ -231,7 +231,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           disabled={isPlaying}
           style={{ width: timeInputWidth }}
         />
-        <span className="lastFrameTime">
+        <span className="last-frame-time">
           / {displayTimes.roundedLastFrameTime}
           {timeUnits ? timeUnits.name : 's'}
         </span>

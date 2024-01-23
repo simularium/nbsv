@@ -5,12 +5,12 @@ import {
   MinusOutlined,
   HomeOutlined,
   InfoCircleFilled,
-  StepBackwardOutlined,
-  StepForwardOutlined,
   CaretRightOutlined,
   PauseOutlined,
 } from '@ant-design/icons';
 import scaleBarSVG from '../../assets/scale-bar.svg';
+import stepBackSVG from '../../assets/step-back.svg';
+import stepForwardSVG from '../../assets/step-forward.svg';
 
 const createImageElementFromSVG = (
   svg: string,
@@ -27,8 +27,8 @@ export const Info = <InfoCircleFilled />;
 export const ScaleBarIcon = createImageElementFromSVG(scaleBarSVG, {
   width: '60px',
 });
-export const FrameBack = <StepBackwardOutlined />;
-export const FrameForward = <StepForwardOutlined />;
+export const FrameBack = createImageElementFromSVG(stepBackSVG);
+export const FrameForward = createImageElementFromSVG(stepForwardSVG);
 export const Pause = <PauseOutlined />;
 export const Play = <CaretRightOutlined />;
 
