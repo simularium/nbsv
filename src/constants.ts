@@ -17,3 +17,10 @@ export const agentColors = [
   '#9f516c',
   '#00aabf',
 ];
+export interface PublicationData {
+  data: any;
+  title: string;
+  journal: string;
+  year: string;
+  url: string;
+}

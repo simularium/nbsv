@@ -4,7 +4,7 @@ import { Close, CloseHover } from './Icons';
 
 import '../../css/meta_data_panel.css';
 import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
-import { PublicationData } from '../Viewer';
+import { PublicationData } from '../constants';
 
 interface MetaDataPanelProps extends ModelInfo {
   publicationData: PublicationData | null;
@@ -27,7 +27,6 @@ const MetaDataPanel: React.FunctionComponent<MetaDataPanelProps> = (
   } = props;
   const hasLinks = inputDataUrl || sourceCodeLicenseUrl || rawOutputDataUrl;
 
-  //   const [showMetaData, setShowMetaData] = React.useState<boolean>(false);
   const [hoverOnClose, setHoverOnClose] = React.useState<boolean>(false);
 
   const handleInfoButtonClick = () => {

@@ -10,7 +10,7 @@ import CameraControls from './components/CameraControls';
 import ViewerTitle from './components/ModelDisplayData';
 import MetaDataPanel from './components/MetaDataPanel';
 import SidePanel from './components/SidePanel';
-import { agentColors } from './constants';
+import { PublicationData, agentColors } from './constants';
 import {
   ModelInfo,
   TrajectoryFileInfo,
@@ -24,14 +24,6 @@ export interface WidgetModelWithState extends WidgetModel {
 
 export interface WidgetProps {
   controller: SimulariumController;
-}
-
-export interface PublicationData {
-  data: any;
-  title: string;
-  journal: string;
-  year: string;
-  url: string;
 }
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
@@ -86,18 +78,12 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   }, [containerRef, showSidePanel]);
 
   const fetchAndDisplayPublicationData = async (doi: string) => {
-    // const testdoi = '10.7554/eLife.82863.sa0';
-    // try {
-    //   const response = await axios.get(`http://doi.org/${testdoi}`, {
-    //     headers: { Accept: 'application/json' },
-    //   });
     try {
       const response = await axios.get(`http://doi.org/${doi}`, {
         headers: { Accept: 'application/json' },
       });
 
       const data = response.data;
-      console.log('fetched data: ', data);
       setPublicationData({
         data: data,
         title: data.title,
