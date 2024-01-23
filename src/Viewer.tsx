@@ -1,13 +1,16 @@
+import React, { useEffect, useRef, useState } from 'react';
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
+  TrajectoryFileInfo,
 } from '@aics/simularium-viewer';
-import React, { useEffect, useRef, useState } from 'react';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
+import ScaleBar from './components/ScaleBar';
 import {
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
   SIDE_PANEL_WIDTH,
@@ -15,13 +18,8 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
-import {
-  ModelInfo,
-  TrajectoryFileInfo,
-} from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
-import ScaleBar from './components/ScaleBar';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
