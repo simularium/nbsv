@@ -1,6 +1,5 @@
 import React from 'react';
 import miniSVGDataURI from 'mini-svg-data-uri';
-import miniSVGDataURI from 'mini-svg-data-uri';
 import {
   PlusOutlined,
   MinusOutlined,
