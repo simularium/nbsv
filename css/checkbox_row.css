@@ -50,3 +50,8 @@
   background-color: var(--dark-one);
   height: 2px;
 }
+
+.star svg {
+  color: var(--white-one);
+  fill: var(--white-one);
+}

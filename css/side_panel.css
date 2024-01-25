@@ -61,11 +61,6 @@
   width: 231px;
 }
 
-.checkbox svg {
-  height: 16px;
-  width: 16px;
-}
-
 .check-all {
   display: flex;
   margin-left: 81px;

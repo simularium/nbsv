@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Tooltip } from 'antd';
 
 import '../../css/checkbox_row.css';
 
@@ -14,9 +14,9 @@ import {
   DisplayAction,
   DisplayStateEntry,
   HiddenOrHighlightedState,
+  TOOLTIP_COLOR,
 } from '../constants';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
-
 interface CheckBoxRowProps {
   agent: UIDisplayEntry | DisplayStateEntry;
   isTopLevel: boolean;
@@ -54,6 +54,16 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
     [Inactive]: NoHighlightStar,
     [Indeterminate]: IndeterminateHighlightStar,
   };
+  const highlightStateTooltipText = {
+    [Active]: 'Remove highlight',
+    [Inactive]: 'Highlight',
+    [Indeterminate]: 'Remove highlight',
+  };
+  const hiddenStateTooltipText = {
+    [Active]: 'Show',
+    [Inactive]: 'Hide',
+    [Indeterminate]: 'Show',
+  };
 
   const swatchMargin = isTopLevel ? '10px' : '32px';
 
@@ -72,12 +82,18 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
         ) : (
           <div className="caret-placeholder"></div>
         )}
-        <div
-          className="checkbox"
-          onClick={() => handleDisplayAction(name, isTopLevel, Highlight)}
+        <Tooltip
+          placement="right"
+          title={highlightStateTooltipText[highlightStatus]}
+          color={TOOLTIP_COLOR}
         >
-          {highlightStateIcon[highlightStatus]}
-        </div>
+          <div
+            className="star"
+            onClick={() => handleDisplayAction(name, isTopLevel, Highlight)}
+          >
+            {highlightStateIcon[highlightStatus]}
+          </div>
+        </Tooltip>
         <div
           className="color-swatch"
           style={{
@@ -85,11 +101,17 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
             marginRight: swatchMargin,
           }}
         ></div>
-        <Checkbox
-          indeterminate={hiddenStatus === 'Indeterminate'}
-          checked={hiddenStatus === 'Inactive'}
-          onClick={() => handleDisplayAction(name, isTopLevel, Hide)}
-        />
+        <Tooltip
+          placement="right"
+          title={hiddenStateTooltipText[hiddenStatus]}
+          color={TOOLTIP_COLOR}
+        >
+          <Checkbox
+            indeterminate={hiddenStatus === 'Indeterminate'}
+            checked={hiddenStatus === 'Inactive'}
+            onClick={() => handleDisplayAction(name, isTopLevel, Hide)}
+          />
+        </Tooltip>
         <span>{name}</span>
       </div>
     </>

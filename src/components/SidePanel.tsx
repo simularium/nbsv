@@ -5,13 +5,14 @@ import { UIDisplayData } from '@aics/simularium-viewer';
 
 import {
   HiddenOrHighlightedState,
+  TOOLTIP_COLOR,
   ViewerVisibilityMap,
   ViewerVisibilityStates,
 } from '../constants';
 import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
-import { Checkbox } from 'antd';
+import { Checkbox, Tooltip } from 'antd';
 
 interface SidePanelProps {
   uiDisplayData: UIDisplayData;
@@ -30,6 +31,12 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
   const [hiddenState, setHiddenState] =
     React.useState<HiddenOrHighlightedState>(Inactive);
+
+  const hiddenStateTooltipText = {
+    [Active]: 'Show',
+    [Inactive]: 'Hide',
+    [Indeterminate]: 'Show',
+  };
 
   React.useEffect(() => {
     let newHiddenState: HiddenOrHighlightedState = Indeterminate;
@@ -65,12 +72,18 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
       <div className="agent-title">Agents</div>
       <div className="checkboxtree">
         <div className="item-row">
-          <Checkbox
-            className={classNames('checkbox', 'check-all')}
-            indeterminate={hiddenState === 'Indeterminate'}
-            checked={hiddenState === 'Inactive'}
-            onClick={() => handleHideAll()}
-          />
+          <Tooltip
+            placement="right"
+            title={hiddenStateTooltipText[hiddenState]}
+            color={TOOLTIP_COLOR}
+          >
+            <Checkbox
+              className={classNames('checkbox', 'check-all')}
+              indeterminate={hiddenState === 'Indeterminate'}
+              checked={hiddenState === 'Inactive'}
+              onClick={() => handleHideAll()}
+            />
+          </Tooltip>
           <span>All agent types</span>
         </div>
         {uiDisplayData.map((agent) => (
