@@ -55,6 +55,7 @@
     "antd": "^5.4.2",
     "crypto": "1.0.1",
     "jest-cli": "^29.7.0",
+    "mini-svg-data-uri": "^1.4.4",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
