@@ -30,7 +30,7 @@
 }
 
 .sp-container::-webkit-scrollbar-thumb {
-  background: var(--gray-three);
+  background: var(--dark-four);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
