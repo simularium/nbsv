@@ -32,11 +32,14 @@
 .sp-container::-webkit-scrollbar-thumb {
   background: var(--gray-three);
   border-radius: 10px;
-  border: 2px solid var(--dark-three) 1;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 .sp-container::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-three);
+  background: var(--gray-one);
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 .checkboxtree {
@@ -55,7 +58,7 @@
   margin-right: 10px;
   margin-left: 10px;
   padding: 12px 11px 12px 20px;
-  width: 240px;
+  width: 231px;
 }
 
 .checkbox svg {
