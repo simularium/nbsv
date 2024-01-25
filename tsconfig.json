@@ -3,7 +3,7 @@
     "declaration": true,
     "esModuleInterop":true,
     "jsx": "react",
-    "lib": ["es2016", "dom"],
+    "lib": ["es2015", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -20,8 +20,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx", 
-    "browser-env.d.ts", 
+    "src/**/*.tsx", "browser-env.d.ts", 
   ],
   "exclude": ["src/**/__tests__"]
 }
