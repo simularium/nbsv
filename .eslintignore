@@ -3,4 +3,3 @@ dist
 coverage
 **/*.d.ts
 tests
-src/__tests__
