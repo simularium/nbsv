@@ -22,7 +22,6 @@
     "src/**/*.ts",
     "src/**/*.tsx", 
     "browser-env.d.ts", 
-    "custom.d.ts",
   ],
   "exclude": ["src/**/__tests__"]
 }
