@@ -11,8 +11,7 @@
   "files": [
     "lib/**/*.js",
     "dist/*.js",
-    "css/*.css",
-    "assets/*.svg"
+    "css/*.css"
   ],
   "homepage": "https://github.com/simularium/nbsv",
   "bugs": {
