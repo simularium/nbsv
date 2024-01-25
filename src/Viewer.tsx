@@ -33,35 +33,34 @@ export interface ViewerProps {
 }
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
-  // UI display state
-  const [dimensions, setDimensions] = useState({
-    width: VIEWER_INITIAL_WIDTH,
-    height: VIEWER_HEIGHT,
-  });
-  const [showSidePanel, setShowSidePanel] = useState(true);
   const controller = props.controller;
-  // trajectory data
+
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
-  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
   const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
-  // UI state
-  const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
-  const [showSidePanel, setShowSidePanel] = useState(true);
-  const [currentVisibilityStates, setCurrentVisibilityStates] =
-    useState<ViewerVisibilityStates>({
-      hidden: {},
-      highlight: {},
-    });
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
+
   // Viewer state
   const [selectionStateInfoForViewer, setSelectionStateInfoForViewer] =
     useState<SelectionStateInfo>({
       highlightedAgents: [],
       hiddenAgents: [],
       colorChange: null,
+    });
+
+  // UI state
+  const [dimensions, setDimensions] = useState({
+    width: VIEWER_INITIAL_WIDTH,
+    height: VIEWER_HEIGHT,
+  });
+  const [showSidePanel, setShowSidePanel] = useState(true);
+  const [currentVisibilityStates, setCurrentVisibilityStates] =
+    useState<ViewerVisibilityStates>({
+      hidden: {},
+      highlight: {},
     });
 
   const containerRef = useRef<HTMLDivElement>(null);

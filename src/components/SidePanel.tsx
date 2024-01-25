@@ -31,7 +31,6 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   const [hiddenState, setHiddenState] =
     React.useState<HiddenOrHighlightedState>(Inactive);
 
-
   React.useEffect(() => {
     let newHiddenState: HiddenOrHighlightedState = Indeterminate;
     if (Object.keys(currentVisibilityStates.hidden).length === 0) {
