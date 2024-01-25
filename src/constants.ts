@@ -23,6 +23,8 @@ export const MIN_WIDTH_TO_SHOW_SIDE_PANEL: number = 580;
 export const VIEWER_INITIAL_WIDTH: number = 500;
 export const VIEWER_HEIGHT: number = 529;
 
+export const TOOLTIP_COLOR = '#3B3649';
+
 //todo get from viewer
 export interface DisplayStateEntry {
   name: string;
