@@ -9,9 +9,6 @@ import {
   StarFilled,
   CaretRightFilled,
   CaretDownFilled,
-  CheckSquareFilled,
-  MinusSquareFilled,
-  CloseSquareFilled,
 } from '@ant-design/icons';
 
 export const Reset = <HomeOutlined />;
@@ -23,9 +20,6 @@ export const HighlightStar = <StarFilled />;
 export const IndeterminateHighlightStar = (
   <StarTwoTone twoToneColor="#b59ff6" />
 );
-export const VisibleCheck = <CheckSquareFilled />;
-export const IndeterminateCheck = <MinusSquareFilled />;
-export const HiddenCheck = <CloseSquareFilled />;
 export const CaretRight = <CaretRightFilled />;
 export const CaretDown = <CaretDownFilled />;
 

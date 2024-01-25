@@ -8,10 +8,10 @@ import {
   ViewerVisibilityMap,
   ViewerVisibilityStates,
 } from '../constants';
-import { VisibleCheck, HiddenCheck, IndeterminateCheck } from './Icons';
 import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
+import { Checkbox } from 'antd';
 
 interface SidePanelProps {
   uiDisplayData: UIDisplayData;
@@ -30,11 +30,11 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
   const [hiddenState, setHiddenState] =
     React.useState<HiddenOrHighlightedState>(Inactive);
-  const hiddenStateIcon = {
-    [Inactive]: VisibleCheck,
-    [Active]: HiddenCheck,
-    [Indeterminate]: IndeterminateCheck,
-  };
+  // const hiddenStateIcon = {
+  //   [Inactive]: VisibleCheck,
+  //   [Active]: HiddenCheck,
+  //   [Indeterminate]: IndeterminateCheck,
+  // };
 
   React.useEffect(() => {
     let newHiddenState: HiddenOrHighlightedState = Indeterminate;
@@ -70,12 +70,12 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
       <div className="agent-title">Agents</div>
       <div className="checkboxtree">
         <div className="item-row">
-          <div
+          <Checkbox
             className={classNames('checkbox', 'check-all')}
+            indeterminate={hiddenState === 'Indeterminate'}
+            checked={hiddenState === 'Inactive'}
             onClick={() => handleHideAll()}
-          >
-            {hiddenStateIcon[hiddenState]}
-          </div>
+          />
           <span>All agent types</span>
         </div>
         {uiDisplayData.map((agent) => (

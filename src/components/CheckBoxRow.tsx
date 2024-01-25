@@ -1,5 +1,5 @@
 import * as React from 'react';
-import classNames from 'classnames';
+import { Checkbox } from 'antd';
 
 import '../../css/checkbox_row.css';
 
@@ -9,16 +9,12 @@ import {
   NoHighlightStar,
   HighlightStar,
   IndeterminateHighlightStar,
-  VisibleCheck,
-  HiddenCheck,
-  IndeterminateCheck,
 } from './Icons';
 import {
   DisplayAction,
   DisplayStateEntry,
   HiddenOrHighlightedState,
 } from '../constants';
-//TODO get UIDisplayEntry and DisplayStateEntry exported from simularium-viewer
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
 interface CheckBoxRowProps {
@@ -53,11 +49,6 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
   const { name, color } = agent;
   const { Active, Inactive, Indeterminate } = HiddenOrHighlightedState;
   const { Hide, Highlight } = DisplayAction;
-  const hiddenStateIcon = {
-    [Inactive]: VisibleCheck,
-    [Active]: HiddenCheck,
-    [Indeterminate]: IndeterminateCheck,
-  };
   const highlightStateIcon = {
     [Active]: HighlightStar,
     [Inactive]: NoHighlightStar,
@@ -94,12 +85,11 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
             marginRight: swatchMargin,
           }}
         ></div>
-        <div
-          className={classNames('custom-checkbox', 'checkbox')}
+        <Checkbox
+          indeterminate={hiddenStatus === 'Indeterminate'}
+          checked={hiddenStatus === 'Inactive'}
           onClick={() => handleDisplayAction(name, isTopLevel, Hide)}
-        >
-          {hiddenStateIcon[hiddenStatus]}
-        </div>
+        />
         <span>{name}</span>
       </div>
     </>
