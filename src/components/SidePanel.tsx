@@ -30,11 +30,7 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
   const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
   const [hiddenState, setHiddenState] =
     React.useState<HiddenOrHighlightedState>(Inactive);
-  // const hiddenStateIcon = {
-  //   [Inactive]: VisibleCheck,
-  //   [Active]: HiddenCheck,
-  //   [Indeterminate]: IndeterminateCheck,
-  // };
+
 
   React.useEffect(() => {
     let newHiddenState: HiddenOrHighlightedState = Indeterminate;

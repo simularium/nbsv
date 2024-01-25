@@ -1,20 +1,26 @@
+import React, { useEffect, useRef, useState } from 'react';
 import SimulariumViewer, {
   RenderStyle,
   SelectionStateInfo,
   SimulariumController,
+  TrajectoryFileInfo,
   UIDisplayData,
 } from '@aics/simularium-viewer';
-import React, { useEffect, useRef, useState } from 'react';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
-import { ViewerVisibilityStates, agentColors } from './constants';
+import ScaleBar from './components/ScaleBar';
 import {
-  ModelInfo,
-  TrajectoryFileInfo,
-} from '@aics/simularium-viewer/type-declarations/simularium/types';
+  MIN_WIDTH_TO_SHOW_SIDE_PANEL,
+  SIDE_PANEL_WIDTH,
+  VIEWER_HEIGHT,
+  VIEWER_INITIAL_WIDTH,
+  agentColors,
+  ViewerVisibilityStates,
+} from './constants';
 
 import '../css/viewer.css';
 
@@ -22,16 +28,25 @@ export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
 }
 
-export interface WidgetProps {
+export interface ViewerProps {
   controller: SimulariumController;
 }
 
-function ViewerWidget(props: WidgetProps): JSX.Element {
+function ViewerWidget(props: ViewerProps): JSX.Element {
+  // UI display state
+  const [dimensions, setDimensions] = useState({
+    width: VIEWER_INITIAL_WIDTH,
+    height: VIEWER_HEIGHT,
+  });
+  const [showSidePanel, setShowSidePanel] = useState(true);
+  const controller = props.controller;
+  // trajectory data
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
   const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
   // UI state
   const [dimensions, setDimensions] = useState({ width: 500, height: 529 });
@@ -52,7 +67,6 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
 
-  // Resize listener
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
     if (!observerRef.current && containerRef.current) {
@@ -61,12 +75,11 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
-            // const { height } = entry.contentRect;
-            const height = 529;
+            const { height } = entry.contentRect;
             // hide side panel if space is small
-            setShowSidePanel(width > 580);
+            setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
-              width = width - 280;
+              width = width - SIDE_PANEL_WIDTH;
             }
             // pass size to viewer
             setDimensions({ width, height });
@@ -93,6 +106,19 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
+    setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
+  };
+
+  const getScaleBarLabel = (spatialUnits: {
+    magnitude: number;
+    name: string;
+  }): string => {
+    const tickIntervalLength = controller.tickIntervalLength;
+    let scaleBarLabelNumber = tickIntervalLength * spatialUnits.magnitude;
+    scaleBarLabelNumber = parseFloat(scaleBarLabelNumber.toPrecision(2));
+    const scaleBarLabelUnit = spatialUnits.name;
+
+    return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
   const handleUIDisplayDataChanged = (uidata: any) => {
@@ -147,8 +173,11 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
+        <div className="scalebar-controls">
+          <ScaleBar label={scaleBarLabel} />
+          <CameraControls controller={props.controller} />
+        </div>
       </div>
-      <CameraControls controller={props.controller} />
     </div>
   );
 }

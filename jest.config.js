@@ -8,6 +8,7 @@ module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
   transform: {
     '^.+\\.tsx$': 'babel-jest',
+    '^.+\\.svg$': 'jest-transform-stub',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transformIgnorePatterns: [
