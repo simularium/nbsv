@@ -1,6 +1,7 @@
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
+  TrajectoryFileInfo,
 } from '@aics/simularium-viewer';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -15,10 +16,7 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
-import {
-  ModelInfo,
-  TrajectoryFileInfo,
-} from '@aics/simularium-viewer/type-declarations/simularium/types';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
 
