@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
@@ -6,7 +7,6 @@ import SimulariumViewer, {
 } from '@aics/simularium-viewer';
 import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
-import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
@@ -137,6 +137,8 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
           backgroundColor={[0, 0, 0]}
+          height={dimensions.height}
+          width={dimensions.width}
           height={dimensions.height}
           width={dimensions.width}
           loggerLevel="off"
