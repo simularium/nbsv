@@ -175,8 +175,8 @@ const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
         newSelection[agent.name] = itemEntry.filter((value) => value !== key);
         if (newSelection[agent.name].length === 0) {
           delete newSelection[agent.name];
-          return newSelection;
         }
+        return newSelection;
       }
     }
     // in none are hidden/highlighted, or some are but not the current agent
