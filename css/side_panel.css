@@ -8,7 +8,7 @@
   min-width: 285px;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-color: var(--gray-three) var(--dark-three); /* thumb and track color */
+  scrollbar-color: var(--dark-four) var(--dark-three); /* thumb and track color */
   scrollbar-width: thin;
 }
 
