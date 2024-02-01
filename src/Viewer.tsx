@@ -29,6 +29,7 @@ export interface WidgetProps {
 }
 
 function ViewerWidget(props: WidgetProps): JSX.Element {
+  const controller = props.controller;
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
@@ -41,6 +42,11 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
+
+  useEffect(() => {
+    controller.disablePan();
+    controller.setFocusMode(false);
+  }, []);
 
   useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
