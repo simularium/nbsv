@@ -9,20 +9,3 @@
   width: 100%;
   z-index: 10;
 }
-
-.info-button {
-  padding-left: 7px;
-}
-
-.info-button svg {
-  background-color: var(--black-one);
-  color: var(--white-one);
-}
-
-.info-button svg:hover {
-  color: var(--light-purple);
-}
-
-.info-button svg:active {
-  color: var(--purple-one);
-}

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
   SelectionStateInfo,
@@ -7,9 +8,12 @@ import SimulariumViewer, {
   UIDisplayData,
 } from '@aics/simularium-viewer';
 import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
-import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
+import ModelDisplayData from './components/ModelDisplayData';
+import SidePanel from './components/SidePanel';
+import ScaleBar from './components/ScaleBar';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import ScaleBar from './components/ScaleBar';
@@ -152,9 +156,12 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
       )}
       <div className="viewer-container">
         <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
+        <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
           backgroundColor={[0, 0, 0]}
+          height={dimensions.height}
+          width={dimensions.width}
           height={dimensions.height}
           width={dimensions.width}
           loggerLevel="off"
@@ -172,6 +179,10 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
+        <div className="scalebar-controls">
+          <ScaleBar label={scaleBarLabel} />
+          <CameraControls controller={props.controller} />
+        </div>
         <div className="scalebar-controls">
           <ScaleBar label={scaleBarLabel} />
           <CameraControls controller={props.controller} />
