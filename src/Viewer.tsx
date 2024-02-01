@@ -42,8 +42,8 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   );
   const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
   const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
-
-  // Viewer state
+  
+   // Viewer state
   const [selectionStateInfoForViewer, setSelectionStateInfoForViewer] =
     useState<SelectionStateInfo>({
       highlightedAgents: [],
@@ -88,7 +88,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
       // observe the container size
       observerRef.current.observe(containerRef.current);
     }
-
+    
     // Cleanup function
     return () => {
       if (observerRef.current) {

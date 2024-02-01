@@ -51,6 +51,7 @@ export const ScaleBarIconTag = (
     </g>
   </svg>
 );
+
 export const IndeterminateHighlightStarTag = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +65,7 @@ export const IndeterminateHighlightStarTag = (
     ></path>
   </svg>
 );
+
 export const HighlightStarTag = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +79,7 @@ export const HighlightStarTag = (
     ></path>
   </svg>
 );
+
 export const NoHighlightStarTag = (
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -37,6 +37,7 @@ export interface DisplayStateEntry {
 export interface ViewerVisibilityMap {
   [key: string]: string[];
 }
+
 // types for matching agent/subagent names to current ui viz status
 // (hidden, visible, indeterminate) - used for visibility and highlighting
 export enum HiddenOrHighlightedState {
@@ -44,6 +45,7 @@ export enum HiddenOrHighlightedState {
   Inactive = 'Inactive',
   Indeterminate = 'Indeterminate',
 }
+
 export interface UIVisibilityMap {
   [key: string]: HiddenOrHighlightedState;
 }
