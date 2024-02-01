@@ -1,14 +1,16 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
   TrajectoryFileInfo,
 } from '@aics/simularium-viewer';
-import React, { useEffect, useRef, useState } from 'react';
+import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
-import { WidgetModel } from '@jupyter-widgets/base';
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
+import ScaleBar from './components/ScaleBar';
 import {
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
   SIDE_PANEL_WIDTH,
@@ -16,7 +18,6 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
-import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
 import '../css/viewer.css';
 
@@ -24,20 +25,24 @@ export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
 }
 
-export interface WidgetProps {
+export interface ViewerProps {
   controller: SimulariumController;
 }
 
-function ViewerWidget(props: WidgetProps): JSX.Element {
-  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
-  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
-    ''
-  );
+function ViewerWidget(props: ViewerProps): JSX.Element {
+  // UI display state
   const [dimensions, setDimensions] = useState({
     width: VIEWER_INITIAL_WIDTH,
     height: VIEWER_HEIGHT,
   });
   const [showSidePanel, setShowSidePanel] = useState(true);
+  const controller = props.controller;
+  // trajectory data
+  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
+    ''
+  );
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -80,6 +85,19 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
+    setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
+  };
+
+  const getScaleBarLabel = (spatialUnits: {
+    magnitude: number;
+    name: string;
+  }): string => {
+    const tickIntervalLength = controller.tickIntervalLength;
+    let scaleBarLabelNumber = tickIntervalLength * spatialUnits.magnitude;
+    scaleBarLabelNumber = parseFloat(scaleBarLabelNumber.toPrecision(2));
+    const scaleBarLabelUnit = spatialUnits.name;
+
+    return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
   return (
@@ -113,8 +131,11 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
           showPaths={false}
           onError={console.log}
         />
+        <div className="scalebar-controls">
+          <ScaleBar label={scaleBarLabel} />
+          <CameraControls controller={props.controller} />
+        </div>
       </div>
-      <CameraControls controller={props.controller} />
     </div>
   );
 }

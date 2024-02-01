@@ -6,5 +6,16 @@
 }
 
 .viewer-container {
+  display: flex;
   position: relative;
+  flex-direction: column;
+}
+
+.scalebar-controls {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  position: absolute;
+  bottom: 30px;
+  right: 50px;
 }
