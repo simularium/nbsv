@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { isEqual } from 'underscore';
+import { Checkbox, Tooltip } from 'antd';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
 import {
@@ -12,7 +13,6 @@ import {
 import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
-import { Checkbox, Tooltip } from 'antd';
 
 interface SidePanelProps {
   uiDisplayData: UIDisplayData;

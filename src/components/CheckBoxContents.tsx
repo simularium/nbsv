@@ -1,8 +1,5 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
-import CheckBoxRow from './CheckBoxRow';
-import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
-import { useEffect } from 'react';
 import {
   DisplayAction,
   HiddenOrHighlightedState,
@@ -11,7 +8,9 @@ import {
   UIVisibilityMap,
   ViewerVisibilityMap,
   ViewerVisibilityStates,
+  UIDisplayEntry,
 } from '../constants';
+import CheckBoxRow from './CheckBoxRow';
 interface CheckBoxContentsProps {
   agent: UIDisplayEntry;
   currentVisibilityStates: ViewerVisibilityStates;

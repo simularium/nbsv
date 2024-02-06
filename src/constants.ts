@@ -32,13 +32,19 @@ export interface DisplayStateEntry {
   color: string;
 }
 
-// maps names/display states for viewer viz status (hidden/highligted or not)
+export interface UIDisplayEntry {
+  name: string;
+  displayStates: DisplayStateEntry[];
+  color: string;
+}
+
+// maps names/display states for viewer viz status (hidden/highligted, or not, in the viewport)
 // called VisiblitySelectionMap in website repo
 export interface ViewerVisibilityMap {
   [key: string]: string[];
 }
 
-// types for matching agent/subagent names to current ui viz status
+// types for matching agent/subagent names to current status of checkboxes in the agent tree UI
 // (hidden, visible, indeterminate) - used for visibility and highlighting
 export enum HiddenOrHighlightedState {
   Active = 'Active',

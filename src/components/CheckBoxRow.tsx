@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Checkbox, Tooltip } from 'antd';
 
-import '../../css/checkbox_row.css';
-
+import {
+  DisplayAction,
+  DisplayStateEntry,
+  HiddenOrHighlightedState,
+  UIDisplayEntry,
+  TOOLTIP_COLOR,
+} from '../constants';
 import {
   CaretDown,
   CaretRight,
@@ -10,13 +15,8 @@ import {
   HighlightStar,
   IndeterminateHighlightStar,
 } from './Icons';
-import {
-  DisplayAction,
-  DisplayStateEntry,
-  HiddenOrHighlightedState,
-  TOOLTIP_COLOR,
-} from '../constants';
-import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
+
+import '../../css/checkbox_row.css';
 interface CheckBoxRowProps {
   agent: UIDisplayEntry | DisplayStateEntry;
   isTopLevel: boolean;

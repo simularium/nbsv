@@ -1,6 +1,7 @@
 .caret-icon {
   margin-right: 5px;
 }
+
 .caret-placeholder {
   height: 10px;
   margin-right: 5px;
@@ -11,7 +12,6 @@
 .color-swatch {
   height: 16px;
   margin-left: 5px;
-  margin-right: 10px;
   width: 12px;
 }
 
@@ -28,7 +28,7 @@
 .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
   .ant-checkbox-checked:not(.ant-checkbox-disabled)
   .ant-checkbox-inner {
-  background-color: white;
+  background-color: var(--white-one);
 }
 
 .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover .ant-checkbox-inner,
@@ -43,7 +43,7 @@
 }
 
 .item-row .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: white;
+  background-color: var(--white-one);
 }
 
 .ant-checkbox-indeterminate .ant-checkbox-inner::after {
