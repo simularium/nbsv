@@ -48,6 +48,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   const observerRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
+    controller.setAllowViewPanning(false);
+    controller.setFocusMode(false);
+  }, []);
+
+  useEffect(() => {
     // Initialize ResizeObserver if it doesn't exist
     if (!observerRef.current && containerRef.current) {
       observerRef.current = new ResizeObserver(
