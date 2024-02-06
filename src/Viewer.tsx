@@ -44,7 +44,7 @@ function ViewerWidget(props: WidgetProps): JSX.Element {
   const observerRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
-    controller.disablePan();
+    controller.setAllowViewPanning(false);
     controller.setFocusMode(false);
   }, []);
 
