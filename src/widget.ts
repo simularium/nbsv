@@ -13,7 +13,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { MODULE_NAME, MODULE_VERSION } from './version';
-import Viewer, { WidgetProps } from './Viewer';
+import Viewer, { ViewerProps } from './Viewer';
 
 // Import the CSS
 import '../css/widget.css';
@@ -71,7 +71,7 @@ export class Viewport extends DOMWidgetView {
 
     const component = React.createElement(Viewer, {
       controller: this.controller,
-    } as WidgetProps);
+    } as ViewerProps);
 
     ReactDOM.render(component, this.el);
   }
