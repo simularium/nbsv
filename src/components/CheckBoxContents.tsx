@@ -19,12 +19,6 @@ interface CheckBoxContentsProps {
   ) => void;
 }
 
-// This is the highest level component that is agent specific,
-// so it contains state variables, listeners, and handlers for
-// the agents and subagents in relation to hiding and highlighting.
-// Tried to strike a balance between readability and conciseness.
-// There is no stylesheet for this component as its basically a data layer.
-
 const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
   props: CheckBoxContentsProps
 ): JSX.Element => {
