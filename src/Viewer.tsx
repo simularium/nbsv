@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
@@ -14,15 +14,22 @@ import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import ScaleBar from './components/ScaleBar';
 import {
+  // DisplayAction,
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
   SIDE_PANEL_WIDTH,
   VIEWER_HEIGHT,
   VIEWER_INITIAL_WIDTH,
+  // ViewerVisibilityMap,
+  // ViewerVisibilityStates,
   agentColors,
-  ViewerVisibilityStates,
+  // ViewerVisibilityStates,
+  // ViewerVisibilityMap,
+  // DisplayAction,
 } from './constants';
 
 import '../css/viewer.css';
+import { VisibilityContext } from './AgentVisibilityContext';
+// import AgentSelector from './AgentSelector';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -57,11 +64,8 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     height: VIEWER_HEIGHT,
   });
   const [showSidePanel, setShowSidePanel] = useState(true);
-  const [currentVisibilityStates, setCurrentVisibilityStates] =
-    useState<ViewerVisibilityStates>({
-      hidden: {},
-      highlight: {},
-    });
+
+  const { currentVisibilityStates } = useContext(VisibilityContext);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -143,13 +147,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
 
   return (
     <div ref={containerRef} className="container">
-      {showSidePanel && (
-        <SidePanel
-          uiDisplayData={uiDisplayData}
-          currentVisibilityStates={currentVisibilityStates}
-          setCurrentVisibilityStates={setCurrentVisibilityStates}
-        />
-      )}
+      {showSidePanel && <SidePanel uiDisplayData={uiDisplayData} />}
       <div className="viewer-container">
         <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer

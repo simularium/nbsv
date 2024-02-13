@@ -8,6 +8,7 @@ import {
   UIDisplayEntry,
   TOOLTIP_COLOR,
 } from '../constants';
+import { VisibilityContext } from '../AgentVisibilityContext';
 import {
   CaretDown,
   CaretRight,
@@ -18,18 +19,14 @@ import {
 
 import '../../css/checkbox_row.css';
 interface CheckBoxRowProps {
-  agent: UIDisplayEntry | DisplayStateEntry;
+  agent: UIDisplayEntry;
+  subAgent?: DisplayStateEntry;
   isTopLevel: boolean;
   hasSubAgents: boolean;
   hiddenStatus: HiddenOrHighlightedState;
   highlightStatus: HiddenOrHighlightedState;
-  showSubAgentRows: boolean;
-  handleShowSubAgentRows: (value: boolean) => void;
-  handleDisplayAction: (
-    key: string,
-    topLevel: boolean,
-    hiddenOrHighlight: DisplayAction
-  ) => void;
+  showSubAgentRows?: boolean;
+  handleShowSubAgentRows?: (value: boolean) => void;
 }
 
 const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
@@ -37,18 +34,26 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
 ): JSX.Element => {
   const {
     agent,
+    subAgent,
     isTopLevel,
     hasSubAgents,
     hiddenStatus,
     highlightStatus,
     showSubAgentRows,
     handleShowSubAgentRows,
-    handleDisplayAction,
   } = props;
+
+  const { handleDisplayActionTopLevel, handleSubAgentDisplayAction } =
+    React.useContext(VisibilityContext);
+
+  const handleDisplayAction = isTopLevel
+    ? handleDisplayActionTopLevel
+    : handleSubAgentDisplayAction;
 
   const { name, color } = agent;
   const { Active, Inactive, Indeterminate } = HiddenOrHighlightedState;
   const { Hide, Highlight } = DisplayAction;
+
   const highlightStateIcon = {
     [Active]: HighlightStar,
     [Inactive]: NoHighlightStar,
@@ -70,7 +75,7 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
   return (
     <>
       <div className="item-row">
-        {hasSubAgents ? (
+        {hasSubAgents && handleShowSubAgentRows ? (
           <div
             className="caret-icon"
             onClick={() => {
@@ -89,7 +94,7 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
         >
           <div
             className="star"
-            onClick={() => handleDisplayAction(name, isTopLevel, Highlight)}
+            onClick={() => handleDisplayAction(agent, Highlight, subAgent)}
           >
             {highlightStateIcon[highlightStatus]}
           </div>
@@ -109,7 +114,7 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
           <Checkbox
             indeterminate={hiddenStatus === 'Indeterminate'}
             checked={hiddenStatus === 'Inactive'}
-            onClick={() => handleDisplayAction(name, isTopLevel, Hide)}
+            onClick={() => handleDisplayAction(agent, Hide, subAgent)}
           />
         </Tooltip>
         <span>{name}</span>

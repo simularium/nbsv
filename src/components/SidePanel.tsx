@@ -1,32 +1,31 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { isEqual } from 'underscore';
 import { Checkbox, Tooltip } from 'antd';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
 import {
+  DisplayAction,
   HiddenOrHighlightedState,
   TOOLTIP_COLOR,
-  ViewerVisibilityMap,
-  ViewerVisibilityStates,
 } from '../constants';
+import { getPayloadForHideAll } from '../selectors';
+import { VisibilityContext } from '../AgentVisibilityContext';
 import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
 
 interface SidePanelProps {
   uiDisplayData: UIDisplayData;
-  currentVisibilityStates: ViewerVisibilityStates;
-  setCurrentVisibilityStates: (
-    visibilityStates: ViewerVisibilityStates
-  ) => void;
 }
 
 const SidePanel: React.FunctionComponent<SidePanelProps> = (
   props: SidePanelProps
 ): JSX.Element => {
-  const { uiDisplayData, currentVisibilityStates, setCurrentVisibilityStates } =
-    props;
+  const { uiDisplayData } = props;
+
+  const { currentVisibilityStates, updateCurrentVisibilityStates } =
+    useContext(VisibilityContext);
 
   const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
   const [hiddenState, setHiddenState] =
@@ -42,31 +41,24 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
     let newHiddenState: HiddenOrHighlightedState = Indeterminate;
     if (Object.keys(currentVisibilityStates.hidden).length === 0) {
       newHiddenState = Inactive;
-    } else if (isEqual(currentVisibilityStates.hidden, payloadForHideAll)) {
+    } else if (
+      isEqual(
+        currentVisibilityStates.hidden,
+        getPayloadForHideAll(uiDisplayData, hiddenState)
+      )
+    ) {
       newHiddenState = Active;
     }
     setHiddenState(newHiddenState);
   }, [currentVisibilityStates.hidden]);
 
-  const payloadForHideAll = (() => {
-    let payload: ViewerVisibilityMap = {};
-    if (hiddenState === Inactive) {
-      payload = uiDisplayData.reduce<ViewerVisibilityMap>((acc, item) => {
-        acc[item.name] = [];
-        return acc;
-      }, {});
-    }
-    return payload;
-  })();
-
   const handleHideAll = () => {
-    setCurrentVisibilityStates({
-      ...currentVisibilityStates,
-      hidden: payloadForHideAll,
-    });
+    updateCurrentVisibilityStates(
+      getPayloadForHideAll(uiDisplayData, hiddenState),
+      DisplayAction.Hide
+    );
   };
 
-  console.log('uidisplaydata in side panel', uiDisplayData);
   return (
     <div className="sp-container">
       <div className="agent-title">Agents</div>
@@ -81,18 +73,14 @@ const SidePanel: React.FunctionComponent<SidePanelProps> = (
               className={classNames('checkbox', 'check-all')}
               indeterminate={hiddenState === 'Indeterminate'}
               checked={hiddenState === 'Inactive'}
-              onClick={() => handleHideAll()}
+              onClick={handleHideAll}
             />
           </Tooltip>
           <span>All agent types</span>
         </div>
         {uiDisplayData.map((agent) => (
           <>
-            <CheckBoxContents
-              agent={agent}
-              currentVisibilityStates={currentVisibilityStates}
-              setCurrentVisibilityStates={setCurrentVisibilityStates}
-            />
+            <CheckBoxContents agent={agent} />
           </>
         ))}
       </div>
