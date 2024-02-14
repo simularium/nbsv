@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, InputNumber, Slider, Tooltip } from 'antd';
+import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 
-import '../../css/playback_controls.css';
 import { PlaybackData, PlaybackState } from '../constants';
 import { FrameBack, FrameForward, Pause, Play } from './Icons';
-import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
+
+import '../../css/playback_controls.css';
 
 const TOOLTIP_COLOR = '#3b3649';
 interface PlayBackProps {
