@@ -56,10 +56,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
-  const [trajTitle, setTrajTitle] = useState<string | undefined>('');
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>('');
   const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
   const [playbackData, setPlaybackData] =
     useState<PlaybackData>(initialPlaybackData);
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -133,7 +134,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     <div ref={containerRef} className="container">
       {showSidePanel && <SidePanel />}
       <div className="viewer-container">
-        <ModelDisplayData {...modelInfo} trajectoryTitle={trajTitle} />
+        <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer
           renderStyle={RenderStyle.WEBGL2_PREFERRED}
           backgroundColor={[0, 0, 0]}
