@@ -177,9 +177,8 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           className="btn"
           onClick={goToPreviousFrame}
           disabled={previousFrameUnavailable}
-        >
-          {FrameBack}
-        </Button>
+          icon={FrameBack}
+        ></Button>
       </Tooltip>
       <Tooltip
         placement="top"
@@ -206,9 +205,8 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           className="btn"
           onClick={gotoNextFrame}
           disabled={nextFrameUnavailable}
-        >
-          {FrameForward}
-        </Button>
+          icon={FrameForward}
+        ></Button>
       </Tooltip>
       <Slider
         value={currentTime}
