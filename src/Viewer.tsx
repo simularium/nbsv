@@ -139,8 +139,6 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           backgroundColor={[0, 0, 0]}
           height={dimensions.height}
           width={dimensions.width}
-          height={dimensions.height}
-          width={dimensions.width}
           loggerLevel="off"
           onTimeChange={handleTimeChange}
           simulariumController={props.controller}
