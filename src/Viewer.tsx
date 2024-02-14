@@ -56,11 +56,12 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
-  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>('');
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
+    ''
+  );
   const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
   const [playbackData, setPlaybackData] =
     useState<PlaybackData>(initialPlaybackData);
-  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -103,7 +104,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
   // Viewer callbacks
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     console.log('handleTrajectoryData', data);
-    setTrajTitle(data.trajectoryTitle);
+    setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
     setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
     setPlaybackData({
