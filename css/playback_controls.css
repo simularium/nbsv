@@ -1,27 +1,39 @@
 .playback-controls {
   align-items: center;
+  container-type: inline-size;
   display: flex;
   gap: 3px;
   margin-bottom: 18px;
   width: 100%;
-  container-type: inline-size;
 }
 
 .playback-controls .btn {
+  align-items: center;
   background-color: var(--dark-one);
   border: none;
   color: var(--white-one);
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 26px;
   height: 26px;
+  width: 26px;
 }
 
 .playback-controls .btn:hover {
   background-color: var(--gray-one);
   border: none;
   color: var(--white-one);
+}
+
+#back-button:hover,
+#play-button:hover,
+#next-button:hover {
+  background-color: var(--gray-one);
+  border: none;
+  color: var(--white-one);
+}
+
+#play-button {
+  padding: 0px;
 }
 
 .playback-controls .slider {
@@ -38,8 +50,12 @@
   border-radius: 3px;
 }
 
-.ant-slider-rail {
-  background-color: var(--dark-four) !important;
+.playback-controls .slider .ant-slider-rail {
+  background-color: var(--dark-four);
+}
+
+.playback-controls .slider .ant-slider-rail:hover {
+  background-color: var(--white-one);
 }
 
 .ant-slider-handle,
@@ -74,6 +90,10 @@
   border-radius: 0px;
 }
 
+.playback-controls .ant-input-number:hover {
+  border-color: var(--purple-one)
+}
+
 .playback-controls .ant-input-number input {
   color: var(--white-one);
   padding: 0 3px;
@@ -83,10 +103,3 @@
   color: var(--gray-three);
 }
 
-#back-button:hover,
-#play-button:hover,
-#next-button:hover {
-  border: none;
-  color: var(--white-one);
-  background-color: var(--gray-one);
-}
