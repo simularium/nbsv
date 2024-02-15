@@ -75,6 +75,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
 
   // useeffect to reset playback state when the last frame is reached
   useEffect(() => {
+    controller.pause();
     controller.gotoTime(firstFrameTime);
     setPlaybackState({
       currentTime: firstFrameTime,
