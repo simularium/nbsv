@@ -1,0 +1,92 @@
+.playback-controls {
+  align-items: center;
+  display: flex;
+  gap: 3px;
+  margin-bottom: 18px;
+  width: 100%;
+  container-type: inline-size;
+}
+
+.playback-controls .btn {
+  background-color: var(--dark-one);
+  border: none;
+  color: var(--white-one);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26px;
+  height: 26px;
+}
+
+.playback-controls .btn:hover {
+  background-color: var(--gray-one);
+  border: none;
+  color: var(--white-one);
+}
+
+.playback-controls .slider {
+  flex: 3;
+  margin: auto 12px;
+}
+
+.playback-controls .slider .ant-slider-track {
+  background-color: var(--white-one);
+}
+
+.playback-controls .slider .ant-slider-track,
+.playback-controls .slider .ant-slider-rail {
+  border-radius: 3px;
+}
+
+.ant-slider-rail {
+  background-color: var(--dark-four) !important;
+}
+
+.ant-slider-handle,
+.ant-slider-handle::before,
+.ant-slider-handle::after {
+  background-color: var(--white-one);
+  border-radius: 50%;
+  box-shadow: none !important;
+  inset-block-start: 0px;
+}
+
+.time-input-display {
+  background-color: var(--dark-one);
+  border-radius: 3px;
+  height: 26px;
+  padding: 4px 5px 4px 5px;
+}
+
+.last-frame-time {
+  color: var(--gray-three);
+  padding-left: 3px;
+}
+
+@container (max-width: 266px) {
+  .last-frame-time {
+    display: none;
+  }
+}
+
+.playback-controls .ant-input-number {
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+.playback-controls .ant-input-number input {
+  color: var(--white-one);
+  padding: 0 3px;
+}
+
+.playback-controls .scale-bar {
+  color: var(--gray-three);
+}
+
+#back-button:hover,
+#play-button:hover,
+#next-button:hover {
+  border: none;
+  color: var(--white-one);
+  background-color: var(--gray-one);
+}
