@@ -37,7 +37,7 @@ export const getSubAgentDisplayStateMap = (
     // default to inactive
     let subAgentStatus = HiddenOrHighlightedState.Inactive;
     // if parent agent is in hidden or highlighted map
-    //check for subagent or empty array (empty array means all subagents are active)
+    // check for subagent or empty array (empty array means all subagents are active)
     if (viewerStatusMap[agent.name] !== undefined) {
       if (
         viewerStatusMap[agent.name].includes(state.name) ||
