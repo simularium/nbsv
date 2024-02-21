@@ -103,7 +103,6 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
 
   // Viewer callbacks
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
-    console.log('handleTrajectoryData', data);
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
     setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
