@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, InputNumber, Slider, Tooltip } from 'antd';
+import classNames from 'classnames';
 import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 
 import { PlaybackData, PlaybackState } from '../constants';
@@ -172,10 +173,17 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
 
   return (
     <div className="playback-controls">
-      <Tooltip placement="top" title="Skip 1 frame back" color={TOOLTIP_COLOR}>
+      <Tooltip
+        placement="top"
+        title={previousFrameUnavailable ? '' : 'Skip 1 frame back'}
+        color={TOOLTIP_COLOR}
+      >
         <Button
           id={'back-button'}
-          className="btn"
+          className={classNames([
+            'btn',
+            previousFrameUnavailable ? 'disabled' : '',
+          ])}
           onClick={goToPreviousFrame}
           disabled={previousFrameUnavailable}
           icon={FrameBack}

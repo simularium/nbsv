@@ -3,7 +3,6 @@
   container-type: inline-size;
   display: flex;
   gap: 3px;
-  margin-bottom: 18px;
   width: 100%;
 }
 
@@ -14,8 +13,12 @@
   color: var(--white-one);
   display: flex;
   justify-content: center;
-  height: 26px;
-  width: 26px;
+  height: 32px;
+  min-width: 32px;
+}
+
+.playback-controls .disabled svg path {
+  fill: var(--gray-four);
 }
 
 .playback-controls .btn:hover {
