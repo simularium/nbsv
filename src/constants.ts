@@ -21,7 +21,7 @@ export const agentColors = [
 export const SIDE_PANEL_WIDTH: number = 280;
 export const MIN_WIDTH_TO_SHOW_SIDE_PANEL: number = 580;
 export const VIEWER_INITIAL_WIDTH: number = 500;
-export const VIEWER_HEIGHT: number = 529;
+export const VIEWER_HEIGHT: number = 580;
 
 export const TOOLTIP_COLOR = '#3B3649';
 
@@ -39,8 +39,7 @@ export interface UIDisplayEntry {
 }
 
 // maps names/display states for viewer viz status (hidden/highligted, or not, in the viewport)
-// called VisiblitySelectionMap in website repo
-export interface ViewerVisibilityMap {
+export interface VisibilitySelectionMap {
   [key: string]: string[];
 }
 
@@ -72,6 +71,6 @@ export enum DisplayAction {
 }
 
 export interface ViewerVisibilityStates {
-  hidden: ViewerVisibilityMap;
-  highlight: ViewerVisibilityMap;
+  hidden: VisibilitySelectionMap;
+  highlight: VisibilitySelectionMap;
 }
