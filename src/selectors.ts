@@ -1,17 +1,22 @@
-import { UIDisplayData } from '@aics/simularium-viewer';
+import {
+  SelectionEntry,
+  SelectionStateInfo,
+  UIDisplayData,
+} from '@aics/simularium-viewer';
 import {
   DisplayStateEntry,
   HiddenOrHighlightedState,
   UIDisplayEntry,
   UIVisibilityMap,
-  ViewerVisibilityMap,
+  VisibilitySelectionMap,
+  ViewerVisibilityStates,
 } from './constants';
 
 const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
 
-export const getTopLevelDisplayStatus = (
+export const getTopLevelDisplayStatePayload = (
   agent: UIDisplayEntry,
-  viewerStatusMap: ViewerVisibilityMap
+  viewerStatusMap: VisibilitySelectionMap
 ) => {
   const displayStates = agent.displayStates.map((entry) => entry.name);
   let status: HiddenOrHighlightedState = Inactive;
@@ -28,14 +33,14 @@ export const getTopLevelDisplayStatus = (
   return status;
 };
 
-export const getSubAgentDisplayStateMap = (
+export const getSubAgentDisplayStatePayload = (
   agent: UIDisplayEntry,
-  viewerStatusMap: ViewerVisibilityMap
+  viewerStatusMap: VisibilitySelectionMap
 ) => {
   const newSubAgentMap: UIVisibilityMap = {};
   agent.displayStates.forEach((state) => {
     // default to inactive
-    let subAgentStatus = HiddenOrHighlightedState.Inactive;
+    let subAgentStatus = Inactive;
     // if parent agent is in hidden or highlighted map
     // check for subagent or empty array (empty array means all subagents are active)
     if (viewerStatusMap[agent.name] !== undefined) {
@@ -43,7 +48,7 @@ export const getSubAgentDisplayStateMap = (
         viewerStatusMap[agent.name].includes(state.name) ||
         viewerStatusMap[agent.name].length === 0
       ) {
-        subAgentStatus = HiddenOrHighlightedState.Active;
+        subAgentStatus = Active;
       }
     }
     newSubAgentMap[state.name] = subAgentStatus;
@@ -54,10 +59,10 @@ export const getSubAgentDisplayStateMap = (
 export const getPayloadForHideAll = (
   uiDisplayData: UIDisplayData,
   hiddenState: HiddenOrHighlightedState
-): ViewerVisibilityMap => {
-  let payload: ViewerVisibilityMap = {};
-  if (hiddenState === HiddenOrHighlightedState.Inactive) {
-    payload = uiDisplayData.reduce<ViewerVisibilityMap>((acc, item) => {
+): VisibilitySelectionMap => {
+  let payload: VisibilitySelectionMap = {};
+  if (hiddenState === Inactive) {
+    payload = uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
       acc[item.name] = [];
       return acc;
     }, {});
@@ -67,17 +72,14 @@ export const getPayloadForHideAll = (
 
 export const getPayloadTopLevelDisplayAction = (
   agent: UIDisplayEntry,
-  currentAgentSelectionMap: ViewerVisibilityMap
-): ViewerVisibilityMap => {
+  currentAgentSelectionMap: VisibilitySelectionMap
+): VisibilitySelectionMap => {
   const key = agent.name;
   const displayStates: string[] = agent.displayStates.map((agent) => {
     return agent.name;
   });
   const newSelection = { ...currentAgentSelectionMap };
-  // this top level status can be the same as asking
-  // is agent present in currentAgentSelectionMap
   const showAllOrRemoveHighlightAll =
-    // topLevelStatus !== HiddenOrHighlightedState.Inactive;
     currentAgentSelectionMap[key] !== undefined;
   let values: string[] = [];
   if (!showAllOrRemoveHighlightAll && displayStates.length > 0) {
@@ -94,8 +96,8 @@ export const getPayloadTopLevelDisplayAction = (
 export const getPayloadSubAgentDisplayAction = (
   agent: UIDisplayEntry,
   subAgent: DisplayStateEntry,
-  currentAgentSelectionMap: ViewerVisibilityMap
-): ViewerVisibilityMap => {
+  currentAgentSelectionMap: VisibilitySelectionMap
+): VisibilitySelectionMap => {
   const newSelection = { ...currentAgentSelectionMap };
   const key = subAgent.name;
   let itemEntry: string[] = [];
@@ -111,4 +113,31 @@ export const getPayloadSubAgentDisplayAction = (
   }
   newSelection[agent.name] = [...itemEntry, key];
   return newSelection;
+};
+
+export const getSelectionStateInfoForViewer = (
+  currentVisibilityStates: ViewerVisibilityStates
+): SelectionStateInfo => {
+  return {
+    highlightedAgents: Object.keys(currentVisibilityStates.highlight).map(
+      (key) => ({
+        name: key,
+        tags: currentVisibilityStates.highlight[key],
+      })
+    ),
+    hiddenAgents: Object.keys(currentVisibilityStates.hidden).map((key) => ({
+      name: key,
+      tags: currentVisibilityStates.hidden[key],
+    })),
+    colorChange: null,
+  };
+};
+
+export const getSelectionStateInfoPayload = (
+  currentVisibilityMap: VisibilitySelectionMap
+): SelectionEntry[] => {
+  return Object.keys(currentVisibilityMap).map((key) => ({
+    name: key,
+    tags: currentVisibilityMap[key],
+  }));
 };

@@ -2,10 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
-  SelectionStateInfo,
   SimulariumController,
   TrajectoryFileInfo,
-  UIDisplayData,
 } from '@aics/simularium-viewer';
 import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/types';
 
@@ -14,22 +12,15 @@ import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
 import ScaleBar from './components/ScaleBar';
 import {
-  // DisplayAction,
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
   SIDE_PANEL_WIDTH,
   VIEWER_HEIGHT,
   VIEWER_INITIAL_WIDTH,
-  // ViewerVisibilityMap,
-  // ViewerVisibilityStates,
   agentColors,
-  // ViewerVisibilityStates,
-  // ViewerVisibilityMap,
-  // DisplayAction,
 } from './constants';
+import { VisibilityContext } from './AgentVisibilityContext';
 
 import '../css/viewer.css';
-import { VisibilityContext } from './AgentVisibilityContext';
-// import AgentSelector from './AgentSelector';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -41,22 +32,15 @@ export interface ViewerProps {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
+  const { selectionStateInfo, receiveUIDisplayData } =
+    useContext(VisibilityContext);
 
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
-  const [uiDisplayData, setUIDisplayData] = useState<UIDisplayData>([]);
   const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
-
-  // Viewer state
-  const [selectionStateInfoForViewer, setSelectionStateInfoForViewer] =
-    useState<SelectionStateInfo>({
-      highlightedAgents: [],
-      hiddenAgents: [],
-      colorChange: null,
-    });
 
   // UI state
   const [dimensions, setDimensions] = useState({
@@ -64,8 +48,6 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     height: VIEWER_HEIGHT,
   });
   const [showSidePanel, setShowSidePanel] = useState(true);
-
-  const { currentVisibilityStates } = useContext(VisibilityContext);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -124,30 +106,9 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
-  const handleUIDisplayDataChanged = (uidata: any) => {
-    setUIDisplayData(uidata);
-  };
-
-  // Listener/setter for selection state info
-  useEffect(() => {
-    setSelectionStateInfoForViewer((prevState) => ({
-      ...prevState,
-      highlightedAgents: Object.keys(currentVisibilityStates.highlight).map(
-        (key) => ({
-          name: key,
-          tags: currentVisibilityStates.highlight[key],
-        })
-      ),
-      hiddenAgents: Object.keys(currentVisibilityStates.hidden).map((key) => ({
-        name: key,
-        tags: currentVisibilityStates.hidden[key],
-      })),
-    }));
-  }, [currentVisibilityStates]);
-
   return (
     <div ref={containerRef} className="container">
-      {showSidePanel && <SidePanel uiDisplayData={uiDisplayData} />}
+      {showSidePanel && <SidePanel />}
       <div className="viewer-container">
         <ModelDisplayData {...modelInfo} trajectoryTitle={trajectoryTitle} />
         <SimulariumViewer
@@ -161,8 +122,8 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           onJsonDataArrived={console.log}
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
-          selectionStateInfo={selectionStateInfoForViewer}
-          onUIDisplayDataChanged={handleUIDisplayDataChanged}
+          selectionStateInfo={selectionStateInfo}
+          onUIDisplayDataChanged={receiveUIDisplayData}
           loadInitialData={true}
           hideAllAgents={false}
           showBounds={true}

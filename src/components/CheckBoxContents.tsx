@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-
 import {
   DisplayAction,
   HiddenOrHighlightedState,
@@ -22,18 +21,18 @@ const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
 
   const [showSubAgentRows, setShowSubAgentsRows] =
     React.useState<boolean>(false);
-  const [subAgentDisplayMaps, setSubAgentDisplayMaps] =
-    React.useState<SubAgentDisplayMaps>({ hidden: {}, highlight: {} });
   const [topLevelDisplayStatus, setTopLevelDisplayStatus] =
     React.useState<TopLevelDisplayStatus>({
       hidden: Inactive,
       highlight: Inactive,
     });
+  const [subAgentDisplayMaps, setSubAgentDisplayMaps] =
+    React.useState<SubAgentDisplayMaps>({ hidden: {}, highlight: {} });
 
   const {
     currentVisibilityStates,
-    updateTopLevelDisplayStatus,
-    updateSubAgentDisplayMaps,
+    getTopLevelDisplayStatus,
+    getSubAgentDisplayMaps,
   } = useContext(VisibilityContext);
 
   const displayStates = agent.displayStates.map((entry) => entry.name);
@@ -42,20 +41,18 @@ const CheckBoxContents: React.FunctionComponent<CheckBoxContentsProps> = (
   // Name and number of subagents aren't known when
   // initializing maps
   useEffect(() => {
-    updateSubAgentDisplayMaps(agent);
+    getSubAgentDisplayMaps(agent);
   }, []);
 
-  // Listener/setters for changes to hidden/highlighted agents/subagents
   useEffect(() => {
-    const newTopLevelStatus = updateTopLevelDisplayStatus(agent);
+    const newTopLevelStatus = getTopLevelDisplayStatus(agent);
     setTopLevelDisplayStatus(newTopLevelStatus);
     if (displayStates.length > 0) {
-      const newSubAgentDisplayMaps = updateSubAgentDisplayMaps(agent);
+      const newSubAgentDisplayMaps = getSubAgentDisplayMaps(agent);
       setSubAgentDisplayMaps(newSubAgentDisplayMaps);
     }
   }, [currentVisibilityStates]);
 
-  // display state handler
   const handleShowSubAgentRows = (value: boolean) => {
     setShowSubAgentsRows(value);
   };

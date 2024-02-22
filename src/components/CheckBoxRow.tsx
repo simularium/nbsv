@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 
 import {
@@ -43,11 +43,11 @@ const CheckBoxRow: React.FunctionComponent<CheckBoxRowProps> = (
     handleShowSubAgentRows,
   } = props;
 
-  const { handleDisplayActionTopLevel, handleSubAgentDisplayAction } =
-    React.useContext(VisibilityContext);
+  const { handleTopLevelDisplayAction, handleSubAgentDisplayAction } =
+    useContext(VisibilityContext);
 
   const handleDisplayAction = isTopLevel
-    ? handleDisplayActionTopLevel
+    ? handleTopLevelDisplayAction
     : handleSubAgentDisplayAction;
 
   const { name, color } = agent;

@@ -3,8 +3,8 @@ import {
   getPayloadForHideAll,
   getPayloadSubAgentDisplayAction,
   getPayloadTopLevelDisplayAction,
-  getSubAgentDisplayStateMap,
-  getTopLevelDisplayStatus,
+  getSubAgentDisplayStatePayload,
+  getTopLevelDisplayStatePayload,
 } from '../selectors';
 import { DisplayAction, HiddenOrHighlightedState } from '../constants';
 const mockUIDisplayData: UIDisplayData = [
@@ -99,50 +99,59 @@ const { Hide, Highlight } = DisplayAction;
 const { Active, Inactive, Indeterminate } = HiddenOrHighlightedState;
 
 describe('selection composed selectors', () => {
-  describe('getTopLevelDisplayStatus', () => {
+  describe('getTopLevelDisplayStatePayload', () => {
     it('returns Inactive if the agent is not in the viewerStatusMap', () => {
       const agent = mockUIDisplayData[0]; // agent1
       const viewerStatusMap = mockViewerVisibilityStates[Hide]; // empty map
-      const status = getTopLevelDisplayStatus(agent, viewerStatusMap);
+      const status = getTopLevelDisplayStatePayload(agent, viewerStatusMap);
       expect(status).toEqual('Inactive');
     });
     it('returns Active if all display states of the agent are in the viewerStatusMap', () => {
       const agent = mockUIDisplayData[0]; // agent1, has state1
       const viewerStatusMap = mockViewerVisibilityStates[Highlight]; // agent1, state1 is in map
-      const status = getTopLevelDisplayStatus(agent, viewerStatusMap);
+      const status = getTopLevelDisplayStatePayload(agent, viewerStatusMap);
       expect(status).toEqual('Active');
     });
     it('returns Indeterminate if some but not all display states are in the viewerStatusMap', () => {
       const agent = mockUIDisplayData[1]; // agent2, has state1 and state2
       const viewerStatusMap = mockViewerVisibilityStates[Highlight]; // agent2, state1 is in map
-      const status = getTopLevelDisplayStatus(agent, viewerStatusMap);
+      const status = getTopLevelDisplayStatePayload(agent, viewerStatusMap);
       expect(status).toEqual('Indeterminate');
     });
     it('returns Active if the viewerStatusMap entry is an empty array', () => {
       const agent = mockUIDisplayData[2]; // agent3, no display states
-      const viewerStatusMap = mockViewerVisibilityStates[Highlight]; 
-      const status = getTopLevelDisplayStatus(agent, viewerStatusMap);
+      const viewerStatusMap = mockViewerVisibilityStates[Highlight];
+      const status = getTopLevelDisplayStatePayload(agent, viewerStatusMap);
       expect(status).toEqual('Active');
     });
   });
-  describe('getSubAgentDisplayStateMap', () => {
+  describe('getSubAgentDisplayStatePayload', () => {
     it('if agent has no displayStates, the map will be empty', () => {
       const agent = mockUIDisplayData[2];
       const viewerStatusMap = mockViewerVisibilityStates[Highlight];
-      const subAgentMap = getSubAgentDisplayStateMap(agent, viewerStatusMap);
+      const subAgentMap = getSubAgentDisplayStatePayload(
+        agent,
+        viewerStatusMap
+      );
       expect(subAgentMap).toEqual({});
     });
     it('if an agent has displyStates, the map will have a key for each subagent', () => {
       const agent = mockUIDisplayData[1];
       const viewerStatusMap = mockViewerVisibilityStates[Highlight];
-      const subAgentMap = getSubAgentDisplayStateMap(agent, viewerStatusMap);
+      const subAgentMap = getSubAgentDisplayStatePayload(
+        agent,
+        viewerStatusMap
+      );
       const keys = Object.keys(subAgentMap);
       expect(keys).toEqual(agent.displayStates.map((state) => state.name));
     });
     it('if the agents is not in the viewerStatusMap, all subagents will be Inactive', () => {
       const agent = mockUIDisplayData[1];
       const viewerStatusMap = mockViewerVisibilityStates[Hide];
-      const subAgentMap = getSubAgentDisplayStateMap(agent, viewerStatusMap);
+      const subAgentMap = getSubAgentDisplayStatePayload(
+        agent,
+        viewerStatusMap
+      );
       expect(subAgentMap).toEqual({
         state1: Inactive,
         state2: Inactive,
@@ -151,7 +160,10 @@ describe('selection composed selectors', () => {
     it('if the agents is in the viewerStatusMap, and mapped array of states is empty, all agents will be active', () => {
       const agent = mockUIDisplayData[3];
       const viewerStatusMap = mockViewerVisibilityStates[Highlight];
-      const subAgentMap = getSubAgentDisplayStateMap(agent, viewerStatusMap);
+      const subAgentMap = getSubAgentDisplayStatePayload(
+        agent,
+        viewerStatusMap
+      );
       expect(subAgentMap).toEqual({
         state1: Active,
         state2: Active,
@@ -161,7 +173,10 @@ describe('selection composed selectors', () => {
     it('if the agents is in the viewerStatusMap, and mapped array of states has entries, all displayStates in array will be active, all displayStates not in array will be inactive', () => {
       const agent = mockUIDisplayData[1];
       const viewerStatusMap = mockViewerVisibilityStates[Highlight];
-      const subAgentMap = getSubAgentDisplayStateMap(agent, viewerStatusMap);
+      const subAgentMap = getSubAgentDisplayStatePayload(
+        agent,
+        viewerStatusMap
+      );
       expect(subAgentMap).toEqual({ state1: Active, state2: Inactive });
     });
   });
