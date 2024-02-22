@@ -1,4 +1,5 @@
 @import url('colors.css');
+@import url('constants.css');
 
 .custom-widget {
   background-color: var(--black-one);
