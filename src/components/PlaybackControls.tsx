@@ -3,12 +3,12 @@ import { Button, InputNumber, Slider, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 
+import { TOOLTIP_COLOR } from '../constants';
 import { PlaybackData, PlaybackState } from '../types';
 import { FrameBack, FrameForward, Pause, Play } from './Icons';
 
 import '../../css/playback_controls.css';
 
-const TOOLTIP_COLOR = '#3b3649';
 interface PlayBackProps {
   playbackState: PlaybackState;
   setPlaybackState: (playbackState: PlaybackState) => void;
@@ -134,7 +134,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
 
   const handleTimeInputChange = (userInput: number | null): void => {
     if (userInput !== null) {
-      setTimeInput(userInput as number);
+      setTimeInput(userInput);
     }
   };
 
@@ -177,6 +177,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
         placement="top"
         title={previousFrameUnavailable ? '' : 'Skip 1 frame back'}
         color={TOOLTIP_COLOR}
+        trigger={['hover', 'focus']}
       >
         <Button
           id={'back-button'}
@@ -193,6 +194,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
         placement="top"
         title={isPlaying ? 'Pause' : 'Play'}
         color={TOOLTIP_COLOR}
+        trigger={['hover', 'focus']}
       >
         <Button
           id={'play-button'}
@@ -208,7 +210,12 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
           {isPlaying ? Pause : Play}
         </Button>
       </Tooltip>
-      <Tooltip placement="top" title="Skip 1 frame ahead" color={TOOLTIP_COLOR}>
+      <Tooltip
+        placement="top"
+        title="Skip 1 frame ahead"
+        color={TOOLTIP_COLOR}
+        trigger={['hover', 'focus']}
+      >
         <Button
           id={'next-button'}
           className="btn"
