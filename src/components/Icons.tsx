@@ -22,7 +22,6 @@ export const Reset = <HomeOutlined />;
 export const ZoomIn = <PlusOutlined />;
 export const ZoomOut = <MinusOutlined />;
 export const Info = <InfoCircleFilled />;
-
 export const CaretRight = <CaretRightFilled />;
 export const CaretDown = <CaretDownFilled />;
 export const Pause = <PauseOutlined />;
