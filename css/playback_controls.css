@@ -74,7 +74,7 @@
   background-color: var(--dark-one);
   border-radius: 3px;
   height: 26px;
-  padding: 4px 5px 4px 5px;
+  padding: 4px 5px;
 }
 
 .last-frame-time {

@@ -156,8 +156,8 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
     }
   };
 
-  const handleSliderChange = (sliderValue: number | [number, number]): void => {
-    skipToTime(sliderValue as number);
+  const handleSliderChange = (sliderValue: number): void => {
+    skipToTime(sliderValue);
     if (isPlaying) {
       controller.pause();
     }
@@ -232,6 +232,7 @@ const PlayBackControls = (props: PlayBackProps): JSX.Element => {
         step={timeStep}
         min={firstFrameTime}
         max={lastFrameTime}
+        range={false}
       />
       <div className="time-input-display">
         <InputNumber
