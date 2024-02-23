@@ -3,7 +3,7 @@ import { Button, InputNumber, Slider, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { SimulariumController, compareTimes } from '@aics/simularium-viewer';
 
-import { PlaybackData, PlaybackState } from '../constants';
+import { PlaybackData, PlaybackState } from '../types';
 import { FrameBack, FrameForward, Pause, Play } from './Icons';
 
 import '../../css/playback_controls.css';

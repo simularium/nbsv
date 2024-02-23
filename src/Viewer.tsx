@@ -18,9 +18,8 @@ import {
   VIEWER_HEIGHT,
   VIEWER_INITIAL_WIDTH,
   agentColors,
-  PlaybackData,
-  PlaybackState,
 } from './constants';
+import { PlaybackData, PlaybackState } from './types';
 
 import '../css/viewer.css';
 
