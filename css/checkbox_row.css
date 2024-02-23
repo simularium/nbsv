@@ -22,7 +22,7 @@
 
 .item-row .ant-checkbox-inner {
   border-radius: 0px;
-  border: 1px solid var(--gray-four);
+  border: 1px solid var(--gray-five);
 }
 
 .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
