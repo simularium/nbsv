@@ -52,6 +52,52 @@ export const ScaleBarIconTag = (
   </svg>
 );
 
+export const FrameBackIconTag = (
+  <svg
+    data-name="Layer 1"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 13.6 13.6"
+  >
+    <g style={{ isolation: 'isolate' }}>
+      <path
+        d="M8.7,9.7V9.2L9.6,9a.9.9,0,0,0,.3-.7h.5V13H9.8V9.7Z"
+        transform="translate(-3.2 -3.2)"
+        fill="#d8d8d8"
+      />
+    </g>
+    <path
+      d="M16.4,7.7A6.8,6.8,0,0,0,7.7,3.6l-1.2.6-.4-1L4.8,6.3l3.4-.4L7,4.9l1-.4a5.9,5.9,0,1,1-3.6,7.6,5.7,5.7,0,0,1-.3-2.6H3.2a5.5,5.5,0,0,0,.4,2.8,6.8,6.8,0,0,0,8.7,4.1A6.8,6.8,0,0,0,16.4,7.7Z"
+      transform="translate(-3.2 -3.2)"
+      fill="#d8d8d8"
+    />
+  </svg>
+);
+
+export const FrameForwardIconTag = (
+  <svg
+    data-name="Layer 1"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 13.6 13.7"
+  >
+    <g style={{ isolation: 'isolate' }}>
+      <path
+        d="M8.9,9.7V9.2L9.8,9a.9.9,0,0,0,.3-.7h.5V13H10V9.7Z"
+        transform="translate(-3.2 -3.1)"
+        fill="#d8d8d8"
+      />
+    </g>
+    <path
+      d="M3.6,7.7a6.8,6.8,0,0,1,8.7-4.1l1.2.6.4-1.1,1.2,3.1-3.4-.4,1.2-1L12,4.4A5.9,5.9,0,1,0,15.6,12a5.4,5.4,0,0,0,.3-2.5h.9a5.5,5.5,0,0,1-.4,2.8,6.8,6.8,0,0,1-8.7,4.1A6.8,6.8,0,0,1,3.6,7.7Z"
+      transform="translate(-3.2 -3.1)"
+      fill="#d8d8d8"
+    />
+  </svg>
+);
+
 export const IndeterminateHighlightStarTag = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
