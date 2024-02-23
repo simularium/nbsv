@@ -54,7 +54,6 @@ export const ScaleBarIconTag = (
 
 export const FrameBackIconTag = (
   <svg
-    id="e0a72a13-c21e-4c58-9a5e-a0ae842f6ad0"
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"
     width="16"
@@ -78,7 +77,6 @@ export const FrameBackIconTag = (
 
 export const FrameForwardIconTag = (
   <svg
-    id="f83b72a1-eb1e-4a2e-b2cf-865592f9a030"
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"
     width="16"
