@@ -10,6 +10,7 @@ import { ModelInfo } from '@aics/simularium-viewer/type-declarations/simularium/
 import CameraControls from './components/CameraControls';
 import ModelDisplayData from './components/ModelDisplayData';
 import SidePanel from './components/SidePanel';
+import PlayBackControls from './components/PlaybackControls';
 import ScaleBar from './components/ScaleBar';
 import {
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
@@ -18,6 +19,7 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
+import { PlaybackData, PlaybackState } from './types';
 
 import '../css/viewer.css';
 
@@ -29,20 +31,36 @@ export interface ViewerProps {
   controller: SimulariumController;
 }
 
+const initialPlaybackData: PlaybackData = {
+  timeStep: 0,
+  lastFrameTime: 0,
+  firstFrameTime: 0,
+  timeUnits: {
+    name: '',
+    magnitude: 1,
+  },
+};
+
 function ViewerWidget(props: ViewerProps): JSX.Element {
-  // UI display state
+  // UI and viewer states
   const [dimensions, setDimensions] = useState({
     width: VIEWER_INITIAL_WIDTH,
     height: VIEWER_HEIGHT,
   });
   const [showSidePanel, setShowSidePanel] = useState(true);
+  const [playbackState, setPlaybackState] = useState<PlaybackState>({
+    currentTime: 0,
+    isPlaying: false,
+  });
   const controller = props.controller;
-  // trajectory data
+  // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
   const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
     ''
   );
   const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
+  const [playbackData, setPlaybackData] =
+    useState<PlaybackData>(initialPlaybackData);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -87,10 +105,17 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     };
   }, [containerRef, showSidePanel]);
 
+  // Viewer callbacks
   const handleTrajectoryData = (data: TrajectoryFileInfo) => {
     setTrajectoryTitle(data.trajectoryTitle);
     setModelInfo(data.modelInfo);
     setScaleBarLabel(getScaleBarLabel(data.spatialUnits));
+    setPlaybackData({
+      timeStep: data.timeStepSize,
+      lastFrameTime: (data.totalSteps - 1) * data.timeStepSize,
+      firstFrameTime: 0,
+      timeUnits: data.timeUnits,
+    });
   };
 
   const getScaleBarLabel = (spatialUnits: {
@@ -105,6 +130,10 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     return scaleBarLabelNumber.toString() + ' ' + scaleBarLabelUnit;
   };
 
+  const handleTimeChange = (timeData: any): void => {
+    setPlaybackState({ ...playbackState, currentTime: timeData.time });
+  };
+
   return (
     <div ref={containerRef} className="container">
       {showSidePanel && <SidePanel />}
@@ -116,7 +145,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           height={dimensions.height}
           width={dimensions.width}
           loggerLevel="off"
-          onTimeChange={console.log}
+          onTimeChange={handleTimeChange}
           simulariumController={props.controller}
           onJsonDataArrived={console.log}
           showCameraControls={false}
@@ -137,8 +166,14 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           onError={console.log}
         />
         <div className="scalebar-controls">
+          <PlayBackControls
+            playbackState={playbackState}
+            setPlaybackState={setPlaybackState}
+            playbackData={playbackData}
+            controller={controller}
+          />
           <ScaleBar label={scaleBarLabel} />
-          <CameraControls controller={props.controller} />
+          <CameraControls controller={controller} />
         </div>
       </div>
     </div>

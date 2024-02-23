@@ -18,6 +18,8 @@ export const agentColors = [
   '#00aabf',
 ];
 
+export const TOOLTIP_COLOR = '#3B3649';
+
 export const SIDE_PANEL_WIDTH: number = 280;
 export const MIN_WIDTH_TO_SHOW_SIDE_PANEL: number = 580;
 export const VIEWER_INITIAL_WIDTH: number = 500;
