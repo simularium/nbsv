@@ -6,7 +6,6 @@ import { HiddenOrHighlightedState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 
 import '../../css/side_panel.css';
-import '../../css/checkbox_row.css';
 
 const SidePanel: React.FunctionComponent = (): JSX.Element => {
   const { hideOrRevealAllAgents, allAgentsHiddenState } =
