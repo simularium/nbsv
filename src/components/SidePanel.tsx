@@ -4,12 +4,12 @@ import { Checkbox, Tooltip } from 'antd';
 
 import { HiddenOrHighlightedState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import CheckBoxContents from './CheckBoxContents';
 
 import '../../css/side_panel.css';
+import '../../css/checkbox_row.css';
 
 const SidePanel: React.FunctionComponent = (): JSX.Element => {
-  const { hideOrRevealAllAgents, uiDisplayData, allAgentsHiddenState } =
+  const { hideOrRevealAllAgents, allAgentsHiddenState } =
     useContext(VisibilityContext);
 
   const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
@@ -39,11 +39,6 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
           </Tooltip>
           <span>All agent types</span>
         </div>
-        {uiDisplayData.map((agent) => (
-          <>
-            <CheckBoxContents agent={agent} />
-          </>
-        ))}
       </div>
     </div>
   );
