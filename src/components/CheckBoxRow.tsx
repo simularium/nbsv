@@ -18,6 +18,7 @@ import {
 } from './Icons';
 
 import '../../css/checkbox_row.css';
+
 interface CheckBoxRowProps {
   agent: UIDisplayEntry;
   subAgent?: DisplayStateEntry;
