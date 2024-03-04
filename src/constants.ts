@@ -45,14 +45,14 @@ export interface VisibilitySelectionMap {
 
 // types for matching agent/subagent names to current status of checkboxes in the agent tree UI
 // (hidden, visible, indeterminate) - used for visibility and highlighting
-export enum HiddenOrHighlightedState {
+export enum ActiveState {
   Active = 'Active',
   Inactive = 'Inactive',
   Indeterminate = 'Indeterminate',
 }
 
 export interface UIVisibilityMap {
-  [key: string]: HiddenOrHighlightedState;
+  [key: string]: ActiveState;
 }
 
 export interface SubAgentDisplayMaps {
@@ -61,8 +61,8 @@ export interface SubAgentDisplayMaps {
 }
 
 export interface TopLevelDisplayStatus {
-  hidden: HiddenOrHighlightedState;
-  highlight: HiddenOrHighlightedState;
+  hidden: ActiveState;
+  highlight: ActiveState;
 }
 
 export enum DisplayAction {

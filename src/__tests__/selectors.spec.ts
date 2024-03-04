@@ -2,7 +2,7 @@ import { UIDisplayData } from '@aics/simularium-viewer';
 import {
   getPayloadForHideAll,
 } from '../selectors';
-import { HiddenOrHighlightedState } from '../constants';
+import { ActiveState } from '../constants';
 const mockUIDisplayData: UIDisplayData = [
   {
     name: 'agent1',
@@ -80,7 +80,7 @@ const mockUIDisplayData: UIDisplayData = [
   },
 ];
 
-const { Active, Inactive, Indeterminate } = HiddenOrHighlightedState;
+const { Active, Inactive, Indeterminate } = ActiveState;
 
 describe('selection composed selectors', () => {
   describe('getPayloadForHideAll', () => {

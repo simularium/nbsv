@@ -4,16 +4,16 @@ import {
   UIDisplayData,
 } from '@aics/simularium-viewer';
 import {
-  HiddenOrHighlightedState,
+  ActiveState,
   VisibilitySelectionMap,
   ViewerVisibilityStates,
 } from './constants';
 
-const { Inactive } = HiddenOrHighlightedState;
+const { Inactive } = ActiveState;
 
 export const getPayloadForHideAll = (
   uiDisplayData: UIDisplayData,
-  hiddenState: HiddenOrHighlightedState
+  hiddenState: ActiveState
 ): VisibilitySelectionMap => {
   let payload: VisibilitySelectionMap = {};
   if (hiddenState === Inactive) {

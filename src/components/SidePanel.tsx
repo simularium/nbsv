@@ -2,16 +2,17 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { Checkbox, Tooltip } from 'antd';
 
-import { HiddenOrHighlightedState, TOOLTIP_COLOR } from '../constants';
+import { ActiveState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 
 import '../../css/side_panel.css';
 
 const SidePanel: React.FunctionComponent = (): JSX.Element => {
-  const { hideOrRevealAllAgents, allAgentsHiddenState } =
+  const { setAllAgentVisibility: setAllAgentVisibility, allAgentsHiddenState } =
     useContext(VisibilityContext);
 
-  const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
+  const { Inactive, Active, Indeterminate } = ActiveState;
+  const visible = allAgentsHiddenState === Inactive; // agents are visible when hiding is inactive
 
   const tooltipText = {
     [Active]: 'Show',
@@ -32,8 +33,8 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
             <Checkbox
               className={classNames('checkbox', 'check-all')}
               indeterminate={allAgentsHiddenState === Indeterminate}
-              checked={allAgentsHiddenState === Inactive}
-              onClick={() => hideOrRevealAllAgents(allAgentsHiddenState)}
+              checked={visible}
+              onClick={() => setAllAgentVisibility(allAgentsHiddenState)}
             />
           </Tooltip>
           <span>All agent types</span>

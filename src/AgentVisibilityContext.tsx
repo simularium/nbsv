@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import { isEqual } from 'underscore';
 import {
   DisplayAction,
-  HiddenOrHighlightedState,
+  ActiveState,
   VisibilitySelectionMap,
 } from './constants';
 import {
@@ -14,15 +14,15 @@ import { SelectionStateInfo, UIDisplayData } from '@aics/simularium-viewer';
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
   selectionStateInfo: SelectionStateInfo;
-  allAgentsHiddenState: HiddenOrHighlightedState;
+  allAgentsHiddenState: ActiveState;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   updateVisibilityAndSelection: (
     newValue: VisibilitySelectionMap,
     hideOrHighlight: DisplayAction
   ) => void;
-  hideOrRevealAllAgents: (hiddenState: HiddenOrHighlightedState) => void;
+  setAllAgentVisibility: (hiddenState: ActiveState) => void;
 }
-const { Inactive, Active, Indeterminate } = HiddenOrHighlightedState;
+const { Inactive, Active, Indeterminate } = ActiveState;
 
 export const VisibilityContext = createContext<VisibilityContextType>({
   uiDisplayData: [],
@@ -34,7 +34,7 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   allAgentsHiddenState: Inactive,
   receiveUIDisplayData: () => {},
   updateVisibilityAndSelection: () => {},
-  hideOrRevealAllAgents: () => {},
+  setAllAgentVisibility: () => {},
 });
 
 export const VisibilityProvider = ({
@@ -50,7 +50,7 @@ export const VisibilityProvider = ({
       colorChange: null,
     });
   const [allAgentsHiddenState, setHiddenState] =
-    React.useState<HiddenOrHighlightedState>(Inactive);
+    React.useState<ActiveState>(Inactive);
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setuiDisplayData(data);
@@ -69,7 +69,7 @@ export const VisibilityProvider = ({
   const updateAllAgentsHiddenState = (
     visibilityMap: VisibilitySelectionMap
   ) => {
-    let newHiddenState: HiddenOrHighlightedState = Indeterminate;
+    let newHiddenState: ActiveState = Indeterminate;
     if (Object.keys(visibilityMap).length === 0) {
       newHiddenState = Inactive;
     } else if (
@@ -83,9 +83,7 @@ export const VisibilityProvider = ({
     setHiddenState(newHiddenState);
   };
 
-  const hideOrRevealAllAgents = (
-    hiddenState: HiddenOrHighlightedState
-  ): void => {
+  const setAllAgentVisibility = (hiddenState: ActiveState): void => {
     const payload = getPayloadForHideAll(uiDisplayData, hiddenState);
     updateVisibilityAndSelection(payload);
   };
@@ -96,7 +94,7 @@ export const VisibilityProvider = ({
     allAgentsHiddenState,
     receiveUIDisplayData,
     updateVisibilityAndSelection,
-    hideOrRevealAllAgents,
+    setAllAgentVisibility,
   };
 
   return (
