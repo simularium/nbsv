@@ -83,6 +83,8 @@ export const VisibilityProvider = ({
     setHiddenState(newHiddenState);
   };
 
+  // if hiddenState is Inactive, meaning none are hidden, this will hide all agents
+  // if hiddenState is Active or Indeterminate, this will show all agents
   const setAllAgentVisibility = (hiddenState: ActiveState): void => {
     const payload = getPayloadForHideAll(uiDisplayData, hiddenState);
     updateVisibilityAndSelection(payload);
