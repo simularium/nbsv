@@ -24,53 +24,12 @@ export const SIDE_PANEL_WIDTH: number = 280;
 export const MIN_WIDTH_TO_SHOW_SIDE_PANEL: number = 580;
 export const VIEWER_INITIAL_WIDTH: number = 500;
 export const VIEWER_HEIGHT: number = 580;
-
-//todo get from viewer
-export interface DisplayStateEntry {
-  name: string;
-  id: string;
-  color: string;
-}
-
-export interface UIDisplayEntry {
-  name: string;
-  displayStates: DisplayStateEntry[];
-  color: string;
-}
-
-// maps names/display states for viewer viz status (hidden/highligted, or not, in the viewport)
 export interface VisibilitySelectionMap {
   [key: string]: string[];
 }
 
-// types for matching agent/subagent names to current status of checkboxes in the agent tree UI
-// (hidden, visible, indeterminate) - used for visibility and highlighting
-export enum ActiveState {
-  Active = 'Active',
-  Inactive = 'Inactive',
+export enum CheckboxState {
+  Checked = 'Checked',
+  Unchecked = 'Unchecked',
   Indeterminate = 'Indeterminate',
-}
-
-export interface UIVisibilityMap {
-  [key: string]: ActiveState;
-}
-
-export interface SubAgentDisplayMaps {
-  hidden: UIVisibilityMap;
-  highlight: UIVisibilityMap;
-}
-
-export interface TopLevelDisplayStatus {
-  hidden: ActiveState;
-  highlight: ActiveState;
-}
-
-export enum DisplayAction {
-  Hide = 'hidden',
-  Highlight = 'highlight',
-}
-
-export interface ViewerVisibilityStates {
-  hidden: VisibilitySelectionMap;
-  highlight: VisibilitySelectionMap;
 }

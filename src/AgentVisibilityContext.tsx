@@ -1,28 +1,19 @@
-import React, { createContext } from 'react';
-import { isEqual } from 'underscore';
-import {
-  DisplayAction,
-  ActiveState,
-  VisibilitySelectionMap,
-} from './constants';
-import {
-  getPayloadForHideAll,
-  getSelectionStateInfoPayload,
-} from './selectors';
+import React, { createContext, useEffect } from 'react';
+import { CheckboxState, VisibilitySelectionMap } from './constants';
+import { getNewHiddenAgents, getNewSelectionStateInfo } from './selectors';
 import { SelectionStateInfo, UIDisplayData } from '@aics/simularium-viewer';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
   selectionStateInfo: SelectionStateInfo;
-  allAgentsHiddenState: ActiveState;
+  hiddenAgents: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
-  updateVisibilityAndSelection: (
-    newValue: VisibilitySelectionMap,
-    hideOrHighlight: DisplayAction
-  ) => void;
-  setAllAgentVisibility: (hiddenState: ActiveState) => void;
+  getAllAgentsCheckboxState: (
+    visibilityMap: VisibilitySelectionMap
+  ) => CheckboxState;
+  handleAllAgentsCheckboxChange: (hiddenState: CheckboxState) => void;
 }
-const { Inactive, Active, Indeterminate } = ActiveState;
+const { Unchecked, Checked, Indeterminate } = CheckboxState;
 
 export const VisibilityContext = createContext<VisibilityContextType>({
   uiDisplayData: [],
@@ -31,10 +22,12 @@ export const VisibilityContext = createContext<VisibilityContextType>({
     highlightedAgents: [],
     colorChange: null,
   },
-  allAgentsHiddenState: Inactive,
+  hiddenAgents: {},
   receiveUIDisplayData: () => {},
-  updateVisibilityAndSelection: () => {},
-  setAllAgentVisibility: () => {},
+  getAllAgentsCheckboxState: (): CheckboxState => {
+    return Indeterminate;
+  },
+  handleAllAgentsCheckboxChange: () => {},
 });
 
 export const VisibilityProvider = ({
@@ -49,54 +42,44 @@ export const VisibilityProvider = ({
       highlightedAgents: [],
       colorChange: null,
     });
-  const [allAgentsHiddenState, setHiddenState] =
-    React.useState<ActiveState>(Inactive);
+  const [hiddenAgents, setHiddenAgents] =
+    React.useState<VisibilitySelectionMap>({});
+
+  useEffect(() => {
+    updateSelectionStateInfo({
+      ...selectionStateInfo,
+      hiddenAgents: getNewSelectionStateInfo(hiddenAgents),
+    });
+  }, [hiddenAgents]);
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setuiDisplayData(data);
   };
 
-  const updateVisibilityAndSelection = (
-    newValue: VisibilitySelectionMap
-  ): void => {
-    updateSelectionStateInfo({
-      ...selectionStateInfo,
-      hiddenAgents: getSelectionStateInfoPayload(newValue),
-    });
-    updateAllAgentsHiddenState(newValue);
-  };
-
-  const updateAllAgentsHiddenState = (
+  // This could be a one line ternary in the component, but will become more complex with
+  // indeterminate logic, and to keep logic out of display components it is still here
+  const getAllAgentsCheckboxState = (
     visibilityMap: VisibilitySelectionMap
-  ) => {
-    let newHiddenState: ActiveState = Indeterminate;
+  ): CheckboxState => {
     if (Object.keys(visibilityMap).length === 0) {
-      newHiddenState = Inactive;
-    } else if (
-      isEqual(
-        visibilityMap,
-        getPayloadForHideAll(uiDisplayData, allAgentsHiddenState)
-      )
-    ) {
-      newHiddenState = Active;
+      return Checked;
     }
-    setHiddenState(newHiddenState);
+    return Unchecked;
   };
 
-  // if hiddenState is Inactive, meaning none are hidden, this will hide all agents
-  // if hiddenState is Active or Indeterminate, this will show all agents
-  const setAllAgentVisibility = (hiddenState: ActiveState): void => {
-    const payload = getPayloadForHideAll(uiDisplayData, hiddenState);
-    updateVisibilityAndSelection(payload);
+  const handleAllAgentsCheckboxChange = (
+    checkboxState: CheckboxState
+  ): void => {
+    setHiddenAgents(getNewHiddenAgents(uiDisplayData, checkboxState));
   };
 
   const vis = {
     uiDisplayData,
     selectionStateInfo,
-    allAgentsHiddenState,
+    hiddenAgents,
+    getAllAgentsCheckboxState,
     receiveUIDisplayData,
-    updateVisibilityAndSelection,
-    setAllAgentVisibility,
+    handleAllAgentsCheckboxChange,
   };
 
   return (
