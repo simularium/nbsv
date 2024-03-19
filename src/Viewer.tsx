@@ -19,11 +19,11 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
+import { getSelectionStateInfo } from './selectors';
 import { PlaybackData, PlaybackState } from './types';
 import { VisibilityContext } from './AgentVisibilityContext';
 
 import '../css/viewer.css';
-import { getSelectionStateInfo } from './selectors';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext } from 'react';
 import { CheckboxState, VisibilitySelectionMap } from './constants';
 import { getNewHiddenAgents } from './selectors';
 import { UIDisplayData } from '@aics/simularium-viewer';
