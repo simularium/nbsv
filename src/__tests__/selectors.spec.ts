@@ -1,8 +1,8 @@
 import { UIDisplayData } from '@aics/simularium-viewer';
 import {
-  getPayloadForHideAll,
+  getNewHiddenAgents,
 } from '../selectors';
-import { ActiveState } from '../constants';
+import { CheckboxState } from '../constants';
 const mockUIDisplayData: UIDisplayData = [
   {
     name: 'agent1',
@@ -80,12 +80,12 @@ const mockUIDisplayData: UIDisplayData = [
   },
 ];
 
-const { Active, Inactive, Indeterminate } = ActiveState;
+const { Checked, Unchecked } = CheckboxState;
 
 describe('selection composed selectors', () => {
-  describe('getPayloadForHideAll', () => {
-    it('if hiddenState is Inactive, return each agent mapped to an empty array', () => {
-      const payload = getPayloadForHideAll(mockUIDisplayData, Inactive);
+  describe('getNewHiddenAgents', () => {
+    it('if previous checkboxState is Unchecked, return each agent mapped to an empty array', () => {
+      const payload = getNewHiddenAgents(mockUIDisplayData, Checked);
       expect(payload).toEqual({
         agent1: [],
         agent2: [],
@@ -94,12 +94,8 @@ describe('selection composed selectors', () => {
         agent5: [],
       });
     });
-    it('if hiddenState is Active, return empty object', () => {
-      const payload = getPayloadForHideAll(mockUIDisplayData, Active);
-      expect(payload).toEqual({});
-    });
-    it('if hiddenState is Indeterminate, return empty object', () => {
-      const payload = getPayloadForHideAll(mockUIDisplayData, Indeterminate);
+    it('if previous checkboxState is Checked, return empty object', () => {
+      const payload = getNewHiddenAgents(mockUIDisplayData, Unchecked);
       expect(payload).toEqual({});
     });
   });
