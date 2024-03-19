@@ -5,10 +5,10 @@ const { Checked } = CheckboxState;
 
 export const getNewHiddenAgents = (
   uiDisplayData: UIDisplayData,
-  oldCheckboxState: CheckboxState
+  prevCheckboxState: CheckboxState
 ): VisibilitySelectionMap => {
   let payload: VisibilitySelectionMap = {};
-  if (oldCheckboxState === Checked) {
+  if (prevCheckboxState === Checked) {
     payload = uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
       acc[item.name] = [];
       return acc;

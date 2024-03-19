@@ -8,15 +8,13 @@ import { VisibilityContext } from '../AgentVisibilityContext';
 import '../../css/side_panel.css';
 
 const SidePanel: React.FunctionComponent = (): JSX.Element => {
-  const {
-    handleAllAgentsCheckboxChange,
-    hiddenAgents,
-    getAllAgentsCheckboxState,
-  } = useContext(VisibilityContext);
+  const { handleAllAgentsCheckboxChange, hiddenAgents } =
+    useContext(VisibilityContext);
 
   const { Unchecked, Checked, Indeterminate } = CheckboxState;
 
-  const checkboxState: CheckboxState = getAllAgentsCheckboxState(hiddenAgents);
+  const allAgentsVisible = Object.keys(hiddenAgents).length === 0;
+  const checkboxState: CheckboxState = allAgentsVisible ? Checked : Unchecked;
 
   const tooltipText = {
     [Unchecked]: 'Show',
@@ -36,7 +34,6 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
           >
             <Checkbox
               className={classNames('checkbox', 'check-all')}
-              indeterminate={checkboxState === Indeterminate}
               checked={checkboxState === Checked}
               onClick={() => handleAllAgentsCheckboxChange(checkboxState)}
             />
