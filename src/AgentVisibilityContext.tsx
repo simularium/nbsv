@@ -1,11 +1,10 @@
 import React, { createContext, useEffect } from 'react';
 import { CheckboxState, VisibilitySelectionMap } from './constants';
-import { getNewHiddenAgents, getNewSelectionStateInfo } from './selectors';
-import { SelectionStateInfo, UIDisplayData } from '@aics/simularium-viewer';
+import { getNewHiddenAgents } from './selectors';
+import { UIDisplayData } from '@aics/simularium-viewer';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
-  selectionStateInfo: SelectionStateInfo;
   hiddenAgents: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   getAllAgentsCheckboxState: (
@@ -17,11 +16,6 @@ const { Unchecked, Checked, Indeterminate } = CheckboxState;
 
 export const VisibilityContext = createContext<VisibilityContextType>({
   uiDisplayData: [],
-  selectionStateInfo: {
-    hiddenAgents: [],
-    highlightedAgents: [],
-    colorChange: null,
-  },
   hiddenAgents: {},
   receiveUIDisplayData: () => {},
   getAllAgentsCheckboxState: (): CheckboxState => {
@@ -36,21 +30,8 @@ export const VisibilityProvider = ({
   children: React.ReactNode;
 }) => {
   const [uiDisplayData, setuiDisplayData] = React.useState<UIDisplayData>([]);
-  const [selectionStateInfo, updateSelectionStateInfo] =
-    React.useState<SelectionStateInfo>({
-      hiddenAgents: [],
-      highlightedAgents: [],
-      colorChange: null,
-    });
   const [hiddenAgents, setHiddenAgents] =
     React.useState<VisibilitySelectionMap>({});
-
-  useEffect(() => {
-    updateSelectionStateInfo({
-      ...selectionStateInfo,
-      hiddenAgents: getNewSelectionStateInfo(hiddenAgents),
-    });
-  }, [hiddenAgents]);
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setuiDisplayData(data);
@@ -75,7 +56,6 @@ export const VisibilityProvider = ({
 
   const vis = {
     uiDisplayData,
-    selectionStateInfo,
     hiddenAgents,
     getAllAgentsCheckboxState,
     receiveUIDisplayData,

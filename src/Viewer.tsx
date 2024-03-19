@@ -23,6 +23,7 @@ import { PlaybackData, PlaybackState } from './types';
 import { VisibilityContext } from './AgentVisibilityContext';
 
 import '../css/viewer.css';
+import { getSelectionStateInfo } from './selectors';
 
 export interface WidgetModelWithState extends WidgetModel {
   controller: SimulariumController;
@@ -44,8 +45,7 @@ const initialPlaybackData: PlaybackData = {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
-  const { selectionStateInfo, receiveUIDisplayData } =
-    useContext(VisibilityContext);
+  const { hiddenAgents, receiveUIDisplayData } = useContext(VisibilityContext);
 
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
@@ -155,7 +155,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           onJsonDataArrived={console.log}
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
-          selectionStateInfo={selectionStateInfo}
+          selectionStateInfo={{
+            hiddenAgents: getSelectionStateInfo(hiddenAgents),
+            highlightedAgents: [],
+            colorChange: null,
+          }}
           onUIDisplayDataChanged={receiveUIDisplayData}
           loadInitialData={true}
           hideAllAgents={false}

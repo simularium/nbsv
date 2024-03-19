@@ -17,7 +17,7 @@ export const getNewHiddenAgents = (
   return payload;
 };
 
-export const getNewSelectionStateInfo = (
+export const getSelectionStateInfo = (
   currentVisibilityMap: VisibilitySelectionMap
 ): SelectionEntry[] => {
   return Object.keys(currentVisibilityMap).map((key) => ({
