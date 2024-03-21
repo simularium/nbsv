@@ -38,7 +38,7 @@ const AgentRow: React.FC<AgentRowProps> = (
     <div className="item-row" style={{ display: 'flex' }}>
       <CustomCheckbox
         checkboxType="highlight"
-        status={checkboxStatus}
+        status={fakeHighlightState}
         clickHandler={() => console.log('highlight clicked')}
       />
       <div
@@ -51,7 +51,7 @@ const AgentRow: React.FC<AgentRowProps> = (
       ></div>
       <CustomCheckbox
         checkboxType="hide"
-        status={fakeHighlightState}
+        status={checkboxStatus}
         clickHandler={() => handleAgentCheckboxChange(agent.name)}
       />
       <span>{agent.name}</span>
