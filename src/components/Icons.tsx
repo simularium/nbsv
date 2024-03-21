@@ -11,6 +11,9 @@ import {
   ScaleBarIconTag,
   FrameBackIconTag,
   FrameForwardIconTag,
+  HighlightStarTag,
+  IndeterminateHighlightStarTag,
+  NoHighlightStarTag,
 } from '../assets/svgs';
 
 export const Reset = <HomeOutlined />;
@@ -22,9 +25,6 @@ export const Play = <CaretRightOutlined />;
 export const ScaleBarIcon = ScaleBarIconTag;
 export const FrameBack = FrameBackIconTag;
 export const FrameForward = FrameForwardIconTag;
-
-export default {
-  Reset,
-  ZoomIn,
-  ZoomOut,
-};
+export const IndeterminateHighlightStar = IndeterminateHighlightStarTag;
+export const HighlightStar = HighlightStarTag;
+export const NoHighlightStar = NoHighlightStarTag;
