@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
@@ -19,7 +19,9 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
+import { getSelectionStateInfo } from './selectors';
 import { PlaybackData, PlaybackState } from './types';
+import { VisibilityContext } from './AgentVisibilityContext';
 
 import '../css/viewer.css';
 
@@ -42,7 +44,19 @@ const initialPlaybackData: PlaybackData = {
 };
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
-  // UI and viewer states
+  const controller = props.controller;
+  const { hiddenAgents, receiveUIDisplayData } = useContext(VisibilityContext);
+
+  // Trajectory data
+  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
+  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
+    ''
+  );
+  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
+  const [playbackData, setPlaybackData] =
+    useState<PlaybackData>(initialPlaybackData);
+
+  // UI state
   const [dimensions, setDimensions] = useState({
     width: VIEWER_INITIAL_WIDTH,
     height: VIEWER_HEIGHT,
@@ -52,15 +66,6 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
     currentTime: 0,
     isPlaying: false,
   });
-  const controller = props.controller;
-  // Trajectory data
-  const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
-  const [trajectoryTitle, setTrajectoryTitle] = useState<string | undefined>(
-    ''
-  );
-  const [scaleBarLabel, setScaleBarLabel] = useState<string>('');
-  const [playbackData, setPlaybackData] =
-    useState<PlaybackData>(initialPlaybackData);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -151,13 +156,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
           selectionStateInfo={{
+            hiddenAgents: getSelectionStateInfo(hiddenAgents),
             highlightedAgents: [],
-            hiddenAgents: [],
             colorChange: null,
           }}
-          onUIDisplayDataChanged={(uidata) =>
-            console.log('new ui data, ', uidata)
-          }
+          onUIDisplayDataChanged={receiveUIDisplayData}
           loadInitialData={true}
           hideAllAgents={false}
           showBounds={true}

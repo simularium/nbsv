@@ -17,6 +17,7 @@ import Viewer, { ViewerProps } from './Viewer';
 
 // Import the CSS
 import '../css/widget.css';
+import { VisibilityProvider } from './AgentVisibilityContext';
 
 const defaultModelProperties = {
   trajectory: '',
@@ -69,11 +70,15 @@ export class Viewport extends DOMWidgetView {
   render(): void {
     this.el.classList.add('custom-widget');
 
-    const component = React.createElement(Viewer, {
-      controller: this.controller,
-    } as ViewerProps);
+    const wrappedComponent = React.createElement(
+      VisibilityProvider,
+      null,
+      React.createElement(Viewer, {
+        controller: this.controller,
+      } as ViewerProps)
+    );
 
-    ReactDOM.render(component, this.el);
+    ReactDOM.render(wrappedComponent, this.el);
   }
 
   async trajectory_changed(): Promise<void> {
