@@ -1,5 +1,5 @@
 import { UIDisplayData } from '@aics/simularium-viewer';
-import { getNewHiddenAgents, getSelectionStateInfo } from '../selectors';
+import { getNewSelectionMap, getSelectionStateInfo } from '../selectors';
 
 const mockVisibilitySelectionMap = {
   agent1: ['agent1'],
@@ -27,16 +27,16 @@ const mockUIDisplayData: UIDisplayData = [
 
 // todo fix this test to match current function
 describe('selection composed selectors', () => {
-  describe('getNewHiddenAgents', () => {
+  describe('getNewSelectionMap', () => {
     it('it has each agent from uidisplaydata in visibility map and nothing else', () => {
-      const payload = getNewHiddenAgents('agent1', mockVisibilitySelectionMap);
+      const payload = getNewSelectionMap('agent1', mockVisibilitySelectionMap);
       mockUIDisplayData.forEach(({ name }) => {
         expect(payload).toHaveProperty(name);
       });
       expect(Object.keys(payload)).toHaveLength(mockUIDisplayData.length);
     });
     it('it adds provided agent to value array if array was previously empty', () => {
-      const payload = getNewHiddenAgents('agent3', mockVisibilitySelectionMap);
+      const payload = getNewSelectionMap('agent3', mockVisibilitySelectionMap);
       expect(payload).toEqual({
         agent1: ['agent1'],
         agent2: ['agent2'],
@@ -44,7 +44,7 @@ describe('selection composed selectors', () => {
       });
     });
     it('it removes agent name from value array if name was previously in array', () => {
-      const payload = getNewHiddenAgents('agent1', mockVisibilitySelectionMap);
+      const payload = getNewSelectionMap('agent1', mockVisibilitySelectionMap);
       expect(payload).toEqual({
         agent1: [],
         agent2: ['agent2'],

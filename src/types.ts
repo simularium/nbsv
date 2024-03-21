@@ -21,3 +21,8 @@ export interface CheckboxDisplayOptions {
   highlightAriaLabel: 'true' | 'false' | 'mixed';
   highlightIcon: JSX.Element;
 }
+
+export enum SelectionType {
+  Hide,
+  Highlight,
+}

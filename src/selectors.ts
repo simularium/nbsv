@@ -1,17 +1,17 @@
 import { SelectionEntry } from '@aics/simularium-viewer';
 import { VisibilitySelectionMap } from './constants';
 
-export const getNewHiddenAgents = (
+export const getNewSelectionMap = (
   agentName: string,
-  hiddenAgents: VisibilitySelectionMap
+  currentVisibilityMap: VisibilitySelectionMap
 ): VisibilitySelectionMap => {
-  const newHidden: VisibilitySelectionMap = { ...hiddenAgents };
-  if (hiddenAgents[agentName].length === 0) {
-    newHidden[agentName] = [agentName];
+  const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
+  if (currentVisibilityMap[agentName].length === 0) {
+    newMap[agentName] = [agentName];
   } else {
-    newHidden[agentName] = [];
+    newMap[agentName] = [];
   }
-  return newHidden;
+  return newMap;
 };
 
 export const getSelectionStateInfo = (

@@ -7,10 +7,10 @@ import {
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { CheckboxDisplayOptions } from '../types';
+import { CheckboxDisplayOptions, SelectionType } from '../types';
 
 interface CustomCheckboxProps {
-  checkboxType: 'hide' | 'highlight';
+  selectionType: SelectionType;
   status: CheckboxState;
   clickHandler: () => void;
 }
@@ -18,28 +18,28 @@ interface CustomCheckboxProps {
 const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { checkboxType, status, clickHandler } = props;
+  const { selectionType: checkboxType, status, clickHandler } = props;
 
   const getDisplayOptions = (): CheckboxDisplayOptions => {
     switch (status) {
       case CheckboxState.Checked:
         return {
           hideTooltipText: 'Hide',
-          highlightTooltipText: 'Highlight',
+          highlightTooltipText: 'Remove highlight',
           highlightAriaLabel: 'true',
           highlightIcon: HighlightStar,
         };
       case CheckboxState.Unchecked:
         return {
           hideTooltipText: 'Show',
-          highlightTooltipText: 'Remove highlight',
+          highlightTooltipText: 'Highlight',
           highlightAriaLabel: 'false',
           highlightIcon: NoHighlightStar,
         };
       case CheckboxState.Indeterminate:
         return {
           hideTooltipText: 'Show',
-          highlightTooltipText: 'Remove highlight',
+          highlightTooltipText: 'Highlight',
           highlightAriaLabel: 'mixed',
           highlightIcon: IndeterminateHighlightStar,
         };
@@ -57,7 +57,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
       highlightIcon,
     } = getDisplayOptions();
     switch (checkboxType) {
-      case 'hide':
+      case SelectionType.Hide:
         return {
           checkboxToRender: (
             <Checkbox
@@ -68,7 +68,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
           ),
           tooltipText: hideTooltipText,
         };
-      case 'highlight':
+      case SelectionType.Highlight:
         return {
           checkboxToRender: (
             <div

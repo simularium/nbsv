@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { isEqual } from '@jupyter-widgets/base';
 
-import { CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
+import { CheckboxState } from '../constants';
+import { SelectionType } from '../types';
 import AgentRow from './AgentRow';
 import CustomCheckbox from './CustomCheckbox';
 
@@ -35,7 +36,7 @@ const SidePanel: React.FC = (): JSX.Element => {
       <div className="checkboxtree">
         <div className="item-row">
           <CustomCheckbox
-            checkboxType="hide"
+            selectionType={SelectionType.Hide}
             status={checkboxStatus}
             clickHandler={() => handleAllAgentsCheckboxChange(checkboxStatus)}
           />
