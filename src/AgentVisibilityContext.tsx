@@ -25,10 +25,18 @@ export const VisibilityProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [uiDisplayData, setuiDisplayData] = React.useState<UIDisplayData>([]);
+  const [uiDisplayData, setUiDisplayData] = React.useState<UIDisplayData>([]);
   const [hiddenAgents, setHiddenAgents] =
     React.useState<VisibilitySelectionMap>({});
 
+  /**
+   * noAgentsHidden maps each agent name to a value of [agent]
+   * allAgentsHidden maps each agent name to an empty array
+   * They serve as values for the handler of the hide all agents checkbox,
+   * and for checks to determine state of that checkbox.
+   * They are memoized to prevent unnecessary re-renders, and
+   * set when the uiDisplayData arrives.
+   */
   const noAgentsHidden: VisibilitySelectionMap = useMemo(() => {
     return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
       acc[item.name] = [item.name];
@@ -48,7 +56,7 @@ export const VisibilityProvider = ({
   }, [noAgentsHidden]);
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
-    setuiDisplayData(data);
+    setUiDisplayData(data);
   };
 
   const handleAllAgentsCheckboxChange = (
