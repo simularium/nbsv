@@ -1,21 +1,5 @@
-import { SelectionEntry, UIDisplayData } from '@aics/simularium-viewer';
-import { CheckboxState, VisibilitySelectionMap } from './constants';
-
-const { Checked } = CheckboxState;
-
-export const getNewHiddenAgents = (
-  uiDisplayData: UIDisplayData,
-  prevCheckboxState: CheckboxState
-): VisibilitySelectionMap => {
-  let payload: VisibilitySelectionMap = {};
-  if (prevCheckboxState === Checked) {
-    payload = uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
-      acc[item.name] = [];
-      return acc;
-    }, {});
-  }
-  return payload;
-};
+import { SelectionEntry } from '@aics/simularium-viewer';
+import { VisibilitySelectionMap } from './constants';
 
 export const getSelectionStateInfo = (
   currentVisibilityMap: VisibilitySelectionMap

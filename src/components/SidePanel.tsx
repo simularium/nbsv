@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import classNames from 'classnames';
 import { Checkbox, Tooltip } from 'antd';
+import { isEqual } from '@jupyter-widgets/base';
+import classNames from 'classnames';
 
 import { CheckboxState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
@@ -8,18 +9,29 @@ import { VisibilityContext } from '../AgentVisibilityContext';
 import '../../css/side_panel.css';
 
 const SidePanel: React.FunctionComponent = (): JSX.Element => {
-  const { handleAllAgentsCheckboxChange, hiddenAgents } =
-    useContext(VisibilityContext);
+  const {
+    handleAllAgentsCheckboxChange,
+    hiddenAgents,
+    allAgentsHidden,
+    noAgentsHidden,
+  } = useContext(VisibilityContext);
 
-  const { Unchecked, Checked, Indeterminate } = CheckboxState;
+  const getCheckboxState = () => {
+    if (isEqual(hiddenAgents, noAgentsHidden)) {
+      return CheckboxState.Checked;
+    }
+    if (isEqual(hiddenAgents, allAgentsHidden)) {
+      return CheckboxState.Unchecked;
+    }
+    return CheckboxState.Indeterminate;
+  };
 
-  const allAgentsVisible = Object.keys(hiddenAgents).length === 0;
-  const checkboxState: CheckboxState = allAgentsVisible ? Checked : Unchecked;
+  const checkboxStatus = getCheckboxState();
 
   const tooltipText = {
-    [Unchecked]: 'Show',
-    [Checked]: 'Hide',
-    [Indeterminate]: 'Show',
+    [CheckboxState.Unchecked]: 'Show',
+    [CheckboxState.Checked]: 'Hide',
+    [CheckboxState.Indeterminate]: 'Show',
   };
 
   return (
@@ -29,13 +41,13 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
         <div className="item-row">
           <Tooltip
             placement="right"
-            title={tooltipText[checkboxState]}
+            title={tooltipText[checkboxStatus]}
             color={TOOLTIP_COLOR}
           >
             <Checkbox
               className={classNames('checkbox', 'check-all')}
-              checked={checkboxState === Checked}
-              onClick={() => handleAllAgentsCheckboxChange(checkboxState)}
+              checked={checkboxStatus === CheckboxState.Checked}
+              onClick={() => handleAllAgentsCheckboxChange(checkboxStatus)}
             />
           </Tooltip>
           <span>All agent types</span>
