@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { CheckboxState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import CheckBoxRow from './CheckboxRow';
+import AgentRow from './AgentRow';
 
 import '../../css/side_panel.css';
 
@@ -55,7 +55,7 @@ const SidePanel: React.FC = (): JSX.Element => {
           </Tooltip>
           <span>All agent types</span>
           {uiDisplayData.map((agent) => (
-            <CheckBoxRow key={agent.name} agent={agent} />
+            <AgentRow key={agent.name} agent={agent} />
           ))}
         </div>
       </div>

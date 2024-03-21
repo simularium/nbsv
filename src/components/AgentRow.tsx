@@ -5,12 +5,12 @@ import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simula
 import { TOOLTIP_COLOR, CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 
-interface CheckboxRowProps {
+interface AgentRowProps {
   agent: UIDisplayEntry;
 }
 
-const CheckboxRow: React.FC<CheckboxRowProps> = (
-  props: CheckboxRowProps
+const AgentRow: React.FC<AgentRowProps> = (
+  props: AgentRowProps
 ): JSX.Element => {
   const { agent } = props;
 
@@ -57,4 +57,4 @@ const CheckboxRow: React.FC<CheckboxRowProps> = (
   );
 };
 
-export default CheckboxRow;
+export default AgentRow;
