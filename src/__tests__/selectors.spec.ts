@@ -1,102 +1,62 @@
-import { UIDisplayData } from '@aics/simularium-viewer';
-import {
-  getNewHiddenAgents,
-} from '../selectors';
-import { CheckboxState } from '../constants';
-const mockUIDisplayData: UIDisplayData = [
-  {
-    name: 'agent1',
-    displayStates: [
-      {
-        name: 'state1',
-        id: 'state1',
-        color: '#000000',
-      },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent2',
-    displayStates: [
-      {
-        name: 'state1',
-        id: 'state1',
-        color: '#000000',
-      },
-      {
-        name: 'state2',
-        id: 'state2',
-        color: '#000000',
-      },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent3',
-    displayStates: [],
-    color: '#000000',
-  },
-  {
-    name: 'agent4',
-    displayStates: [
-      {
-        name: 'state1',
-        id: 'state1',
-        color: '#000000',
-      },
-      {
-        name: 'state2',
-        id: 'state2',
-        color: '#000000',
-      },
-      {
-        name: 'state3',
-        id: 'state3',
-        color: '#000000',
-      },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent5',
-    displayStates: [
-      {
-        name: 'state1',
-        id: 'state1',
-        color: '#000000',
-      },
-      {
-        name: 'state2',
-        id: 'state2',
-        color: '#000000',
-      },
-      {
-        name: 'state3',
-        id: 'state3',
-        color: '#000000',
-      },
-    ],
-    color: '#000000',
-  },
-];
+import { getSelectionStateInfo } from '../selectors';
 
-const { Checked, Unchecked } = CheckboxState;
+  const mockVisibilitySelectionMap = {
+    agent1: ['state1'],
+    agent2: ['state1', 'state2'],
+    agent3: [],
+  };
 
 describe('selection composed selectors', () => {
-  describe('getNewHiddenAgents', () => {
-    it('if previous checkboxState is Unchecked, return each agent mapped to an empty array', () => {
-      const payload = getNewHiddenAgents(mockUIDisplayData, Checked);
-      expect(payload).toEqual({
+  describe('getSelectionStateInfo', () => {
+    it('returns an array of SelectionEntry objects', () => {
+      const payload = getSelectionStateInfo(mockVisibilitySelectionMap);
+      expect(Array.isArray(payload)).toBe(true);
+      expect(
+        payload.every(
+          (entry) =>
+            typeof entry === 'object' && 'name' in entry && 'tags' in entry
+        )
+      ).toBe(true);
+    });
+
+    it('returns an empty array if given an empty object', () => {
+      const payload = getSelectionStateInfo({});
+      expect(payload).toEqual([]);
+    });
+
+    it('returns selection entries with empty tags arrays for visibility selections with empty array values', () => {
+      const payload = getSelectionStateInfo({
         agent1: [],
         agent2: [],
-        agent3: [],
-        agent4: [],
-        agent5: [],
       });
+      expect(payload).toEqual([
+        {
+          name: 'agent1',
+          tags: [],
+        },
+        {
+          name: 'agent2',
+          tags: [],
+        },
+      ]);
     });
-    it('if previous checkboxState is Checked, return empty object', () => {
-      const payload = getNewHiddenAgents(mockUIDisplayData, Unchecked);
-      expect(payload).toEqual({});
+
+    it('returns tags arrays with values when visibility selections have non-empty array values', () => {
+      const payload = getSelectionStateInfo(mockVisibilitySelectionMap);
+      expect(payload).toEqual([
+        {
+          name: 'agent1',
+          tags: ['state1'],
+        },
+        {
+          name: 'agent2',
+          tags: ['state1', 'state2'],
+        },
+        {
+          name: 'agent3',
+          tags: [],
+        },
+      ]);
     });
   });
 });
