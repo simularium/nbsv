@@ -14,3 +14,10 @@ export interface PlaybackData {
   firstFrameTime: number;
   timeUnits: TimeUnits;
 }
+
+export interface CheckboxDisplayOptions {
+  hideTooltipText: string;
+  highlightTooltipText: string;
+  highlightAriaLabel: 'true' | 'false' | 'mixed';
+  highlightIcon: JSX.Element;
+}
