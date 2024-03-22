@@ -46,6 +46,7 @@ const AgentRow: React.FC<AgentRowProps> = (
         placement="right"
         title={hiddenStateTooltipText[checkedState]}
         color={TOOLTIP_COLOR}
+        trigger=["hover", "focus"]
       >
         <Checkbox
           checked={checkedState === CheckboxState.Checked}
