@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
 import { CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
+import { SelectionType } from '../types';
 import CustomCheckbox from './CustomCheckbox';
 
 interface AgentRowProps {
@@ -14,32 +15,38 @@ const AgentRow: React.FC<AgentRowProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const { handleAgentCheckboxChange, hiddenAgents } =
+  const { handleSelectionChange, hiddenAgents, highlightedAgents } =
     useContext(VisibilityContext);
 
-  const getCheckboxStatus = () => {
-    if (hiddenAgents[agent.name]?.length === 0) {
+  const getHighlightCheckboxStatus = (): CheckboxState => {
+    if (highlightedAgents[agent.name]?.length === 0) {
+      return CheckboxState.Checked;
+    }
+    return CheckboxState.Unchecked;
+  };
+
+  const getHideCheckboxStatus = (): CheckboxState => {
+    if (highlightedAgents[agent.name]?.length === 0) {
       return CheckboxState.Unchecked;
     }
     return CheckboxState.Checked;
   };
 
-  const checkboxStatus = getCheckboxStatus();
-
-  // below is a temporary dummy status that just reverses
-  // the state of the other checkbox as a proof of concept
-  // todo: add true highlight state and functionality
-  const fakeHighlightState =
-    getCheckboxStatus() === CheckboxState.Checked
-      ? CheckboxState.Unchecked
-      : CheckboxState.Checked;
+  const hideCheckboxStatus = useMemo(() => {
+    return getHideCheckboxStatus();
+  }, [hiddenAgents]);
+  const highlightCheckboxStatus = useMemo(() => {
+    return getHighlightCheckboxStatus();
+  }, [highlightedAgents]);
 
   return (
     <div className="item-row" style={{ display: 'flex' }}>
       <CustomCheckbox
-        checkboxType="highlight"
-        status={fakeHighlightState}
-        clickHandler={() => console.log('highlight clicked')}
+        selectionType={SelectionType.Highlight}
+        status={highlightCheckboxStatus}
+        clickHandler={() =>
+          handleSelectionChange(agent.name, SelectionType.Highlight)
+        }
       />
       <div
         className="color-swatch"
@@ -50,9 +57,11 @@ const AgentRow: React.FC<AgentRowProps> = (
         }}
       ></div>
       <CustomCheckbox
-        checkboxType="hide"
-        status={checkboxStatus}
-        clickHandler={() => handleAgentCheckboxChange(agent.name)}
+        selectionType={SelectionType.Hide}
+        status={hideCheckboxStatus}
+        clickHandler={() =>
+          handleSelectionChange(agent.name, SelectionType.Hide)
+        }
       />
       <span>{agent.name}</span>
     </div>

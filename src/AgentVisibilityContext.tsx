@@ -1,37 +1,46 @@
-import React, { createContext, useEffect, useMemo } from 'react';
-import { CheckboxState, VisibilitySelectionMap } from './constants';
+import React, {
+  createContext,
+  useEffect,
+  useMemo,
+  useState,
+  ReactNode,
+} from 'react';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
-import { getNewHiddenAgents } from './selectors';
+import { CheckboxState, VisibilitySelectionMap } from './constants';
+import { getNewSelectionMap } from './selectors';
+import { SelectionType } from './types';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
   hiddenAgents: VisibilitySelectionMap;
+  highlightedAgents: VisibilitySelectionMap;
   allAgentsHidden: VisibilitySelectionMap;
   noAgentsHidden: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   handleAllAgentsCheckboxChange: (hiddenState: CheckboxState) => void;
-  handleAgentCheckboxChange: (agentName: string) => void;
+  handleSelectionChange: (
+    agentName: string,
+    selectionType: SelectionType
+  ) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
   uiDisplayData: [],
   hiddenAgents: {},
+  highlightedAgents: {},
   allAgentsHidden: {},
   noAgentsHidden: {},
   receiveUIDisplayData: () => {},
   handleAllAgentsCheckboxChange: () => {},
-  handleAgentCheckboxChange: () => {},
+  handleSelectionChange: () => {},
 });
 
-export const VisibilityProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [uiDisplayData, setUiDisplayData] = React.useState<UIDisplayData>([]);
-  const [hiddenAgents, setHiddenAgents] =
-    React.useState<VisibilitySelectionMap>({});
+export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
+  const [uiDisplayData, setUiDisplayData] = useState<UIDisplayData>([]);
+  const [hiddenAgents, setHiddenAgents] = useState<VisibilitySelectionMap>({});
+  const [highlightedAgents, setHighlightedAgents] =
+    useState<VisibilitySelectionMap>({});
 
   /**
    * noAgentsHidden maps each agent name to a value of [agent]
@@ -55,8 +64,21 @@ export const VisibilityProvider = ({
     }, {});
   }, [uiDisplayData]);
 
+  /**
+   * This is never used as an argument but should be set upon arrival
+   * of the uiDisplayData to ensure that the highlightedAgents state
+   * is not an empty object, but corresponds to the actual agent data.
+   */
+  const noAgentsHighlighted: VisibilitySelectionMap = useMemo(() => {
+    return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
+      acc[item.name] = [item.name];
+      return acc;
+    }, {});
+  }, [uiDisplayData]);
+
   useEffect(() => {
     setHiddenAgents(noAgentsHidden);
+    setHighlightedAgents(noAgentsHighlighted);
   }, [noAgentsHidden]);
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
@@ -73,18 +95,35 @@ export const VisibilityProvider = ({
     setHiddenAgents(newHidden);
   };
 
-  const handleAgentCheckboxChange = (agentName: string) => {
-    setHiddenAgents(getNewHiddenAgents(agentName, hiddenAgents));
+  const handleSelectionChange = (
+    agentName: string,
+    selectionType: SelectionType
+  ) => {
+    switch (selectionType) {
+      case SelectionType.Hide:
+        setHiddenAgents((prevHiddenAgents) =>
+          getNewSelectionMap(agentName, prevHiddenAgents)
+        );
+        break;
+      case SelectionType.Highlight:
+        setHighlightedAgents((prevHighlightedAgents) =>
+          getNewSelectionMap(agentName, prevHighlightedAgents)
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const vis = {
     uiDisplayData,
     hiddenAgents,
+    highlightedAgents,
     allAgentsHidden,
     noAgentsHidden,
     receiveUIDisplayData,
     handleAllAgentsCheckboxChange,
-    handleAgentCheckboxChange,
+    handleSelectionChange,
   };
 
   return (
