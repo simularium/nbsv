@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { Checkbox, Tooltip } from 'antd';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
-import { TOOLTIP_COLOR, CheckboxState } from '../constants';
+import { CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
+import CustomCheckbox from './CustomCheckbox';
 
 interface AgentRowProps {
   agent: UIDisplayEntry;
@@ -17,23 +17,30 @@ const AgentRow: React.FC<AgentRowProps> = (
   const { handleAgentCheckboxChange, hiddenAgents } =
     useContext(VisibilityContext);
 
-  const getCheckboxState = () => {
+  const getCheckboxStatus = () => {
     if (hiddenAgents[agent.name]?.length === 0) {
       return CheckboxState.Unchecked;
     }
     return CheckboxState.Checked;
   };
 
-  const checkedState = getCheckboxState();
+  const checkboxStatus = getCheckboxStatus();
 
-  const hiddenStateTooltipText = {
-    [CheckboxState.Checked]: 'Hide',
-    [CheckboxState.Unchecked]: 'Show',
-    [CheckboxState.Indeterminate]: '',
-  };
+  // below is a temporary dummy status that just reverses
+  // the state of the other checkbox as a proof of concept
+  // todo: add true highlight state and functionality
+  const fakeHighlightState =
+    getCheckboxStatus() === CheckboxState.Checked
+      ? CheckboxState.Unchecked
+      : CheckboxState.Checked;
 
   return (
     <div className="item-row" style={{ display: 'flex' }}>
+      <CustomCheckbox
+        checkboxType="highlight"
+        status={fakeHighlightState}
+        clickHandler={() => console.log('highlight clicked')}
+      />
       <div
         className="color-swatch"
         style={{
@@ -42,17 +49,11 @@ const AgentRow: React.FC<AgentRowProps> = (
           height: '12px',
         }}
       ></div>
-      <Tooltip
-        placement="right"
-        title={hiddenStateTooltipText[checkedState]}
-        color={TOOLTIP_COLOR}
-        trigger={['hover', 'focus']}
-      >
-        <Checkbox
-          checked={checkedState === CheckboxState.Checked}
-          onClick={() => handleAgentCheckboxChange(agent.name)}
-        />
-      </Tooltip>
+      <CustomCheckbox
+        checkboxType="hide"
+        status={checkboxStatus}
+        clickHandler={() => handleAgentCheckboxChange(agent.name)}
+      />
       <span>{agent.name}</span>
     </div>
   );
