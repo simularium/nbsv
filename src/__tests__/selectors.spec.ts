@@ -1,12 +1,58 @@
-import { getSelectionStateInfo } from '../selectors';
+import { UIDisplayData } from '@aics/simularium-viewer';
+import { getNewHiddenAgents, getSelectionStateInfo } from '../selectors';
 
-  const mockVisibilitySelectionMap = {
-    agent1: ['state1'],
-    agent2: ['state1', 'state2'],
-    agent3: [],
-  };
+const mockVisibilitySelectionMap = {
+  agent1: ['agent1'],
+  agent2: ['agent2'],
+  agent3: [],
+};
 
+const mockUIDisplayData: UIDisplayData = [
+  {
+    name: 'agent1',
+    displayStates: [],
+    color: '#000000',
+  },
+  {
+    name: 'agent2',
+    displayStates: [],
+    color: '#000000',
+  },
+  {
+    name: 'agent3',
+    displayStates: [],
+    color: '#000000',
+  },
+];
+
+// todo fix this test to match current function
 describe('selection composed selectors', () => {
+  describe('getNewHiddenAgents', () => {
+    it('it has each agent from uidisplaydata in visibility map and nothing else', () => {
+      const payload = getNewHiddenAgents('agent1', mockVisibilitySelectionMap);
+      mockUIDisplayData.forEach(({ name }) => {
+        expect(payload).toHaveProperty(name);
+      });
+      expect(Object.keys(payload)).toHaveLength(mockUIDisplayData.length);
+    });
+    it('it adds provided agent to value array if array was previously empty', () => {
+      const payload = getNewHiddenAgents('agent3', mockVisibilitySelectionMap);
+      expect(payload).toEqual({
+        agent1: ['agent1'],
+        agent2: ['agent2'],
+        agent3: ['agent3'],
+      });
+    });
+    it('it removes agent name from value array if name was previously in array', () => {
+      const payload = getNewHiddenAgents('agent1', mockVisibilitySelectionMap);
+      expect(payload).toEqual({
+        agent1: [],
+        agent2: ['agent2'],
+        agent3: [],
+      });
+    });
+  });
+
   describe('getSelectionStateInfo', () => {
     it('returns an array of SelectionEntry objects', () => {
       const payload = getSelectionStateInfo(mockVisibilitySelectionMap);
@@ -46,11 +92,11 @@ describe('selection composed selectors', () => {
       expect(payload).toEqual([
         {
           name: 'agent1',
-          tags: ['state1'],
+          tags: ['agent1'],
         },
         {
           name: 'agent2',
-          tags: ['state1', 'state2'],
+          tags: ['agent2'],
         },
         {
           name: 'agent3',

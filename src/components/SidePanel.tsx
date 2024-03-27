@@ -5,13 +5,15 @@ import classNames from 'classnames';
 
 import { CheckboxState, TOOLTIP_COLOR } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
+import AgentRow from './AgentRow';
 
 import '../../css/side_panel.css';
 
-const SidePanel: React.FunctionComponent = (): JSX.Element => {
+const SidePanel: React.FC = (): JSX.Element => {
   const {
     handleAllAgentsCheckboxChange,
     hiddenAgents,
+    uiDisplayData,
     allAgentsHidden,
     noAgentsHidden,
   } = useContext(VisibilityContext);
@@ -26,7 +28,7 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
     return CheckboxState.Indeterminate;
   };
 
-  const checkboxStatus = getCheckboxState();
+  const checkboxState = getCheckboxState();
 
   const tooltipText = {
     [CheckboxState.Unchecked]: 'Show',
@@ -41,16 +43,20 @@ const SidePanel: React.FunctionComponent = (): JSX.Element => {
         <div className="item-row">
           <Tooltip
             placement="right"
-            title={tooltipText[checkboxStatus]}
+            title={tooltipText[checkboxState]}
             color={TOOLTIP_COLOR}
           >
             <Checkbox
               className={classNames('checkbox', 'check-all')}
-              checked={checkboxStatus === CheckboxState.Checked}
-              onClick={() => handleAllAgentsCheckboxChange(checkboxStatus)}
+              indeterminate={checkboxState === CheckboxState.Indeterminate}
+              checked={checkboxState === CheckboxState.Checked}
+              onClick={() => handleAllAgentsCheckboxChange(checkboxState)}
             />
           </Tooltip>
           <span>All agent types</span>
+          {uiDisplayData.map((agent) => (
+            <AgentRow key={agent.name} agent={agent} />
+          ))}
         </div>
       </div>
     </div>

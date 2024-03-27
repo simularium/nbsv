@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useMemo } from 'react';
 import { CheckboxState, VisibilitySelectionMap } from './constants';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
+import { getNewHiddenAgents } from './selectors';
+
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
   hiddenAgents: VisibilitySelectionMap;
@@ -9,6 +11,7 @@ interface VisibilityContextType {
   noAgentsHidden: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   handleAllAgentsCheckboxChange: (hiddenState: CheckboxState) => void;
+  handleAgentCheckboxChange: (agentName: string) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
@@ -18,6 +21,7 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   noAgentsHidden: {},
   receiveUIDisplayData: () => {},
   handleAllAgentsCheckboxChange: () => {},
+  handleAgentCheckboxChange: () => {},
 });
 
 export const VisibilityProvider = ({
@@ -69,6 +73,10 @@ export const VisibilityProvider = ({
     setHiddenAgents(newHidden);
   };
 
+  const handleAgentCheckboxChange = (agentName: string) => {
+    setHiddenAgents(getNewHiddenAgents(agentName, hiddenAgents));
+  };
+
   const vis = {
     uiDisplayData,
     hiddenAgents,
@@ -76,6 +84,7 @@ export const VisibilityProvider = ({
     noAgentsHidden,
     receiveUIDisplayData,
     handleAllAgentsCheckboxChange,
+    handleAgentCheckboxChange,
   };
 
   return (
