@@ -9,11 +9,9 @@ import CustomCheckbox from './CustomCheckbox';
 import '../../css/side_panel.css';
 
 const SidePanel: React.FC = (): JSX.Element => {
-const SidePanel: React.FC = (): JSX.Element => {
   const {
     handleAllAgentsCheckboxChange,
     hiddenAgents,
-    uiDisplayData,
     uiDisplayData,
     allAgentsHidden,
     noAgentsHidden,
@@ -42,9 +40,6 @@ const SidePanel: React.FC = (): JSX.Element => {
             clickHandler={() => handleAllAgentsCheckboxChange(checkboxStatus)}
           />
           <span>All agent types</span>
-          {uiDisplayData.map((agent) => (
-            <AgentRow key={agent.name} agent={agent} />
-          ))}
           {uiDisplayData.map((agent) => (
             <AgentRow key={agent.name} agent={agent} />
           ))}
