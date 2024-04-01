@@ -63,7 +63,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
         };
     }
   };
-  
+
   const getDisplayElements = (): {
     checkboxToRender: JSX.Element;
     tooltipText: string;

@@ -19,7 +19,7 @@ interface VisibilityContextType {
   noAgentsHidden: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   handleAllAgentsCheckboxChange: (hiddenState: CheckboxState) => void;
-  handleSelectionChange: (
+  toggleAgentVisibility: (
     agentName: string,
     selectionType: SelectionType
   ) => void;
@@ -33,7 +33,7 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   noAgentsHidden: {},
   receiveUIDisplayData: () => {},
   handleAllAgentsCheckboxChange: () => {},
-  handleSelectionChange: () => {},
+  toggleAgentVisibility: () => {},
 });
 
 export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
@@ -43,12 +43,11 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     useState<VisibilitySelectionMap>({});
 
   /**
+   * The memoized values below are used as arguments when the checkbox
+   * that hides all agents is clicked. They are memoized to prevent unnecessary
+   * re-renders, and set when the uiDisplayData arrives.
    * noAgentsHidden maps each agent name to a value of [agent]
    * allAgentsHidden maps each agent name to an empty array
-   * They serve as values for the handler of the hide all agents checkbox,
-   * and for checks to determine state of that checkbox.
-   * They are memoized to prevent unnecessary re-renders, and
-   * set when the uiDisplayData arrives.
    */
   const noAgentsHidden: VisibilitySelectionMap = useMemo(() => {
     return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
@@ -95,7 +94,7 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     setHiddenAgents(newHidden);
   };
 
-  const handleSelectionChange = (
+  const toggleAgentVisibility = (
     agentName: string,
     selectionType: SelectionType
   ) => {
@@ -123,7 +122,7 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     noAgentsHidden,
     receiveUIDisplayData,
     handleAllAgentsCheckboxChange,
-    handleSelectionChange,
+    toggleAgentVisibility,
   };
 
   return (

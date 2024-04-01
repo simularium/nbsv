@@ -15,7 +15,7 @@ const AgentRow: React.FC<AgentRowProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const { handleSelectionChange, hiddenAgents, highlightedAgents } =
+  const { toggleAgentVisibility, hiddenAgents, highlightedAgents } =
     useContext(VisibilityContext);
 
   const getHighlightCheckboxStatus = (): CheckboxState => {
@@ -45,7 +45,7 @@ const AgentRow: React.FC<AgentRowProps> = (
         selectionType={SelectionType.Highlight}
         status={highlightCheckboxStatus}
         clickHandler={() =>
-          handleSelectionChange(agent.name, SelectionType.Highlight)
+          toggleAgentVisibility(agent.name, SelectionType.Highlight)
         }
       />
       <div
@@ -60,7 +60,7 @@ const AgentRow: React.FC<AgentRowProps> = (
         selectionType={SelectionType.Hide}
         status={hideCheckboxStatus}
         clickHandler={() =>
-          handleSelectionChange(agent.name, SelectionType.Hide)
+          toggleAgentVisibility(agent.name, SelectionType.Hide)
         }
       />
       <span>{agent.name}</span>
