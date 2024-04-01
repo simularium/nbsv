@@ -22,7 +22,7 @@ interface CustomCheckboxProps {
 const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { selectionType: checkboxType, status, clickHandler } = props;
+  const { selectionType, status, clickHandler } = props;
 
   const getDisplayOptionsHighlight = (): CheckboxDisplayOptionsHighlight => {
     switch (status) {
@@ -68,7 +68,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
     checkboxToRender: JSX.Element;
     tooltipText: string;
   } => {
-    switch (checkboxType) {
+    switch (selectionType) {
       case SelectionType.Hide: {
         const { hideTooltipText } = getDisplayOptionsHide();
         return {

@@ -25,7 +25,6 @@ const mockUIDisplayData: UIDisplayData = [
   },
 ];
 
-// todo fix this test to match current function
 describe('selection composed selectors', () => {
   describe('getNewSelectionMap', () => {
     it('it has each agent from uidisplaydata in visibility map and nothing else', () => {
