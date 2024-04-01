@@ -26,7 +26,7 @@ const AgentRow: React.FC<AgentRowProps> = (
   };
 
   const getHideCheckboxStatus = (): CheckboxState => {
-    if (highlightedAgents[agent.name]?.length === 0) {
+    if (hiddenAgents[agent.name]?.length === 0) {
       return CheckboxState.Unchecked;
     }
     return CheckboxState.Checked;
