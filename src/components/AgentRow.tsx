@@ -4,7 +4,8 @@ import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simula
 import { CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import { SelectionType } from '../types';
-import CustomCheckbox from './CustomCheckbox';
+import HideCheckbox from './HideCheckox';
+import HighlightCheckbox from './HighlightCheckbox';
 
 interface AgentRowProps {
   agent: UIDisplayEntry;
@@ -41,8 +42,7 @@ const AgentRow: React.FC<AgentRowProps> = (
 
   return (
     <div className="item-row" style={{ display: 'flex' }}>
-      <CustomCheckbox
-        selectionType={SelectionType.Highlight}
+      <HighlightCheckbox
         status={highlightCheckboxStatus}
         clickHandler={() =>
           toggleAgentVisibility(agent.name, SelectionType.Highlight)
@@ -56,8 +56,7 @@ const AgentRow: React.FC<AgentRowProps> = (
           height: '12px',
         }}
       ></div>
-      <CustomCheckbox
-        selectionType={SelectionType.Hide}
+      <HideCheckbox
         status={hideCheckboxStatus}
         clickHandler={() =>
           toggleAgentVisibility(agent.name, SelectionType.Hide)
