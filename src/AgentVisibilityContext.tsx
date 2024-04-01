@@ -8,7 +8,7 @@ import React, {
 import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { CheckboxState, VisibilitySelectionMap } from './constants';
-import { getNewSelectionMap } from './selectors';
+import { getNewSelectionMap } from './utils';
 import { SelectionType } from './types';
 
 interface VisibilityContextType {

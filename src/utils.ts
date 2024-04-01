@@ -14,7 +14,7 @@ export const getNewSelectionMap = (
   return newMap;
 };
 
-export const getSelectionStateInfo = (
+export const convertMapToSelectionStateInfo = (
   currentVisibilityMap: VisibilitySelectionMap
 ): SelectionEntry[] => {
   return Object.keys(currentVisibilityMap).map((key) => ({
