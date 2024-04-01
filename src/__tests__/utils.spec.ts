@@ -1,5 +1,5 @@
 import { UIDisplayData } from '@aics/simularium-viewer';
-import { getNewSelectionMap, getSelectionStateInfo } from '../selectors';
+import { getNewSelectionMap, convertMapToSelectionStateInfo } from '../utils';
 
 const mockVisibilitySelectionMap = {
   agent1: ['agent1'],
@@ -25,7 +25,7 @@ const mockUIDisplayData: UIDisplayData = [
   },
 ];
 
-describe('selection composed selectors', () => {
+describe('utils for converting selection data types and handling selection actions', () => {
   describe('getNewSelectionMap', () => {
     it('it has each agent from uidisplaydata in visibility map and nothing else', () => {
       const payload = getNewSelectionMap('agent1', mockVisibilitySelectionMap);
@@ -52,9 +52,9 @@ describe('selection composed selectors', () => {
     });
   });
 
-  describe('getSelectionStateInfo', () => {
+  describe('convertMapToSelectionStateInfo', () => {
     it('returns an array of SelectionEntry objects', () => {
-      const payload = getSelectionStateInfo(mockVisibilitySelectionMap);
+      const payload = convertMapToSelectionStateInfo(mockVisibilitySelectionMap);
       expect(Array.isArray(payload)).toBe(true);
       expect(
         payload.every(
@@ -65,12 +65,12 @@ describe('selection composed selectors', () => {
     });
 
     it('returns an empty array if given an empty object', () => {
-      const payload = getSelectionStateInfo({});
+      const payload = convertMapToSelectionStateInfo({});
       expect(payload).toEqual([]);
     });
 
     it('returns selection entries with empty tags arrays for visibility selections with empty array values', () => {
-      const payload = getSelectionStateInfo({
+      const payload = convertMapToSelectionStateInfo({
         agent1: [],
         agent2: [],
       });
@@ -87,7 +87,7 @@ describe('selection composed selectors', () => {
     });
 
     it('returns tags arrays with values when visibility selections have non-empty array values', () => {
-      const payload = getSelectionStateInfo(mockVisibilitySelectionMap);
+      const payload = convertMapToSelectionStateInfo(mockVisibilitySelectionMap);
       expect(payload).toEqual([
         {
           name: 'agent1',
