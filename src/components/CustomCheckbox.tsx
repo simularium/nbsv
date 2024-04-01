@@ -7,7 +7,11 @@ import {
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { CheckboxDisplayOptions, SelectionType } from '../types';
+import {
+  CheckboxDisplayOptionsHide,
+  CheckboxDisplayOptionsHighlight,
+  SelectionType,
+} from '../types';
 
 interface CustomCheckboxProps {
   selectionType: SelectionType;
@@ -20,28 +24,42 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
 ): JSX.Element => {
   const { selectionType: checkboxType, status, clickHandler } = props;
 
-  const getDisplayOptions = (): CheckboxDisplayOptions => {
+  const getDisplayOptionsHighlight = (): CheckboxDisplayOptionsHighlight => {
     switch (status) {
       case CheckboxState.Checked:
         return {
-          hideTooltipText: 'Hide',
           highlightTooltipText: 'Remove highlight',
           highlightAriaLabel: 'true',
           highlightIcon: HighlightStar,
         };
       case CheckboxState.Unchecked:
         return {
-          hideTooltipText: 'Show',
           highlightTooltipText: 'Highlight',
           highlightAriaLabel: 'false',
           highlightIcon: NoHighlightStar,
         };
       case CheckboxState.Indeterminate:
         return {
-          hideTooltipText: 'Show',
           highlightTooltipText: 'Highlight',
           highlightAriaLabel: 'mixed',
           highlightIcon: IndeterminateHighlightStar,
+        };
+    }
+  };
+
+  const getDisplayOptionsHide = (): CheckboxDisplayOptionsHide => {
+    switch (status) {
+      case CheckboxState.Checked:
+        return {
+          hideTooltipText: 'Hide',
+        };
+      case CheckboxState.Unchecked:
+        return {
+          hideTooltipText: 'Show',
+        };
+      case CheckboxState.Indeterminate:
+        return {
+          hideTooltipText: 'Show',
         };
     }
   };
@@ -50,14 +68,9 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
     checkboxToRender: JSX.Element;
     tooltipText: string;
   } => {
-    const {
-      hideTooltipText,
-      highlightTooltipText,
-      highlightAriaLabel,
-      highlightIcon,
-    } = getDisplayOptions();
     switch (checkboxType) {
-      case SelectionType.Hide:
+      case SelectionType.Hide: {
+        const { hideTooltipText } = getDisplayOptionsHide();
         return {
           checkboxToRender: (
             <Checkbox
@@ -68,7 +81,10 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
           ),
           tooltipText: hideTooltipText,
         };
-      case SelectionType.Highlight:
+      }
+      case SelectionType.Highlight: {
+        const { highlightTooltipText, highlightAriaLabel, highlightIcon } =
+          getDisplayOptionsHighlight();
         return {
           checkboxToRender: (
             <div
@@ -83,6 +99,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
           ),
           tooltipText: highlightTooltipText,
         };
+      }
     }
   };
 

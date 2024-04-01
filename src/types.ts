@@ -15,8 +15,11 @@ export interface PlaybackData {
   timeUnits: TimeUnits;
 }
 
-export interface CheckboxDisplayOptions {
+export interface CheckboxDisplayOptionsHide {
   hideTooltipText: string;
+}
+
+export interface CheckboxDisplayOptionsHighlight {
   highlightTooltipText: string;
   highlightAriaLabel: 'true' | 'false' | 'mixed';
   highlightIcon: JSX.Element;
