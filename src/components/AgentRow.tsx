@@ -1,9 +1,6 @@
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
-import { CheckboxState } from '../constants';
-import { VisibilityContext } from '../AgentVisibilityContext';
-import { SelectionType } from '../types';
 import HideCheckbox from './HideCheckox';
 import HighlightCheckbox from './HighlightCheckbox';
 
@@ -16,38 +13,9 @@ const AgentRow: React.FC<AgentRowProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const { toggleAgentVisibility, hiddenAgents, highlightedAgents } =
-    useContext(VisibilityContext);
-
-  const getHighlightCheckboxStatus = (): CheckboxState => {
-    if (highlightedAgents[agent.name]?.length === 0) {
-      return CheckboxState.Checked;
-    }
-    return CheckboxState.Unchecked;
-  };
-
-  const getHideCheckboxStatus = (): CheckboxState => {
-    if (hiddenAgents[agent.name]?.length === 0) {
-      return CheckboxState.Unchecked;
-    }
-    return CheckboxState.Checked;
-  };
-
-  const hideCheckboxStatus = useMemo(() => {
-    return getHideCheckboxStatus();
-  }, [hiddenAgents]);
-  const highlightCheckboxStatus = useMemo(() => {
-    return getHighlightCheckboxStatus();
-  }, [highlightedAgents]);
-
   return (
     <div className="item-row" style={{ display: 'flex' }}>
-      <HighlightCheckbox
-        status={highlightCheckboxStatus}
-        clickHandler={() =>
-          toggleAgentVisibility(agent.name, SelectionType.Highlight)
-        }
-      />
+      <HighlightCheckbox agent={agent} />
       <div
         className="color-swatch"
         style={{
@@ -56,12 +24,7 @@ const AgentRow: React.FC<AgentRowProps> = (
           height: '12px',
         }}
       ></div>
-      <HideCheckbox
-        status={hideCheckboxStatus}
-        clickHandler={() =>
-          toggleAgentVisibility(agent.name, SelectionType.Hide)
-        }
-      />
+      <HideCheckbox agent={agent} />
       <span>{agent.name}</span>
     </div>
   );

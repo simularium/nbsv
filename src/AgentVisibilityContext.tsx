@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useEffect,
-  useMemo,
-  useState,
-  ReactNode,
-} from 'react';
+import React, { createContext, useState, ReactNode } from 'react';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { CheckboxState, VisibilitySelectionMap } from './constants';
@@ -42,46 +36,37 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
   const [highlightedAgents, setHighlightedAgents] =
     useState<VisibilitySelectionMap>({});
 
-  /**
-   * The memoized values below are used as arguments when the checkbox
-   * that hides all agents is clicked. They are memoized to prevent unnecessary
-   * re-renders, and set when the uiDisplayData arrives.
-   * noAgentsHidden maps each agent name to a value of [agent]
-   * allAgentsHidden maps each agent name to an empty array
-   */
-  const noAgentsHidden: VisibilitySelectionMap = useMemo(() => {
-    return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
-      acc[item.name] = [item.name];
-      return acc;
-    }, {});
-  }, [uiDisplayData]);
-
-  const allAgentsHidden: VisibilitySelectionMap = useMemo(() => {
-    return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
-      acc[item.name] = [];
-      return acc;
-    }, {});
-  }, [uiDisplayData]);
-
-  /**
-   * This is never used as an argument but should be set upon arrival
-   * of the uiDisplayData to ensure that the highlightedAgents state
-   * is not an empty object, but corresponds to the actual agent data.
-   */
-  const noAgentsHighlighted: VisibilitySelectionMap = useMemo(() => {
-    return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
-      acc[item.name] = [item.name];
-      return acc;
-    }, {});
-  }, [uiDisplayData]);
-
-  useEffect(() => {
-    setHiddenAgents(noAgentsHidden);
-    setHighlightedAgents(noAgentsHighlighted);
-  }, [noAgentsHidden]);
+  const [allAgentsHidden, setAllAgentsHidden] =
+    useState<VisibilitySelectionMap>({});
+  const [noAgentsHidden, setNoAgentsHidden] = useState<VisibilitySelectionMap>(
+    {}
+  );
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setUiDisplayData(data);
+
+    const allHidden: VisibilitySelectionMap =
+      data.reduce<VisibilitySelectionMap>((acc, item) => {
+        acc[item.name] = [];
+        return acc;
+      }, {});
+
+    const noneHidden: VisibilitySelectionMap =
+      data.reduce<VisibilitySelectionMap>((acc, item) => {
+        acc[item.name] = [item.name];
+        return acc;
+      }, {});
+
+    const noneHighlighted: VisibilitySelectionMap =
+      data.reduce<VisibilitySelectionMap>((acc, item) => {
+        acc[item.name] = [item.name];
+        return acc;
+      }, {});
+
+    setAllAgentsHidden(allHidden);
+    setNoAgentsHidden(noneHidden);
+    setHiddenAgents(noneHidden);
+    setHighlightedAgents(noneHighlighted);
   };
 
   const handleAllAgentsCheckboxChange = (
