@@ -36,6 +36,11 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
   const [highlightedAgents, setHighlightedAgents] =
     useState<VisibilitySelectionMap>({});
 
+  /**
+   * These two states are used as values for the "hide all agents"
+   * checkbox when it is clicked, and get set when the UI display data
+   * is received.
+   */
   const [allAgentsHidden, setAllAgentsHidden] =
     useState<VisibilitySelectionMap>({});
   const [noAgentsHidden, setNoAgentsHidden] = useState<VisibilitySelectionMap>(
