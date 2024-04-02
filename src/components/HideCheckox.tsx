@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
+import { VisibilityContext } from '../AgentVisibilityContext';
+import { SelectionType } from '../types';
+import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
 interface HideCheckboxProps {
-  status: CheckboxState;
-  clickHandler: () => void;
+  agent: UIDisplayEntry;
 }
 
 const HideCheckbox: React.FunctionComponent<HideCheckboxProps> = (
   props: HideCheckboxProps
 ): JSX.Element => {
-  const { status, clickHandler } = props;
+  const { agent } = props;
+
+  const { toggleAgentVisibility, hiddenAgents } = useContext(VisibilityContext);
+
+  const getHideCheckboxStatus = (): CheckboxState => {
+    if (hiddenAgents[agent.name]?.length === 0) {
+      return CheckboxState.Unchecked;
+    }
+    return CheckboxState.Checked;
+  };
+
+  const checkboxStatus = useMemo(() => {
+    return getHideCheckboxStatus();
+  }, [hiddenAgents]);
 
   const tooltipMap = {
     [CheckboxState.Checked]: 'Hide',
@@ -19,14 +34,14 @@ const HideCheckbox: React.FunctionComponent<HideCheckboxProps> = (
     [CheckboxState.Indeterminate]: 'Show',
   };
 
-  const tooltipText = tooltipMap[status];
+  const tooltipText = tooltipMap[checkboxStatus];
 
   return (
     <Tooltip placement="right" title={tooltipText}>
       <Checkbox
-        indeterminate={status === 'Indeterminate'}
-        checked={status === 'Checked'}
-        onClick={clickHandler}
+        indeterminate={checkboxStatus === 'Indeterminate'}
+        checked={checkboxStatus === 'Checked'}
+        onClick={() => toggleAgentVisibility(agent.name, SelectionType.Hide)}
       />
     </Tooltip>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
@@ -7,20 +7,35 @@ import {
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { HighlightDisplayOption } from '../types';
+import { HighlightDisplayOption, SelectionType } from '../types';
+import { VisibilityContext } from '../AgentVisibilityContext';
+import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
 interface CustomCheckboxProps {
-  status: CheckboxState;
-  clickHandler: () => void;
+  agent: UIDisplayEntry;
 }
 
 const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { status, clickHandler } = props;
+  const { agent } = props;
+
+  const { toggleAgentVisibility, highlightedAgents } =
+    useContext(VisibilityContext);
+
+  const getHighlightCheckboxStatus = (): CheckboxState => {
+    if (highlightedAgents[agent.name]?.length === 0) {
+      return CheckboxState.Checked;
+    }
+    return CheckboxState.Unchecked;
+  };
+
+  const checkboxStatus = useMemo(() => {
+    return getHighlightCheckboxStatus();
+  }, [highlightedAgents]);
 
   const getHighlightDisplayOptions = (): HighlightDisplayOption => {
-    switch (status) {
+    switch (checkboxStatus) {
       case CheckboxState.Checked:
         return {
           tooltipText: 'Remove highlight',
@@ -46,15 +61,22 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
 
   return (
     <Tooltip placement="right" title={tooltipText}>
-      <div
-        role="checkbox"
-        aria-checked={ariaLabel}
+      <input
+        type="checkbox"
+        aria-label={ariaLabel}
         tabIndex={0}
-        style={{ fill: '#d3d3d3' }}
-        onClick={clickHandler}
-      >
-        {icon}
-      </div>
+        style={{
+          position: 'absolute',
+          opacity: 0,
+          width: '100%',
+          height: '100%',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          toggleAgentVisibility(agent.name, SelectionType.Highlight);
+        }}
+      />
+      <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>
   );
 };
