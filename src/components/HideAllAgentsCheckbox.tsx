@@ -24,6 +24,14 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
     return mapUIDisplayDataToSelectionMap(uiDisplayData, selectAllAgents);
   }, [uiDisplayData]);
 
+  const clickHandler = () => {
+    const newValue =
+      checkboxStatus === CheckboxState.Checked
+        ? noAgentsSelectedMap
+        : allAgentsSelectedMap;
+    setHiddenAgents(newValue);
+  };
+
   const tooltipMap = {
     [CheckboxState.Checked]: 'Hide',
     [CheckboxState.Unchecked]: 'Show',
@@ -42,17 +50,13 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
 
   const checkboxStatus = getCheckboxStatus();
   const tooltipText = tooltipMap[checkboxStatus];
-  const onClickValue =
-    checkboxStatus === CheckboxState.Checked
-      ? allAgentsSelectedMap
-      : noAgentsSelectedMap;
 
   return (
     <Tooltip placement="right" title={tooltipText}>
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
-        onClick={() => setHiddenAgents(onClickValue)}
+        onClick={clickHandler}
       />
     </Tooltip>
   );
