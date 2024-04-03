@@ -1,7 +1,7 @@
 import React from 'react';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
-import HideCheckbox from './HideCheckox';
+import HideCheckbox from './HideCheckbox';
 import HighlightCheckbox from './HighlightCheckbox';
 
 interface AgentRowProps {
