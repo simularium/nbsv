@@ -1,4 +1,4 @@
-import { SelectionEntry } from '@aics/simularium-viewer';
+import { SelectionEntry, UIDisplayData } from '@aics/simularium-viewer';
 import { VisibilitySelectionMap } from './constants';
 
 export const getNewSelectionMap = (
@@ -21,4 +21,18 @@ export const convertMapToSelectionStateInfo = (
     name: key,
     tags: currentVisibilityMap[key],
   }));
+};
+
+export const mapUIDisplayDataToSelectionMap = (
+  uiDisplayData: UIDisplayData,
+  selectAllAgents: boolean = false
+) => {
+  return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
+    if (selectAllAgents) {
+      acc[item.name] = [];
+    } else {
+      acc[item.name] = [item.name];
+    }
+    return acc;
+  }, {});
 };
