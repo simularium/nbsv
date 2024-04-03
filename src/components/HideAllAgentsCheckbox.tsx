@@ -20,7 +20,8 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
 
   const allAgentsSelectedMap = useMemo(() => {
     // the boolean tells the util to select all agents, it defaults to false
-    return mapUIDisplayDataToSelectionMap(uiDisplayData, !!'select all agents');
+    const selectAllAgents = true;
+    return mapUIDisplayDataToSelectionMap(uiDisplayData, selectAllAgents);
   }, [uiDisplayData]);
 
   const tooltipMap = {
