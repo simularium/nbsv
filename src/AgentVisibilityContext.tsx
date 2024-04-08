@@ -3,7 +3,6 @@ import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { VisibilitySelectionMap } from './constants';
 import { getNewSelectionMap, mapUIDisplayDataToSelectionMap } from './utils';
-import { SelectionType } from './types';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
@@ -11,10 +10,8 @@ interface VisibilityContextType {
   highlightedAgents: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   setHiddenAgents: React.Dispatch<React.SetStateAction<VisibilitySelectionMap>>;
-  toggleAgentVisibility: (
-    agentName: string,
-    selectionType: SelectionType
-  ) => void;
+  handleVisibilityCheckboxChange: (agentName: string) => void;
+  handleHightlightCheckboxChange: (agentName: string) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
@@ -23,7 +20,8 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   highlightedAgents: {},
   receiveUIDisplayData: () => {},
   setHiddenAgents: () => {},
-  toggleAgentVisibility: () => {},
+  handleVisibilityCheckboxChange: () => {},
+  handleHightlightCheckboxChange: () => {},
 });
 
 export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
@@ -39,24 +37,16 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     setHiddenAgents(noAgentsSelectedMap);
   };
 
-  const toggleAgentVisibility = (
-    agentName: string,
-    selectionType: SelectionType
-  ) => {
-    switch (selectionType) {
-      case SelectionType.Hide:
-        setHiddenAgents((prevHiddenAgents) =>
-          getNewSelectionMap(agentName, prevHiddenAgents)
-        );
-        break;
-      case SelectionType.Highlight:
-        setHighlightedAgents((prevHighlightedAgents) =>
-          getNewSelectionMap(agentName, prevHighlightedAgents)
-        );
-        break;
-      default:
-        break;
-    }
+  const handleVisibilityCheckboxChange = (agentName: string) => {
+    setHiddenAgents((prevHiddenAgents) =>
+      getNewSelectionMap(agentName, prevHiddenAgents)
+    );
+  };
+
+  const handleHightlightCheckboxChange = (agentName: string) => {
+    setHighlightedAgents((prevHighlightedAgents) =>
+      getNewSelectionMap(agentName, prevHighlightedAgents)
+    );
   };
 
   const vis = {
@@ -65,7 +55,8 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     highlightedAgents,
     receiveUIDisplayData,
     setHiddenAgents,
-    toggleAgentVisibility,
+    handleHightlightCheckboxChange,
+    handleVisibilityCheckboxChange,
   };
 
   return (

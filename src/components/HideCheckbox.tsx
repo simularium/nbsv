@@ -3,7 +3,6 @@ import { Checkbox, Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import { SelectionType } from '../types';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
 interface HideCheckboxProps {
@@ -15,7 +14,8 @@ const HideCheckbox: React.FunctionComponent<HideCheckboxProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const { toggleAgentVisibility, hiddenAgents } = useContext(VisibilityContext);
+  const { handleVisibilityCheckboxChange, hiddenAgents } =
+    useContext(VisibilityContext);
 
   const getHideCheckboxStatus = (): CheckboxState => {
     if (hiddenAgents[agent.name]?.length === 0) {
@@ -41,7 +41,7 @@ const HideCheckbox: React.FunctionComponent<HideCheckboxProps> = (
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
-        onClick={() => toggleAgentVisibility(agent.name, SelectionType.Hide)}
+        onClick={() => handleVisibilityCheckboxChange(agent.name)}
       />
     </Tooltip>
   );

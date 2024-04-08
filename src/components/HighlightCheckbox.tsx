@@ -7,7 +7,7 @@ import {
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { HighlightDisplayOption, SelectionType } from '../types';
+import { HighlightDisplayOption } from '../types';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
@@ -20,7 +20,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const { toggleAgentVisibility, highlightedAgents } =
+  const { handleHightlightCheckboxChange, highlightedAgents } =
     useContext(VisibilityContext);
 
   const getHighlightCheckboxStatus = (): CheckboxState => {
@@ -73,7 +73,7 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
           cursor: 'pointer',
         }}
         onClick={() => {
-          toggleAgentVisibility(agent.name, SelectionType.Highlight);
+          handleHightlightCheckboxChange(agent.name);
         }}
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
