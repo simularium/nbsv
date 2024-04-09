@@ -19,7 +19,7 @@ import {
   VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
-import { getSelectionStateInfo } from './selectors';
+import { convertMapToSelectionStateInfo } from './utils';
 import { PlaybackData, PlaybackState } from './types';
 import { VisibilityContext } from './AgentVisibilityContext';
 
@@ -45,7 +45,8 @@ const initialPlaybackData: PlaybackData = {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
-  const { hiddenAgents, receiveUIDisplayData } = useContext(VisibilityContext);
+  const { hiddenAgents, highlightedAgents, receiveUIDisplayData } =
+    useContext(VisibilityContext);
 
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
@@ -156,8 +157,9 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
           selectionStateInfo={{
-            hiddenAgents: getSelectionStateInfo(hiddenAgents),
-            highlightedAgents: [],
+            hiddenAgents: convertMapToSelectionStateInfo(hiddenAgents),
+            highlightedAgents:
+              convertMapToSelectionStateInfo(highlightedAgents),
             colorChange: null,
           }}
           onUIDisplayDataChanged={receiveUIDisplayData}
