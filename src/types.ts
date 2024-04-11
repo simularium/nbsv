@@ -25,3 +25,25 @@ export enum SelectionType {
   Hide,
   Highlight,
 }
+
+export enum AgentType {
+  Agent,
+  DisplayState,
+}
+
+interface BaseCustomCheckboxProps {
+  agentName: string;
+  agentType: AgentType;
+}
+
+export interface AgentProps extends BaseCustomCheckboxProps {
+  agentType: AgentType.Agent;
+  displayStateName?: never;
+}
+
+export interface DisplayStateProps extends BaseCustomCheckboxProps {
+  agentType: AgentType.DisplayState;
+  displayStateName: string;
+}
+
+export type CustomCheckboxProps = AgentProps | DisplayStateProps;
