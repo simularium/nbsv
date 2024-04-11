@@ -1,40 +1,45 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
+import { CustomCheckboxProps, HighlightDisplayOption } from '../types';
+import { VisibilityContext } from '../AgentVisibilityContext';
 import {
   HighlightStar,
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { HighlightDisplayOption } from '../types';
-import { VisibilityContext } from '../AgentVisibilityContext';
-import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
-interface CustomCheckboxProps {
-  agent: UIDisplayEntry;
-}
-
-const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
+const HighlightCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { agent } = props;
+  const { agentName, displayStateName } = props;
 
   const { handleHightlightCheckboxChange, highlightedAgents } =
     useContext(VisibilityContext);
 
-  const getHighlightCheckboxStatus = (): CheckboxState => {
-    if (highlightedAgents[agent.name]?.length === 0) {
+  const selections = highlightedAgents[agentName];
+  const isTopLevel = displayStateName === undefined;
+
+  const determineTopLevelCheckboxStatus = () => {
+    if (selections?.length === 0) {
+      return CheckboxState.Checked;
+    }
+    if (selections?.includes(agentName)) {
+      return CheckboxState.Unchecked;
+    }
+    return CheckboxState.Indeterminate;
+  };
+
+  const determineDisplayStateCheckboxStatus = (displayStateName: string) => {
+    if (selections?.includes(displayStateName) || selections?.length === 0) {
       return CheckboxState.Checked;
     }
     return CheckboxState.Unchecked;
   };
-
-  const checkboxStatus = useMemo(() => {
-    return getHighlightCheckboxStatus();
-  }, [highlightedAgents]);
-
-  const getHighlightDisplayOptions = (): HighlightDisplayOption => {
+  const getHighlightDisplayOptions = (
+    checkboxStatus: CheckboxState
+  ): HighlightDisplayOption => {
     switch (checkboxStatus) {
       case CheckboxState.Checked:
         return {
@@ -57,10 +62,14 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
     }
   };
 
-  const { tooltipText, ariaLabel, icon } = getHighlightDisplayOptions();
+  const checkboxStatus = isTopLevel
+    ? determineTopLevelCheckboxStatus()
+    : determineDisplayStateCheckboxStatus(displayStateName);
+  const { tooltipText, ariaLabel, icon } =
+    getHighlightDisplayOptions(checkboxStatus);
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="top" title={tooltipText}>
       <input
         type="checkbox"
         aria-label={ariaLabel}
@@ -68,17 +77,15 @@ const CustomCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
         style={{
           position: 'absolute',
           opacity: 0,
-          width: '100%',
-          height: '100%',
           cursor: 'pointer',
         }}
-        onClick={() => {
-          handleHightlightCheckboxChange(agent.name);
-        }}
+        onClick={() =>
+          handleHightlightCheckboxChange(agentName, displayStateName)
+        }
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>
   );
 };
 
-export default CustomCheckbox;
+export default HighlightCheckbox;

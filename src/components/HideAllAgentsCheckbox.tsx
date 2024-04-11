@@ -27,8 +27,8 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const clickHandler = () => {
     const newValue =
       checkboxStatus === CheckboxState.Checked
-        ? noAgentsSelectedMap
-        : allAgentsSelectedMap;
+        ? allAgentsSelectedMap
+        : noAgentsSelectedMap;
     setHiddenAgents(newValue);
   };
 

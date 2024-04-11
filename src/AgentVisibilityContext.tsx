@@ -2,7 +2,11 @@ import React, { createContext, useState, ReactNode } from 'react';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { VisibilitySelectionMap } from './constants';
-import { getNewSelectionMap, mapUIDisplayDataToSelectionMap } from './utils';
+import {
+  getNewMapAfterDisplayStateClick,
+  mapUIDisplayDataToSelectionMap,
+  getNewMapAfterTopLevelCheckboxClick,
+} from './utils';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
@@ -10,8 +14,14 @@ interface VisibilityContextType {
   highlightedAgents: VisibilitySelectionMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
   setHiddenAgents: React.Dispatch<React.SetStateAction<VisibilitySelectionMap>>;
-  handleVisibilityCheckboxChange: (agentName: string) => void;
-  handleHightlightCheckboxChange: (agentName: string) => void;
+  handleVisibilityCheckboxChange: (
+    agentName: string,
+    displayStateName?: string
+  ) => void;
+  handleHightlightCheckboxChange: (
+    agentName: string,
+    displayStateName?: string
+  ) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
@@ -37,16 +47,54 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     setHiddenAgents(noAgentsSelectedMap);
   };
 
-  const handleVisibilityCheckboxChange = (agentName: string) => {
-    setHiddenAgents((prevHiddenAgents) =>
-      getNewSelectionMap(agentName, prevHiddenAgents)
-    );
+  const getDisplayStates = (agentName: string): string[] => {
+    const agentEntry = uiDisplayData.find((entry) => entry.name === agentName);
+    if (agentEntry === undefined) {
+      return [];
+    }
+    return agentEntry.displayStates.map((state) => state.name);
   };
 
-  const handleHightlightCheckboxChange = (agentName: string) => {
-    setHighlightedAgents((prevHighlightedAgents) =>
-      getNewSelectionMap(agentName, prevHighlightedAgents)
-    );
+  const handleVisibilityCheckboxChange = (
+    agentName: string,
+    displayStateName?: string
+  ) => {
+    if (displayStateName !== undefined) {
+      const displayStates = getDisplayStates(agentName);
+      setHiddenAgents((prevHiddenAgents) =>
+        getNewMapAfterDisplayStateClick(
+          agentName,
+          displayStateName,
+          displayStates,
+          prevHiddenAgents
+        )
+      );
+    } else {
+      setHiddenAgents((prevHiddenAgents) =>
+        getNewMapAfterTopLevelCheckboxClick(agentName, prevHiddenAgents)
+      );
+    }
+  };
+
+  const handleHightlightCheckboxChange = (
+    agentName: string,
+    displayStateName?: string
+  ) => {
+    if (displayStateName !== undefined) {
+      const displayStates = getDisplayStates(agentName);
+      setHighlightedAgents((prevHiddenAgents) =>
+        getNewMapAfterDisplayStateClick(
+          agentName,
+          displayStateName,
+          displayStates,
+          prevHiddenAgents
+        )
+      );
+    } else {
+      setHighlightedAgents((prevHiddenAgents) =>
+        getNewMapAfterTopLevelCheckboxClick(agentName, prevHiddenAgents)
+      );
+    }
   };
 
   const vis = {

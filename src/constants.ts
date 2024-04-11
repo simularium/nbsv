@@ -33,3 +33,9 @@ export enum CheckboxState {
   Unchecked = 'Unchecked',
   Indeterminate = 'Indeterminate',
 }
+
+export const tooltipMap = {
+  [CheckboxState.Checked]: 'Hide',
+  [CheckboxState.Unchecked]: 'Show',
+  [CheckboxState.Indeterminate]: 'Show',
+};
