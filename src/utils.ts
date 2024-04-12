@@ -22,7 +22,6 @@ export const getNewMapAfterDisplayStateClick = (
 ): VisibilitySelectionMap => {
   const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
   const currentStates = currentVisibilityMap[agentName] || [];
-  const index = currentStates.indexOf(displayStateName);
   if (currentStates.length === 0) {
     const allOtherDisplayStates = allDisplayStates.filter(
       (name) => name !== displayStateName
@@ -30,7 +29,7 @@ export const getNewMapAfterDisplayStateClick = (
     newMap[agentName] = allOtherDisplayStates;
     return newMap;
   }
-  if (index !== -1) {
+  if (currentStates.indexOf(displayStateName) !== -1) {
     // Display state is currently selected, so unselect it
     newMap[agentName] = currentStates.filter(
       (state) => state !== displayStateName
