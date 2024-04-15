@@ -22,30 +22,38 @@ export const getNewMapAfterDisplayStateClick = (
 ): VisibilitySelectionMap => {
   const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
   const currentStates = currentVisibilityMap[agentName] || [];
-  if (currentStates.length === 0) {
+
+  const isAgentFullySelected = currentStates.length === 0;
+  const nothingCurrentlySelected =
+    currentStates.length === 1 && currentStates[0] === agentName;
+  const isThisDisplayStateSelected = currentStates.includes(displayStateName);
+  const isSelectionNowEmpty = (): boolean => {
+    return newMap[agentName].length === 0;
+  };
+  const allDisplayStatesNowSelected = (): boolean => {
+    return newMap[agentName].length === allDisplayStates.length;
+  };
+
+  if (isAgentFullySelected) {
     const allOtherDisplayStates = allDisplayStates.filter(
       (name) => name !== displayStateName
     );
     newMap[agentName] = allOtherDisplayStates;
     return newMap;
-  }
-  if (currentStates.indexOf(displayStateName) !== -1) {
-    // Display state is currently selected, so unselect it
+  } else if (isThisDisplayStateSelected) {
     newMap[agentName] = currentStates.filter(
       (state) => state !== displayStateName
     );
-    if (newMap[agentName].length === 0) {
-      newMap[agentName] = [agentName]; // No display states left selected, so set to agent name only
+    if (isSelectionNowEmpty()) {
+      newMap[agentName] = [agentName];
     }
   } else {
-    // if array only includes agent name, replace it with clicked display state
-    if (currentStates.length === 1 && currentStates.includes(agentName)) {
+    if (nothingCurrentlySelected) {
       newMap[agentName] = [displayStateName];
     } else {
-      // if other display states are selected, add clicked display state
       newMap[agentName] = [...currentStates, displayStateName];
     }
-    if (newMap[agentName].length === allDisplayStates.length) {
+    if (allDisplayStatesNowSelected()) {
       newMap[agentName] = [];
     }
   }
