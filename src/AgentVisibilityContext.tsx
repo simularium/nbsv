@@ -3,7 +3,7 @@ import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { VisibilitySelectionMap } from './constants';
 import {
-  getNewMapAfterDisplayStateClick,
+  getNewMapAfterChildAgentClick,
   mapUIDisplayDataToSelectionMap,
   getNewMapAfterTopLevelCheckboxClick,
 } from './utils';
@@ -16,11 +16,11 @@ interface VisibilityContextType {
   setHiddenAgents: React.Dispatch<React.SetStateAction<VisibilitySelectionMap>>;
   handleVisibilityCheckboxChange: (
     agentName: string,
-    displayStateName?: string
+    childAgentName?: string
   ) => void;
   handleHightlightCheckboxChange: (
     agentName: string,
-    displayStateName?: string
+    childAgentName?: string
   ) => void;
 }
 
@@ -47,7 +47,7 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     setHiddenAgents(noAgentsSelectedMap);
   };
 
-  const getDisplayStates = (agentName: string): string[] => {
+  const getChildren = (agentName: string): string[] => {
     const agentEntry = uiDisplayData.find((entry) => entry.name === agentName);
     if (agentEntry === undefined) {
       return [];
@@ -57,15 +57,15 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
 
   const handleVisibilityCheckboxChange = (
     agentName: string,
-    displayStateName?: string
+    childAgentName?: string
   ) => {
-    if (displayStateName !== undefined) {
-      const displayStates = getDisplayStates(agentName);
+    if (childAgentName !== undefined) {
+      const children = getChildren(agentName);
       setHiddenAgents((prevHiddenAgents) =>
-        getNewMapAfterDisplayStateClick(
+        getNewMapAfterChildAgentClick(
           agentName,
-          displayStateName,
-          displayStates,
+          childAgentName,
+          children,
           prevHiddenAgents
         )
       );
@@ -78,15 +78,15 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
 
   const handleHightlightCheckboxChange = (
     agentName: string,
-    displayStateName?: string
+    childAgentName?: string
   ) => {
-    if (displayStateName !== undefined) {
-      const displayStates = getDisplayStates(agentName);
+    if (childAgentName !== undefined) {
+      const children = getChildren(agentName);
       setHighlightedAgents((prevHiddenAgents) =>
-        getNewMapAfterDisplayStateClick(
+        getNewMapAfterChildAgentClick(
           agentName,
-          displayStateName,
-          displayStates,
+          childAgentName,
+          children,
           prevHiddenAgents
         )
       );

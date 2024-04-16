@@ -3,7 +3,7 @@ import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simula
 
 import HideCheckbox from './HideCheckbox';
 import HighlightCheckbox from './HighlightCheckbox';
-import { AgentProps, AgentType, DisplayStateProps } from '../types';
+import { ParentAgentProps, AgentLevel, ChildAgentProps } from '../types';
 import { Button } from 'antd';
 
 interface AgentRowProps {
@@ -15,15 +15,15 @@ const AgentRow: React.FC<AgentRowProps> = (
 ): JSX.Element => {
   const { agent } = props;
 
-  const [showDisplayStates, setShowDisplayStates] = React.useState(false);
-  const hasDisplayStates = agent.displayStates.length > 0;
+  const [showChildren, setShowChildren] = React.useState(false);
+  const hasChildren = agent.displayStates.length > 0;
 
-  const getDisplayStateRows = (agent: UIDisplayEntry) => {
+  const getChildRows = (agent: UIDisplayEntry) => {
     return agent.displayStates.map((displayState) => {
-      const checkboxProps: DisplayStateProps = {
-        agentType: AgentType.DisplayState,
+      const checkboxProps: ChildAgentProps = {
+        agentLevel: AgentLevel.ChildAgent,
         agentName: agent.name,
-        displayStateName: displayState.name,
+        childName: displayState.name,
       };
       return (
         <div className="item-row" style={{ display: 'flex' }}>
@@ -43,10 +43,10 @@ const AgentRow: React.FC<AgentRowProps> = (
     });
   };
 
-  const displayStateRows = hasDisplayStates && getDisplayStateRows(agent);
+  const childRows = hasChildren && getChildRows(agent);
 
-  const checkboxProps: AgentProps = {
-    agentType: AgentType.Agent,
+  const checkboxProps: ParentAgentProps = {
+    agentLevel: AgentLevel.Agent,
     agentName: agent.name,
   };
 
@@ -64,17 +64,17 @@ const AgentRow: React.FC<AgentRowProps> = (
         ></div>
         <HideCheckbox {...checkboxProps} />
         <span>{agent.name}</span>
-        {hasDisplayStates && (
+        {hasChildren && (
           <Button
             style={{ paddingLeft: '30px' }}
-            onClick={() => setShowDisplayStates(!showDisplayStates)}
+            onClick={() => setShowChildren(!showChildren)}
           >
-            show display states
+            show child rows
           </Button>
         )}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        {showDisplayStates && displayStateRows}
+        {showChildren && childRows}
       </div>
     </div>
   );

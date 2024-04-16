@@ -1,7 +1,7 @@
 import { UIDisplayData } from '@aics/simularium-viewer';
 import {
   convertMapToSelectionStateInfo,
-  getNewMapAfterDisplayStateClick,
+  getNewMapAfterChildAgentClick,
   getNewMapAfterTopLevelCheckboxClick,
 } from '../utils';
 
@@ -95,7 +95,7 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['state1'],
       });
     });
-        it('it removes displaystates and replaces them with empty array', () => {
+        it('it removes children and replaces them with empty array', () => {
           const payload = getNewMapAfterTopLevelCheckboxClick(
             'agent4',
             mockVisibilitySelectionMap
@@ -110,9 +110,9 @@ describe('utils for converting selection data types and handling selection actio
         });
   });
 
-  describe('getNewMapAfterDisplayStateClick', () => {
-    it('if selection array is empty, it fills its with all display states except the one that was clicked', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+  describe('getNewMapAfterChildAgentClick', () => {
+    it('if selection array is empty, it fills its with all children except the one that was clicked', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent3',
         'state1',
         ['state1', 'state2', 'state3'],
@@ -126,8 +126,8 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['state1'],
       });
     });
-    it('if display state is selected among other display states, it should be removed from selection array', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+    it('if child is selected among other children, it should be removed from selection array', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent4',
         'state1',
         ['state1', 'state2', 'state3'],
@@ -141,8 +141,8 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['state1'],
       });
     });
-    it('if clicked display state is the only current selection, it should return an array with the agent name', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+    it('if clicked child is the only current selection, it should return an array with the agent name', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent5',
         'state1',
         ['state1', 'state2', 'state3'],
@@ -156,8 +156,8 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['agent5'],
       });
     });
-    it('if display state is clicked and selection array currently has agent name, replace it with display state name', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+    it('if child is clicked and selection array currently has agent name, replace it with child name', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent1',
         'state1',
         ['state1', 'state2', 'state3'],
@@ -171,8 +171,8 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['state1'],
       });
     });
-    it('if adding clicked display state means all display states are selected, make selection array empty', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+    it('if adding clicked child means all children are selected, make selection array empty', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent4',
         'state3',
         ['state1', 'state2', 'state3'],
@@ -186,8 +186,8 @@ describe('utils for converting selection data types and handling selection actio
         agent5: ['state1'],
       });
     });
-    it('if adding clicked display state is leaves at least one display state unselected, add clicked state to array', () => {
-      const payload = getNewMapAfterDisplayStateClick(
+    it('if adding clicked child is leaves at least one child unselected, add clicked state to array', () => {
+      const payload = getNewMapAfterChildAgentClick(
         'agent5',
         'state2',
         ['state1', 'state2', 'state3'],

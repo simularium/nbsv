@@ -14,10 +14,10 @@ export const getNewMapAfterTopLevelCheckboxClick = (
   return newMap;
 };
 
-export const getNewMapAfterDisplayStateClick = (
+export const getNewMapAfterChildAgentClick = (
   agentName: string,
-  displayStateName: string,
-  allDisplayStates: string[],
+  childAgentName: string,
+  allChildren: string[],
   currentVisibilityMap: VisibilitySelectionMap
 ): VisibilitySelectionMap => {
   const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
@@ -26,34 +26,34 @@ export const getNewMapAfterDisplayStateClick = (
   const isAgentFullySelected = currentStates.length === 0;
   const nothingCurrentlySelected =
     currentStates.length === 1 && currentStates[0] === agentName;
-  const isThisDisplayStateSelected = currentStates.includes(displayStateName);
+  const isThisChildSelected = currentStates.includes(childAgentName);
   const isSelectionNowEmpty = (): boolean => {
     return newMap[agentName].length === 0;
   };
-  const allDisplayStatesNowSelected = (): boolean => {
-    return newMap[agentName].length === allDisplayStates.length;
+  const allChildrenNowSelected = (): boolean => {
+    return newMap[agentName].length === allChildren.length;
   };
 
   if (isAgentFullySelected) {
-    const allOtherDisplayStates = allDisplayStates.filter(
-      (name) => name !== displayStateName
+    const allOtherChildren = allChildren.filter(
+      (name) => name !== childAgentName
     );
-    newMap[agentName] = allOtherDisplayStates;
+    newMap[agentName] = allOtherChildren;
     return newMap;
-  } else if (isThisDisplayStateSelected) {
+  } else if (isThisChildSelected) {
     newMap[agentName] = currentStates.filter(
-      (state) => state !== displayStateName
+      (state) => state !== childAgentName
     );
     if (isSelectionNowEmpty()) {
       newMap[agentName] = [agentName];
     }
   } else {
     if (nothingCurrentlySelected) {
-      newMap[agentName] = [displayStateName];
+      newMap[agentName] = [childAgentName];
     } else {
-      newMap[agentName] = [...currentStates, displayStateName];
+      newMap[agentName] = [...currentStates, childAgentName];
     }
-    if (allDisplayStatesNowSelected()) {
+    if (allChildrenNowSelected()) {
       newMap[agentName] = [];
     }
   }

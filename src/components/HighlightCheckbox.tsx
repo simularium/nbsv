@@ -13,13 +13,13 @@ import {
 const HighlightCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { agentName, displayStateName } = props;
+  const { agentName, childName } = props;
 
   const { handleHightlightCheckboxChange, highlightedAgents } =
     useContext(VisibilityContext);
 
   const selections = highlightedAgents[agentName];
-  const isTopLevel = displayStateName === undefined;
+  const isTopLevel = childName === undefined;
 
   const determineTopLevelCheckboxStatus = () => {
     if (selections?.length === 0) {
@@ -31,8 +31,8 @@ const HighlightCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
     return CheckboxState.Indeterminate;
   };
 
-  const determineDisplayStateCheckboxStatus = (displayStateName: string) => {
-    if (selections?.includes(displayStateName) || selections?.length === 0) {
+  const determineChildAgentCheckboxStatus = (childName: string) => {
+    if (selections?.includes(childName) || selections?.length === 0) {
       return CheckboxState.Checked;
     }
     return CheckboxState.Unchecked;
@@ -64,7 +64,7 @@ const HighlightCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
 
   const checkboxStatus = isTopLevel
     ? determineTopLevelCheckboxStatus()
-    : determineDisplayStateCheckboxStatus(displayStateName);
+    : determineChildAgentCheckboxStatus(childName);
   const { tooltipText, ariaLabel, icon } =
     getHighlightDisplayOptions(checkboxStatus);
 
@@ -79,9 +79,7 @@ const HighlightCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
           opacity: 0,
           cursor: 'pointer',
         }}
-        onClick={() =>
-          handleHightlightCheckboxChange(agentName, displayStateName)
-        }
+        onClick={() => handleHightlightCheckboxChange(agentName, childName)}
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>

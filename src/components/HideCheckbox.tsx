@@ -8,12 +8,12 @@ import { CheckboxState, tooltipMap } from '../constants';
 const HideCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
   props: CustomCheckboxProps
 ): JSX.Element => {
-  const { agentName, displayStateName } = props;
+  const { agentName, childName } = props;
   const { handleVisibilityCheckboxChange, hiddenAgents } =
     useContext(VisibilityContext);
 
   const selections = hiddenAgents[agentName];
-  const isTopLevel = displayStateName === undefined;
+  const isTopLevel = childName === undefined;
 
   const determineTopLevelCheckboxStatus = () => {
     if (selections?.length === 0) {
@@ -25,8 +25,8 @@ const HideCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
     return CheckboxState.Indeterminate;
   };
 
-  const determineDisplayStateCheckboxStatus = (displayStateName: string) => {
-    if (selections?.includes(displayStateName) || selections?.length === 0) {
+  const determineChildAgentCheckboxStatus = (childName: string) => {
+    if (selections?.includes(childName) || selections?.length === 0) {
       return CheckboxState.Unchecked;
     }
     return CheckboxState.Checked;
@@ -34,7 +34,7 @@ const HideCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
 
   const checkboxStatus = isTopLevel
     ? determineTopLevelCheckboxStatus()
-    : determineDisplayStateCheckboxStatus(displayStateName);
+    : determineChildAgentCheckboxStatus(childName);
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
@@ -42,9 +42,7 @@ const HideCheckbox: React.FunctionComponent<CustomCheckboxProps> = (
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
-        onClick={() =>
-          handleVisibilityCheckboxChange(agentName, displayStateName)
-        }
+        onClick={() => handleVisibilityCheckboxChange(agentName, childName)}
       />
     </Tooltip>
   );

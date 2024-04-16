@@ -26,24 +26,24 @@ export enum SelectionType {
   Highlight,
 }
 
-export enum AgentType {
+export enum AgentLevel {
   Agent,
-  DisplayState,
+  ChildAgent,
 }
 
 interface BaseCustomCheckboxProps {
   agentName: string;
-  agentType: AgentType;
+  agentLevel: AgentLevel;
 }
 
-export interface AgentProps extends BaseCustomCheckboxProps {
-  agentType: AgentType.Agent;
-  displayStateName?: never;
+export interface ParentAgentProps extends BaseCustomCheckboxProps {
+  agentLevel: AgentLevel.Agent;
+  childName?: never;
 }
 
-export interface DisplayStateProps extends BaseCustomCheckboxProps {
-  agentType: AgentType.DisplayState;
-  displayStateName: string;
+export interface ChildAgentProps extends BaseCustomCheckboxProps {
+  agentLevel: AgentLevel.ChildAgent;
+  childName: string;
 }
 
-export type CustomCheckboxProps = AgentProps | DisplayStateProps;
+export type CustomCheckboxProps = ParentAgentProps | ChildAgentProps;
