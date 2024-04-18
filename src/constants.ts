@@ -26,15 +26,14 @@ export const VIEWER_INITIAL_WIDTH: number = 500;
 export const VIEWER_HEIGHT: number = 580;
 
 /**
- * The VisibilitySelectionMap holds selection information from which we can derive the state of the agent
- * checkboxes and of the SelectionStateInfo. The keys are agent names and the array contains possible selections.
- * The VisibilitySelectionMap is generalied to be used for both hiding and highlighting selections.
- * if visMap[agentName] = [agentName] // the agent is not selected (default), and by extension, no children are selected
- * if visMap[agentName] = [ ] // the agent is selected, and by extension all children are selected
- * if visMap[agentName] = [ childAgentName1, childAgentName2... ] // some but not all children are selected, the agent checkbox is by definition indeterminate
- * if a selection array would contain all the child names, it should be changed to an empty array
+ * The UserChangesMap stores user changes to highlighting and hiding checkboxes.
+ * If a user highlights an agent or display state, that "star" checkbox will be checked.
+ * If a user hides an agent or display state, that checkbox will be checked.
+ * The selection state info for the viewer is derived from these maps.
+ * The default state is to include the agent name, or if an agent has multiple display states,
+ * all of the display state names.
  */
-export interface VisibilitySelectionMap {
+export interface UserChangesMap {
   [key: string]: string[];
 }
 

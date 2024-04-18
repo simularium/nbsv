@@ -1,83 +1,86 @@
 import { SelectionEntry, UIDisplayData } from '@aics/simularium-viewer';
-import { VisibilitySelectionMap } from './constants';
+import { UserChangesMap } from './constants';
+import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
 
-export const getNewMapAfterTopLevelCheckboxClick = (
-  agentName: string,
-  currentVisibilityMap: VisibilitySelectionMap
-): VisibilitySelectionMap => {
-  const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
-  if (currentVisibilityMap[agentName].includes(agentName)) {
-    newMap[agentName] = [];
+export const getSelectionAfterCheckboxClick = (
+  name: string,
+  children: string[],
+  currentVisibilityMap: UserChangesMap
+): UserChangesMap => {
+  const newMap: UserChangesMap = { ...currentVisibilityMap };
+  const selectionValue = children.length === 0 ? [name] : children;
+  if (currentVisibilityMap[name].length !== selectionValue.length) {
+    newMap[name] = selectionValue;
   } else {
-    newMap[agentName] = [agentName];
+    newMap[name] = [];
   }
   return newMap;
 };
 
-export const getNewMapAfterChildAgentClick = (
-  agentName: string,
-  childAgentName: string,
-  allChildren: string[],
-  currentVisibilityMap: VisibilitySelectionMap
-): VisibilitySelectionMap => {
-  const newMap: VisibilitySelectionMap = { ...currentVisibilityMap };
-  const currentStates = currentVisibilityMap[agentName] || [];
-
-  const isAgentFullySelected = currentStates.length === 0;
-  const nothingCurrentlySelected =
-    currentStates.length === 1 && currentStates[0] === agentName;
-  const isThisChildSelected = currentStates.includes(childAgentName);
-  const isSelectionNowEmpty = (): boolean => {
-    return newMap[agentName].length === 0;
-  };
-  const allChildrenNowSelected = (): boolean => {
-    return newMap[agentName].length === allChildren.length;
-  };
-
-  if (isAgentFullySelected) {
-    const allOtherChildren = allChildren.filter(
-      (name) => name !== childAgentName
-    );
-    newMap[agentName] = allOtherChildren;
-    return newMap;
-  } else if (isThisChildSelected) {
-    newMap[agentName] = currentStates.filter(
-      (state) => state !== childAgentName
-    );
-    if (isSelectionNowEmpty()) {
-      newMap[agentName] = [agentName];
-    }
+export const getSelectionAfterChildCheckboxClick = (
+  name: string,
+  parent: string,
+  currentVisibilityMap: UserChangesMap
+): UserChangesMap => {
+  const newMap: UserChangesMap = { ...currentVisibilityMap };
+  if (newMap[parent].includes(name)) {
+    newMap[parent] = newMap[parent].filter((child) => child !== name);
   } else {
-    if (nothingCurrentlySelected) {
-      newMap[agentName] = [childAgentName];
-    } else {
-      newMap[agentName] = [...currentStates, childAgentName];
-    }
-    if (allChildrenNowSelected()) {
-      newMap[agentName] = [];
-    }
+    newMap[parent].push(name);
   }
   return newMap;
+};
+
+export const getChildren = (agent: UIDisplayEntry): string[] => {
+  if (agent === undefined || agent.displayStates.length === 0) {
+    return [];
+  }
+  return agent.displayStates.map((state) => state.name);
 };
 
 export const convertMapToSelectionStateInfo = (
-  currentVisibilityMap: VisibilitySelectionMap
+  currentVisibilityMap: UserChangesMap,
+  uiData: UIDisplayData
 ): SelectionEntry[] => {
-  return Object.keys(currentVisibilityMap).map((key) => ({
-    name: key,
-    tags: currentVisibilityMap[key],
-  }));
+  const init: SelectionEntry[] = [];
+  return uiData.reduce((acc, agent) => {
+    // Theoretically, this block should never be hit because `agentVisibilityMap`
+    // should always contain all the agents in `agentDisplayData`
+    if (!currentVisibilityMap[agent.name]) {
+      return acc;
+    }
+
+    if (!agent.displayStates.length) {
+      // if no tags and nothing is on, include agent name
+      if (!currentVisibilityMap[agent.name].length) {
+        acc.push({
+          name: agent.name,
+          tags: [],
+        });
+      }
+    } else {
+      const hiddenTags = agent.displayStates
+        .filter((tag) => !currentVisibilityMap[agent.name].includes(tag.id))
+        .map((displayState) => displayState.id);
+      if (hiddenTags.length) {
+        acc.push({
+          name: agent.name,
+          tags: hiddenTags,
+        });
+      }
+    }
+    return acc;
+  }, init);
 };
 
 export const mapUIDisplayDataToSelectionMap = (
-  uiDisplayData: UIDisplayData,
-  selectAllAgents: boolean = false
+  uiDisplayData: UIDisplayData
 ) => {
-  return uiDisplayData.reduce<VisibilitySelectionMap>((acc, item) => {
-    if (selectAllAgents) {
-      acc[item.name] = [];
+  return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
+    if (agent.displayStates && agent.displayStates.length > 0) {
+      acc[agent.name] = [...agent.displayStates.map((state) => state.id)];
     } else {
-      acc[item.name] = [item.name];
+      acc[agent.name] = [agent.name];
     }
     return acc;
   }, {});

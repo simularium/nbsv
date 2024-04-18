@@ -1,27 +1,23 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
-import { VisibilitySelectionMap } from './constants';
+import { UserChangesMap } from './constants';
 import {
-  getNewMapAfterChildAgentClick,
   mapUIDisplayDataToSelectionMap,
-  getNewMapAfterTopLevelCheckboxClick,
+  getSelectionAfterCheckboxClick,
+  getSelectionAfterChildCheckboxClick,
 } from './utils';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
-  hiddenAgents: VisibilitySelectionMap;
-  highlightedAgents: VisibilitySelectionMap;
+  hiddenAgents: UserChangesMap;
+  highlightedAgents: UserChangesMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
-  setHiddenAgents: React.Dispatch<React.SetStateAction<VisibilitySelectionMap>>;
-  handleVisibilityCheckboxChange: (
-    agentName: string,
-    childAgentName?: string
-  ) => void;
-  handleHightlightCheckboxChange: (
-    agentName: string,
-    childAgentName?: string
-  ) => void;
+  setHiddenAgents: React.Dispatch<React.SetStateAction<UserChangesMap>>;
+  handleHideCheckboxChange: (name: string, children: string[]) => void;
+  handleHideChildCheckboxChange: (name: string, parent: string) => void;
+  handleHighlightChange: (name: string, children: string[]) => void;
+  handleChildHighlightChange: (name: string, parent: string) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
@@ -30,15 +26,18 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   highlightedAgents: {},
   receiveUIDisplayData: () => {},
   setHiddenAgents: () => {},
-  handleVisibilityCheckboxChange: () => {},
-  handleHightlightCheckboxChange: () => {},
+  handleHideCheckboxChange: () => {},
+  handleHideChildCheckboxChange: () => {},
+  handleHighlightChange: () => {},
+  handleChildHighlightChange: () => {},
 });
 
 export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
   const [uiDisplayData, setUiDisplayData] = useState<UIDisplayData>([]);
-  const [hiddenAgents, setHiddenAgents] = useState<VisibilitySelectionMap>({});
-  const [highlightedAgents, setHighlightedAgents] =
-    useState<VisibilitySelectionMap>({});
+  const [hiddenAgents, setHiddenAgents] = useState<UserChangesMap>({});
+  const [highlightedAgents, setHighlightedAgents] = useState<UserChangesMap>(
+    {}
+  );
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setUiDisplayData(data);
@@ -47,54 +46,28 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     setHiddenAgents(noAgentsSelectedMap);
   };
 
-  const getChildren = (agentName: string): string[] => {
-    const agentEntry = uiDisplayData.find((entry) => entry.name === agentName);
-    if (agentEntry === undefined) {
-      return [];
-    }
-    return agentEntry.displayStates.map((state) => state.name);
+  const handleHideCheckboxChange = (name: string, children: string[]) => {
+    setHiddenAgents((prevHiddenAgents) =>
+      getSelectionAfterCheckboxClick(name, children, prevHiddenAgents)
+    );
   };
 
-  const handleVisibilityCheckboxChange = (
-    agentName: string,
-    childAgentName?: string
-  ) => {
-    if (childAgentName !== undefined) {
-      const children = getChildren(agentName);
-      setHiddenAgents((prevHiddenAgents) =>
-        getNewMapAfterChildAgentClick(
-          agentName,
-          childAgentName,
-          children,
-          prevHiddenAgents
-        )
-      );
-    } else {
-      setHiddenAgents((prevHiddenAgents) =>
-        getNewMapAfterTopLevelCheckboxClick(agentName, prevHiddenAgents)
-      );
-    }
+  const handleHideChildCheckboxChange = (name: string, parent: string) => {
+    setHiddenAgents((prevHiddenAgents) =>
+      getSelectionAfterChildCheckboxClick(name, parent, prevHiddenAgents)
+    );
   };
 
-  const handleHightlightCheckboxChange = (
-    agentName: string,
-    childAgentName?: string
-  ) => {
-    if (childAgentName !== undefined) {
-      const children = getChildren(agentName);
-      setHighlightedAgents((prevHiddenAgents) =>
-        getNewMapAfterChildAgentClick(
-          agentName,
-          childAgentName,
-          children,
-          prevHiddenAgents
-        )
-      );
-    } else {
-      setHighlightedAgents((prevHiddenAgents) =>
-        getNewMapAfterTopLevelCheckboxClick(agentName, prevHiddenAgents)
-      );
-    }
+  const handleHighlightChange = (name: string, children: string[]) => {
+    setHighlightedAgents((prevHighlightedAgents) =>
+      getSelectionAfterCheckboxClick(name, children, prevHighlightedAgents)
+    );
+  };
+
+  const handleChildHighlightChange = (name: string, parent: string) => {
+    setHighlightedAgents((prevHighlightedAgents) =>
+      getSelectionAfterChildCheckboxClick(name, parent, prevHighlightedAgents)
+    );
   };
 
   const vis = {
@@ -103,8 +76,10 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     highlightedAgents,
     receiveUIDisplayData,
     setHiddenAgents,
-    handleHightlightCheckboxChange,
-    handleVisibilityCheckboxChange,
+    handleHighlightChange,
+    handleChildHighlightChange,
+    handleHideCheckboxChange,
+    handleHideChildCheckboxChange,
   };
 
   return (

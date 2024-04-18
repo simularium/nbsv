@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 import { isEqual } from '@jupyter-widgets/base';
 
-import { CheckboxState } from '../constants';
+import { CheckboxState, UserChangesMap } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import { mapUIDisplayDataToSelectionMap } from '../utils';
 
@@ -19,9 +19,10 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   }, [uiDisplayData]);
 
   const allAgentsSelectedMap = useMemo(() => {
-    // the boolean tells the util to select all agents, it defaults to false
-    const selectAllAgents = true;
-    return mapUIDisplayDataToSelectionMap(uiDisplayData, selectAllAgents);
+    return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
+      acc[agent.name] = [];
+      return acc;
+    }, {});
   }, [uiDisplayData]);
 
   const clickHandler = () => {

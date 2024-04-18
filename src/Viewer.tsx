@@ -45,8 +45,12 @@ const initialPlaybackData: PlaybackData = {
 
 function ViewerWidget(props: ViewerProps): JSX.Element {
   const controller = props.controller;
-  const { hiddenAgents, highlightedAgents, receiveUIDisplayData } =
-    useContext(VisibilityContext);
+  const {
+    hiddenAgents,
+    highlightedAgents,
+    receiveUIDisplayData,
+    uiDisplayData,
+  } = useContext(VisibilityContext);
 
   // Trajectory data
   const [modelInfo, setModelInfo] = useState<ModelInfo | undefined>({});
@@ -157,9 +161,14 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           showCameraControls={false}
           onTrajectoryFileInfoChanged={handleTrajectoryData}
           selectionStateInfo={{
-            hiddenAgents: convertMapToSelectionStateInfo(hiddenAgents),
-            highlightedAgents:
-              convertMapToSelectionStateInfo(highlightedAgents),
+            hiddenAgents: convertMapToSelectionStateInfo(
+              hiddenAgents,
+              uiDisplayData
+            ),
+            highlightedAgents: convertMapToSelectionStateInfo(
+              highlightedAgents,
+              uiDisplayData
+            ),
             colorChange: null,
           }}
           onUIDisplayDataChanged={receiveUIDisplayData}

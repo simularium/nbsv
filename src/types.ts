@@ -1,3 +1,5 @@
+import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
+
 export interface TimeUnits {
   magnitude: number;
   name: string;
@@ -21,29 +23,11 @@ export interface HighlightDisplayOption {
   icon: JSX.Element;
 }
 
-export enum SelectionType {
-  Hide,
-  Highlight,
+export interface ChildCheckboxProps {
+  name: string;
+  parentName: string;
 }
 
-export enum AgentLevel {
-  Agent,
-  ChildAgent,
+export interface CheckboxProps {
+  agent: UIDisplayEntry;
 }
-
-interface BaseCustomCheckboxProps {
-  agentName: string;
-  agentLevel: AgentLevel;
-}
-
-export interface ParentAgentProps extends BaseCustomCheckboxProps {
-  agentLevel: AgentLevel.Agent;
-  childName?: never;
-}
-
-export interface ChildAgentProps extends BaseCustomCheckboxProps {
-  agentLevel: AgentLevel.ChildAgent;
-  childName: string;
-}
-
-export type CustomCheckboxProps = ParentAgentProps | ChildAgentProps;

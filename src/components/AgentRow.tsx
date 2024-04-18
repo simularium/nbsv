@@ -3,8 +3,10 @@ import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simula
 
 import HideCheckbox from './HideCheckbox';
 import HighlightCheckbox from './HighlightCheckbox';
-import { ParentAgentProps, AgentLevel, ChildAgentProps } from '../types';
+import { ChildCheckboxProps } from '../types';
 import { Button } from 'antd';
+import ChildHideCheckbox from './ChildHideCheckbox';
+import ChildHighlightCheckbox from './ChildHighlightCheckbox';
 
 interface AgentRowProps {
   agent: UIDisplayEntry;
@@ -20,14 +22,13 @@ const AgentRow: React.FC<AgentRowProps> = (
 
   const getChildRows = (agent: UIDisplayEntry) => {
     return agent.displayStates.map((displayState) => {
-      const checkboxProps: ChildAgentProps = {
-        agentLevel: AgentLevel.ChildAgent,
-        agentName: agent.name,
-        childName: displayState.name,
+      const checkboxProps: ChildCheckboxProps = {
+        name: displayState.name,
+        parentName: agent.name,
       };
       return (
         <div className="item-row" style={{ display: 'flex' }}>
-          <HighlightCheckbox {...checkboxProps} />
+          <ChildHighlightCheckbox {...checkboxProps} />
           <div
             className="color-swatch"
             style={{
@@ -36,7 +37,7 @@ const AgentRow: React.FC<AgentRowProps> = (
               height: '12px',
             }}
           ></div>
-          <HideCheckbox {...checkboxProps} />
+          <ChildHideCheckbox {...checkboxProps} />
           <span>{displayState.name}</span>
         </div>
       );
@@ -45,15 +46,10 @@ const AgentRow: React.FC<AgentRowProps> = (
 
   const childRows = hasChildren && getChildRows(agent);
 
-  const checkboxProps: ParentAgentProps = {
-    agentLevel: AgentLevel.Agent,
-    agentName: agent.name,
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <div className="item-row" style={{ display: 'flex' }}>
-        <HighlightCheckbox {...checkboxProps} />
+        <HighlightCheckbox agent={agent} />
         <div
           className="color-swatch"
           style={{
@@ -62,7 +58,7 @@ const AgentRow: React.FC<AgentRowProps> = (
             height: '12px',
           }}
         ></div>
-        <HideCheckbox {...checkboxProps} />
+        <HideCheckbox agent={agent} />
         <span>{agent.name}</span>
         {hasChildren && (
           <Button

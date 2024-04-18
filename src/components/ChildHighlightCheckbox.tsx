@@ -2,35 +2,29 @@ import React, { useContext } from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
-import { CheckboxProps, HighlightDisplayOption } from '../types';
+import { ChildCheckboxProps, HighlightDisplayOption } from '../types';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import {
   HighlightStar,
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { getChildren } from '../utils';
 
-const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
-  props: CheckboxProps
+const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
+  props: ChildCheckboxProps
 ): JSX.Element => {
-  const { agent } = props;
+  const { name, parentName } = props;
 
-  const { handleHighlightChange, highlightedAgents } =
+  const { handleChildHighlightChange, highlightedAgents } =
     useContext(VisibilityContext);
 
-  const selections = highlightedAgents[agent.name];
-  const maxSelections =
-    agent.displayStates.length > 0 ? agent.displayStates.length : 1;
+  const selections = highlightedAgents[parentName];
 
   const getCheckboxStatus = () => {
-    if (selections?.length === 0) {
-      return CheckboxState.Checked;
-    }
-    if (selections?.length === maxSelections) {
+    if (selections?.includes(name)) {
       return CheckboxState.Unchecked;
     }
-    return CheckboxState.Indeterminate;
+    return CheckboxState.Checked;
   };
 
   const getHighlightDisplayOptions = (
@@ -61,7 +55,6 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   const checkboxStatus = getCheckboxStatus();
   const { tooltipText, ariaLabel, icon } =
     getHighlightDisplayOptions(checkboxStatus);
-  const children = getChildren(agent);
 
   return (
     <Tooltip placement="top" title={tooltipText}>
@@ -74,11 +67,11 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
           opacity: 0,
           cursor: 'pointer',
         }}
-        onClick={() => handleHighlightChange(agent.name, children)}
+        onClick={() => handleChildHighlightChange(name, parentName)}
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>
   );
 };
 
-export default HighlightCheckbox;
+export default ChildHighlightCheckbox;
