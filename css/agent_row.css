@@ -1,0 +1,66 @@
+.caret-icon {
+  width: 14px;
+}
+
+.item-row {
+  align-items: center;
+  background-color: var(--dark-three);
+  color: var(--gray-two);
+  display: flex;
+  gap: 6px;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding: 12px 11px 12px 20px;
+}
+
+
+.color-swatch {
+  height: 16px;
+  margin-left: 5px;
+  width: 12px;
+  margin-right: 10px;
+}
+
+.color-swatch.child {
+  margin-right: 32px;
+}
+
+.custom-checkbox {
+  color: var(--white-one);
+  background-color: var(--dark-one);
+}
+
+.item-row .ant-checkbox-inner {
+  border-radius: 0px;
+  border: 1px solid var(--gray-five);
+}
+
+.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
+  .ant-checkbox-checked:not(.ant-checkbox-disabled)
+  .ant-checkbox-inner {
+  background-color: var(--white-one);
+}
+
+.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover .ant-checkbox-inner,
+.ant-checkbox:not(.ant-checkbox-disabled):hover .ant-checkbox-inner {
+  border-radius: 0px;
+  border: none;
+}
+
+
+.item-row .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: var(--dark-one);
+}
+
+.item-row .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--white-one);
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  background-color: var(--dark-one);
+  height: 2px;
+}
+
+.star svg {
+  fill: var(--white-one);
+}

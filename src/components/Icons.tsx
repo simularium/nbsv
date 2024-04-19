@@ -6,6 +6,8 @@ import {
   InfoCircleFilled,
   CaretRightOutlined,
   PauseOutlined,
+  CaretRightFilled,
+  CaretDownFilled,
 } from '@ant-design/icons';
 import {
   ScaleBarIconTag,
@@ -20,6 +22,8 @@ export const Reset = <HomeOutlined />;
 export const ZoomIn = <PlusOutlined />;
 export const ZoomOut = <MinusOutlined />;
 export const Info = <InfoCircleFilled />;
+export const CaretRight = <CaretRightFilled />;
+export const CaretDown = <CaretDownFilled />;
 export const Pause = <PauseOutlined />;
 export const Play = <CaretRightOutlined />;
 export const ScaleBarIcon = ScaleBarIconTag;

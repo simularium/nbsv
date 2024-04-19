@@ -4,9 +4,11 @@ import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simula
 import HideCheckbox from './HideCheckbox';
 import HighlightCheckbox from './HighlightCheckbox';
 import { ChildCheckboxProps } from '../types';
-import { Button } from 'antd';
 import ChildHideCheckbox from './ChildHideCheckbox';
 import ChildHighlightCheckbox from './ChildHighlightCheckbox';
+import { CaretDown, CaretRight } from './Icons';
+
+import '../../css/agent_row.css';
 
 interface AgentRowProps {
   agent: UIDisplayEntry;
@@ -20,6 +22,14 @@ const AgentRow: React.FC<AgentRowProps> = (
   const [showChildren, setShowChildren] = React.useState(false);
   const hasChildren = agent.displayStates.length > 0;
 
+  const Caret = (
+    <div className="caret-icon" onClick={() => setShowChildren(!showChildren)}>
+      {showChildren ? CaretDown : CaretRight}
+    </div>
+  );
+
+  const Spacer = <div className="caret-icon" />;
+
   const getChildRows = (agent: UIDisplayEntry) => {
     return agent.displayStates.map((displayState) => {
       const checkboxProps: ChildCheckboxProps = {
@@ -28,13 +38,12 @@ const AgentRow: React.FC<AgentRowProps> = (
       };
       return (
         <div className="item-row" style={{ display: 'flex' }}>
+          {Spacer}
           <ChildHighlightCheckbox {...checkboxProps} />
           <div
-            className="color-swatch"
+            className={['color-swatch', 'child'].join(' ')}
             style={{
               backgroundColor: displayState.color,
-              width: '12px',
-              height: '12px',
             }}
           ></div>
           <ChildHideCheckbox {...checkboxProps} />
@@ -47,27 +56,18 @@ const AgentRow: React.FC<AgentRowProps> = (
   const childRows = hasChildren && getChildRows(agent);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <div>
       <div className="item-row" style={{ display: 'flex' }}>
+        {hasChildren ? Caret : Spacer}
         <HighlightCheckbox agent={agent} />
         <div
           className="color-swatch"
           style={{
             backgroundColor: agent.color,
-            width: '12px',
-            height: '12px',
           }}
         ></div>
         <HideCheckbox agent={agent} />
         <span>{agent.name}</span>
-        {hasChildren && (
-          <Button
-            style={{ paddingLeft: '30px' }}
-            onClick={() => setShowChildren(!showChildren)}
-          >
-            show child rows
-          </Button>
-        )}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         {showChildren && childRows}

@@ -16,10 +16,10 @@ const SidePanel: React.FC = (): JSX.Element => {
         <div className="item-row">
           <HideAllAgentsCheckbox />
           <span>All agent types</span>
-          {uiDisplayData.map((agent) => (
-            <AgentRow key={agent.name} agent={agent} />
-          ))}
         </div>
+        {uiDisplayData.map((agent) => (
+          <AgentRow key={agent.name} agent={agent} />
+        ))}
       </div>
     </div>
   );
