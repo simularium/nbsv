@@ -1,5 +1,6 @@
-.caret-icon {
+.caret-spacer {
   width: 14px;
+  color: var(--gray-five);
 }
 
 .item-row {
@@ -7,22 +8,20 @@
   background-color: var(--dark-three);
   color: var(--gray-two);
   display: flex;
-  gap: 6px;
+  gap: 11px;
   margin-right: 10px;
   margin-left: 10px;
   padding: 12px 11px 12px 20px;
 }
 
-
 .color-swatch {
   height: 16px;
-  margin-left: 5px;
   width: 12px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .color-swatch.child {
-  margin-right: 32px;
+  margin-right: 27px;
 }
 
 .custom-checkbox {

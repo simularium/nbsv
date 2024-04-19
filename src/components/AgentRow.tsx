@@ -23,12 +23,15 @@ const AgentRow: React.FC<AgentRowProps> = (
   const hasChildren = agent.displayStates.length > 0;
 
   const Caret = (
-    <div className="caret-icon" onClick={() => setShowChildren(!showChildren)}>
+    <div
+      className="caret-spacer"
+      onClick={() => setShowChildren(!showChildren)}
+    >
       {showChildren ? CaretDown : CaretRight}
     </div>
   );
 
-  const Spacer = <div className="caret-icon" />;
+  const Spacer = <div className="caret-spacer" />;
 
   const getChildRows = (agent: UIDisplayEntry) => {
     return agent.displayStates.map((displayState) => {
