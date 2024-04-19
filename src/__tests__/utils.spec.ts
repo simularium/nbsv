@@ -1,270 +1,200 @@
-import { UIDisplayData } from '@aics/simularium-viewer';
+// import { UIDisplayData } from '@aics/simularium-viewer';
 import {
   convertMapToSelectionStateInfo,
-  getNewMapAfterChildAgentClick,
-  getNewMapAfterTopLevelCheckboxClick,
+  getSelectionAfterChildCheckboxClick,
+  updateUserChangesAfterCheckboxClick,
+  getChildren,
+  mapUIDisplayDataToSelectionMap,
 } from '../utils';
 
-const mockVisibilitySelectionMap = {
-  agent1: ['agent1'],
-  agent2: ['agent2'],
-  agent3: [],
-  agent4: ['state1', 'state2'],
-  agent5: ['state1'],
-};
-
-const mockUIDisplayData: UIDisplayData = [
-  {
-    name: 'agent1',
-    displayStates: [
-      { name: 'state1', id: '1', color: '#000000' },
-      { name: 'state2', id: '2', color: '#000000' },
-      { name: 'state3', id: '3', color: '#000000' },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent2',
-    displayStates: [],
-    color: '#000000',
-  },
-  {
-    name: 'agent3',
-    displayStates: [
-      { name: 'state1', id: '1', color: '#000000' },
-      { name: 'state2', id: '2', color: '#000000' },
-      { name: 'state3', id: '3', color: '#000000' },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent4',
-    displayStates: [
-      { name: 'state1', id: '1', color: '#000000' },
-      { name: 'state2', id: '2', color: '#000000' },
-      { name: 'state3', id: '3', color: '#000000' },
-    ],
-    color: '#000000',
-  },
-  {
-    name: 'agent5',
-    displayStates: [
-      { name: 'state1', id: '1', color: '#000000' },
-      { name: 'state2', id: '2', color: '#000000' },
-      { name: 'state3', id: '3', color: '#000000' },
-    ],
-    color: '#000000',
-  },
-];
-
 describe('utils for converting selection data types and handling selection actions', () => {
-  describe('getNewMapAfterTopLevelCheckboxClick', () => {
-    it('it has each agent from uidisplaydata in visibility map and nothing else', () => {
-      const payload = getNewMapAfterTopLevelCheckboxClick(
-        'agent1',
-        mockVisibilitySelectionMap
+  describe('updateUserChangesAfterCheckboxClick', () => {
+    it('removes an agent with no children from selection if it was previoulsy included', () => {
+      const result = updateUserChangesAfterCheckboxClick(
+        'agent_with_no_children',
+        [],
+        {
+          agent_with_no_children: ['agent_with_no_children'],
+        }
       );
-      mockUIDisplayData.forEach(({ name }) => {
-        expect(payload).toHaveProperty(name);
-      });
-      expect(Object.keys(payload)).toHaveLength(mockUIDisplayData.length);
+      expect(result).toEqual({ agent_with_no_children: [] });
     });
-    it('it adds provided agent to value array if array was previously empty', () => {
-      const payload = getNewMapAfterTopLevelCheckboxClick(
-        'agent3',
-        mockVisibilitySelectionMap
+    it('it adds an agent with no children to selection if it was was not previously included in selection', () => {
+      const result = updateUserChangesAfterCheckboxClick(
+        'agent_with_no_children',
+        [],
+        {
+          agent_with_no_children: [],
+        }
       );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: ['agent3'],
-        agent4: ['state1', 'state2'],
-        agent5: ['state1'],
-      });
-    });
-    it('it removes agent name from value array if name was previously in array', () => {
-      const payload = getNewMapAfterTopLevelCheckboxClick(
-        'agent1',
-        mockVisibilitySelectionMap
-      );
-      expect(payload).toEqual({
-        agent1: [],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: ['state1', 'state2'],
-        agent5: ['state1'],
+      expect(result).toEqual({
+        agent_with_no_children: ['agent_with_no_children'],
       });
     });
-        it('it removes children and replaces them with empty array', () => {
-          const payload = getNewMapAfterTopLevelCheckboxClick(
-            'agent4',
-            mockVisibilitySelectionMap
-          );
-          expect(payload).toEqual({
-            agent1: ['agent1'],
-            agent2: ['agent2'],
-            agent3: [],
-            agent4: ['agent4'],
-            agent5: ['state1'],
-          });
-        });
-  });
-
-  describe('getNewMapAfterChildAgentClick', () => {
-    it('if selection array is empty, it fills its with all children except the one that was clicked', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent3',
-        'state1',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
+    it('removes an agents children from selection if they were previously selected', () => {
+      const result = updateUserChangesAfterCheckboxClick(
+        'agent_with_children',
+        ['child1', 'child2'],
+        {
+          agent_with_children: ['child1', 'child2'],
+        }
       );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: ['state2', 'state3'],
-        agent4: ['state1', 'state2'],
-        agent5: ['state1'],
+      expect(result).toEqual({
+        agent_with_children: [],
       });
     });
-    it('if child is selected among other children, it should be removed from selection array', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent4',
-        'state1',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
+    it('selects agents children if they were not previously selected', () => {
+      const childList = ['child1', 'child2'];
+      const result = updateUserChangesAfterCheckboxClick(
+        'agent_with_children',
+        childList,
+        {
+          agent_with_children: [],
+        }
       );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: ['state2'],
-        agent5: ['state1'],
+      expect(result).toEqual({
+        agent_with_children: childList,
       });
     });
-    it('if clicked child is the only current selection, it should return an array with the agent name', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent5',
-        'state1',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
+    it('it includes all children in selection if only some were previously selected', () => {
+      const childList = ['child1', 'child2'];
+      const result = updateUserChangesAfterCheckboxClick(
+        'agent_with_children',
+        childList,
+        {
+          agent_with_children: ['child1'],
+        }
       );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: ['state1', 'state2'],
-        agent5: ['agent5'],
-      });
-    });
-    it('if child is clicked and selection array currently has agent name, replace it with child name', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent1',
-        'state1',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
-      );
-      expect(payload).toEqual({
-        agent1: ['state1'],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: ['state1', 'state2'],
-        agent5: ['state1'],
-      });
-    });
-    it('if adding clicked child means all children are selected, make selection array empty', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent4',
-        'state3',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
-      );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: [],
-        agent5: ['state1'],
-      });
-    });
-    it('if adding clicked child is leaves at least one child unselected, add clicked state to array', () => {
-      const payload = getNewMapAfterChildAgentClick(
-        'agent5',
-        'state2',
-        ['state1', 'state2', 'state3'],
-        mockVisibilitySelectionMap
-      );
-      expect(payload).toEqual({
-        agent1: ['agent1'],
-        agent2: ['agent2'],
-        agent3: [],
-        agent4: ['state1', 'state2'],
-        agent5: ['state1', 'state2'],
+      expect(result).toEqual({
+        agent_with_children: childList,
       });
     });
   });
 
+  describe('getSelectionAfterChildCheckboxClick', () => {
+    it('removes child from parents selection array if it was previously included', () => {
+      const result = getSelectionAfterChildCheckboxClick('child', 'parent', {
+        parent: ['child'],
+      });
+      expect(result).toEqual({ parent: [] });
+    });
+    it('adds child to parents selection array if child was not previously included', () => {
+      const result = getSelectionAfterChildCheckboxClick('child', 'parent', {
+        parent: ['child2'],
+      });
+      expect(result).toEqual({ parent: ['child2', 'child'] });
+    });
+    it('will throw an error if the parent is not found in the userChangesMap', () => {
+      expect(() => {
+        getSelectionAfterChildCheckboxClick('child', 'parent', {});
+      }).toThrow('Parent not found in map');
+    });
+  });
+
+  describe('getChildren', () => {
+    it('returns the display states for an agent', () => {
+      const agent = {
+        name: 'name',
+        displayStates: [{ name: 'state1', id: '1', color: '#000000' }],
+        color: '#000000',
+      };
+      const result = getChildren(agent);
+      expect(result).toEqual(['1']);
+    });
+    it('returns an empty array if the agent has no display states', () => {
+      const agent = {
+        name: 'name',
+        displayStates: [],
+        color: '#000000',
+      };
+      const result = getChildren(agent);
+      expect(result).toEqual([]);
+    });
+  });
 
   describe('convertMapToSelectionStateInfo', () => {
-    it('returns an array of SelectionEntry objects', () => {
-      const payload = convertMapToSelectionStateInfo(
-        mockVisibilitySelectionMap
+    it('should put the agent name in the tags field of the selection entry of an agent with no display states whose userChangesMap value is empty', () => {
+      const agent = {
+        name: 'agent_no_children',
+        displayStates: [],
+        color: '#000000',
+      };
+      const result = convertMapToSelectionStateInfo({ agent_no_children: [] }, [
+        agent,
+      ]);
+      expect(result).toEqual([{ name: 'agent_no_children', tags: [] }]);
+    });
+    it('should return no selection entry if the agent has no display states and the agent name is in the userChangesMap', () => {
+      const agent = {
+        name: 'agent_no_children',
+        displayStates: [],
+        color: '#000000',
+      };
+      const result = convertMapToSelectionStateInfo(
+        { agent_no_children: ['agent_no_children'] },
+        [agent]
       );
-      expect(Array.isArray(payload)).toBe(true);
-      expect(
-        payload.every(
-          (entry) =>
-            typeof entry === 'object' && 'name' in entry && 'tags' in entry
-        )
-      ).toBe(true);
+      expect(result).toEqual([]);
     });
+  });
+  it('should remove the display states selected in the userChangesMap from the tags field of an agents selection entry', () => {
+    const agent = {
+      name: 'agent_with_children',
+      displayStates: [
+        { name: 'state1', id: '1', color: '#000000' },
+        { name: 'state2', id: '2', color: '#000000' },
+      ],
+      color: '#000000',
+    };
+    const result = convertMapToSelectionStateInfo(
+      { agent_with_children: ['1'] },
+      [agent]
+    );
+    expect(result).toEqual([{ name: 'agent_with_children', tags: ['2'] }]);
+  });
+  it('should return no selection entry if all the display states are in the userChangesMap', () => {
+    const agent = {
+      name: 'agent_with_children',
+      displayStates: [
+        { name: 'state1', id: '1', color: '#000000' },
+        { name: 'state2', id: '2', color: '#000000' },
+      ],
+      color: '#000000',
+    };
+    const result = convertMapToSelectionStateInfo(
+      { agent_with_children: ['1', '2'] },
+      [agent]
+    );
+    expect(result).toEqual([]);
+  });
 
-    it('returns an empty array if given an empty object', () => {
-      const payload = convertMapToSelectionStateInfo({});
-      expect(payload).toEqual([]);
-    });
-
-    it('returns selection entries with empty tags arrays for visibility selections with empty array values', () => {
-      const payload = convertMapToSelectionStateInfo({
-        agent1: [],
-        agent2: [],
+  describe('mapUIDisplayDataToSelectionMap', () => {
+    it('should make an agent entry with just agent name for ui entries with no display states', () => {
+      const uiData = [
+        {
+          name: 'agent_with_no_children',
+          displayStates: [],
+          color: '#000000',
+        },
+      ];
+      const result = mapUIDisplayDataToSelectionMap(uiData);
+      expect(result).toEqual({
+        agent_with_no_children: ['agent_with_no_children'],
       });
-      expect(payload).toEqual([
-        {
-          name: 'agent1',
-          tags: [],
-        },
-        {
-          name: 'agent2',
-          tags: [],
-        },
-      ]);
     });
-    it('returns tags arrays with values when visibility selections have non-empty array values', () => {
-      const payload = convertMapToSelectionStateInfo(
-        mockVisibilitySelectionMap
-      );
-      expect(payload).toEqual([
+    it('should make an agent entry with all the display state ids for ui entries with display states', () => {
+      const uiData = [
         {
-          name: 'agent1',
-          tags: ['agent1'],
+          name: 'agent_with_children',
+          displayStates: [
+            { name: 'state1', id: '1', color: '#000000' },
+            { name: 'state2', id: '2', color: '#000000' },
+          ],
+          color: '#000000',
         },
-        {
-          name: 'agent2',
-          tags: ['agent2'],
-        },
-        {
-          name: 'agent3',
-          tags: [],
-        },
-        {
-          name: 'agent4',
-          tags: ['state1', 'state2'],
-        },
-        {
-          name: 'agent5',
-          tags: ['state1'],
-        },
-      ]);
+      ];
+      const result = mapUIDisplayDataToSelectionMap(uiData);
+      expect(result).toEqual({ agent_with_children: ['1', '2'] });
     });
-});
+  });
 });
