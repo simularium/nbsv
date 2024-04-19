@@ -8,7 +8,7 @@ import {
 
 describe('utils for converting selection data types and handling selection actions', () => {
   describe('updateUserChangesAfterCheckboxClick', () => {
-    it('removes an agent with no children from selection if it was previoulsy included', () => {
+    it('removes an agent with no children from selection if it was previously included', () => {
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_no_children',
         [],
