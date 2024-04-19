@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Tooltip } from 'antd';
 
-import { CheckboxState } from '../constants';
+import { CheckboxState, TOOLTIP_COLOR } from '../constants';
 import { CheckboxProps, HighlightDisplayOption } from '../types';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import {
@@ -64,7 +64,7 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   const children = getChildren(agent);
 
   return (
-    <Tooltip placement="top" title={tooltipText}>
+    <Tooltip placement="top" title={tooltipText} color={TOOLTIP_COLOR}>
       <input
         type="checkbox"
         aria-label={ariaLabel}

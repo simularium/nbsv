@@ -3,7 +3,7 @@ import { Checkbox, Tooltip } from 'antd';
 
 import { ChildCheckboxProps } from '../types';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import { CheckboxState, tooltipMap } from '../constants';
+import { CheckboxState, TOOLTIP_COLOR, tooltipMap } from '../constants';
 
 const ChildHideCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
   props: ChildCheckboxProps
@@ -25,7 +25,7 @@ const ChildHideCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="top" title={tooltipText} color={TOOLTIP_COLOR}>
       <Checkbox
         checked={checkboxStatus === 'Checked'}
         onClick={() => handleHideChildCheckboxChange(name, parentName)}
