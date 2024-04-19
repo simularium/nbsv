@@ -112,7 +112,7 @@ describe('utils for converting selection data types and handling selection actio
   });
 
   describe('convertMapToSelectionStateInfo', () => {
-    it('should return a selection entry with an empty tags array if agent name is in user changes map has agent name in array', () => {
+    it('should return a selection entry with an empty tags array if agent name is in user changes map and has agent name in array', () => {
       const agent = {
         name: 'agent_no_children',
         displayStates: [],
