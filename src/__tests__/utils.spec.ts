@@ -124,7 +124,7 @@ describe('utils for converting selection data types and handling selection actio
       );
       expect(result).toEqual([{ name: 'agent_no_children', tags: [] }]);
     });
-    it('should return no selection entry for an agent withtout children if the user changes map array is empty', () => {
+    it('should return no selection entry for an agent without children if the user changes map array is empty', () => {
       const agent = {
         name: 'agent_no_children',
         displayStates: [],
