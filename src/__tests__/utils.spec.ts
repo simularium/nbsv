@@ -1,4 +1,3 @@
-// import { UIDisplayData } from '@aics/simularium-viewer';
 import {
   convertMapToSelectionStateInfo,
   getSelectionAfterChildCheckboxClick,
@@ -113,18 +112,7 @@ describe('utils for converting selection data types and handling selection actio
   });
 
   describe('convertMapToSelectionStateInfo', () => {
-    it('should put the agent name in the tags field of the selection entry of an agent with no display states whose userChangesMap value is empty', () => {
-      const agent = {
-        name: 'agent_no_children',
-        displayStates: [],
-        color: '#000000',
-      };
-      const result = convertMapToSelectionStateInfo({ agent_no_children: [] }, [
-        agent,
-      ]);
-      expect(result).toEqual([{ name: 'agent_no_children', tags: [] }]);
-    });
-    it('should return no selection entry if the agent has no display states and the agent name is in the userChangesMap', () => {
+    it('should return a selection entry with an empty tags array if agent name is in user changes map has agent name in array', () => {
       const agent = {
         name: 'agent_no_children',
         displayStates: [],
@@ -134,42 +122,52 @@ describe('utils for converting selection data types and handling selection actio
         { agent_no_children: ['agent_no_children'] },
         [agent]
       );
+      expect(result).toEqual([{ name: 'agent_no_children', tags: [] }]);
+    });
+    it('should return no selection entry for an agent withtout children if the user changes map array is empty', () => {
+      const agent = {
+        name: 'agent_no_children',
+        displayStates: [],
+        color: '#000000',
+      };
+      const result = convertMapToSelectionStateInfo({ agent_no_children: [] }, [
+        agent,
+      ]);
+      expect(result).toEqual([]);
+    });
+    it('should include all the display states currently in the userChangesMap in the tags array of the selection entry', () => {
+      const agent = {
+        name: 'agent_with_children',
+        displayStates: [
+          { name: 'state1', id: '1', color: '#000000' },
+          { name: 'state2', id: '2', color: '#000000' },
+        ],
+        color: '#000000',
+      };
+      const result = convertMapToSelectionStateInfo(
+        { agent_with_children: ['1'] },
+        [agent]
+      );
+      expect(result).toEqual([{ name: 'agent_with_children', tags: ['1'] }]);
+    });
+    it('should return no selection entry if no display states are in the userChangesMap', () => {
+      const agent = {
+        name: 'agent_with_children',
+        displayStates: [
+          { name: 'state1', id: '1', color: '#000000' },
+          { name: 'state2', id: '2', color: '#000000' },
+        ],
+        color: '#000000',
+      };
+      const result = convertMapToSelectionStateInfo(
+        { agent_with_children: [] },
+        [agent]
+      );
       expect(result).toEqual([]);
     });
   });
-  it('should remove the display states selected in the userChangesMap from the tags field of an agents selection entry', () => {
-    const agent = {
-      name: 'agent_with_children',
-      displayStates: [
-        { name: 'state1', id: '1', color: '#000000' },
-        { name: 'state2', id: '2', color: '#000000' },
-      ],
-      color: '#000000',
-    };
-    const result = convertMapToSelectionStateInfo(
-      { agent_with_children: ['1'] },
-      [agent]
-    );
-    expect(result).toEqual([{ name: 'agent_with_children', tags: ['2'] }]);
-  });
-  it('should return no selection entry if all the display states are in the userChangesMap', () => {
-    const agent = {
-      name: 'agent_with_children',
-      displayStates: [
-        { name: 'state1', id: '1', color: '#000000' },
-        { name: 'state2', id: '2', color: '#000000' },
-      ],
-      color: '#000000',
-    };
-    const result = convertMapToSelectionStateInfo(
-      { agent_with_children: ['1', '2'] },
-      [agent]
-    );
-    expect(result).toEqual([]);
-  });
-
   describe('mapUIDisplayDataToSelectionMap', () => {
-    it('should make an agent entry with just agent name for ui entries with no display states', () => {
+    it('should make an entry for each agent with an empty array as its value', () => {
       const uiData = [
         {
           name: 'agent_with_no_children',
@@ -179,22 +177,8 @@ describe('utils for converting selection data types and handling selection actio
       ];
       const result = mapUIDisplayDataToSelectionMap(uiData);
       expect(result).toEqual({
-        agent_with_no_children: ['agent_with_no_children'],
+        agent_with_no_children: [],
       });
-    });
-    it('should make an agent entry with all the display state ids for ui entries with display states', () => {
-      const uiData = [
-        {
-          name: 'agent_with_children',
-          displayStates: [
-            { name: 'state1', id: '1', color: '#000000' },
-            { name: 'state2', id: '2', color: '#000000' },
-          ],
-          color: '#000000',
-        },
-      ];
-      const result = mapUIDisplayDataToSelectionMap(uiData);
-      expect(result).toEqual({ agent_with_children: ['1', '2'] });
     });
   });
 });

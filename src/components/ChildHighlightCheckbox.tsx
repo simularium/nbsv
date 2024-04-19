@@ -22,9 +22,9 @@ const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
 
   const getCheckboxStatus = () => {
     if (selections?.includes(name)) {
-      return CheckboxState.Unchecked;
+      return CheckboxState.Checked;
     }
-    return CheckboxState.Checked;
+    return CheckboxState.Unchecked;
   };
 
   const getHighlightDisplayOptions = (

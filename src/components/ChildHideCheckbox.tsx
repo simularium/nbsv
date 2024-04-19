@@ -16,9 +16,9 @@ const ChildHideCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
 
   const getCheckboxStatus = () => {
     if (selections?.includes(name)) {
-      return CheckboxState.Checked;
+      return CheckboxState.Unchecked;
     }
-    return CheckboxState.Unchecked;
+    return CheckboxState.Checked;
   };
 
   const checkboxStatus = getCheckboxStatus();

@@ -25,10 +25,10 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
 
   const getCheckboxStatus = () => {
     if (selections?.length === 0) {
-      return CheckboxState.Checked;
+      return CheckboxState.Unchecked;
     }
     if (selections?.length === maxSelections) {
-      return CheckboxState.Unchecked;
+      return CheckboxState.Checked;
     }
     return CheckboxState.Indeterminate;
   };

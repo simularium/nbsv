@@ -20,7 +20,11 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
 
   const allAgentsSelectedMap = useMemo(() => {
     return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
-      acc[agent.name] = [];
+      if (agent.displayStates && agent.displayStates.length > 0) {
+        acc[agent.name] = [...agent.displayStates.map((state) => state.id)];
+      } else {
+        acc[agent.name] = [agent.name];
+      }
       return acc;
     }, {});
   }, [uiDisplayData]);

@@ -30,11 +30,11 @@ export const getSelectionAfterChildCheckboxClick = (
   if (newMap[parent] === undefined) {
     throw new Error('Parent not found in map');
   }
-  if (newMap[parent].includes(name)) {
-    newMap[parent] = newMap[parent].filter((child) => child !== name);
-  } else {
-    newMap[parent].push(name);
-  }
+  const updatedChildren = newMap[parent].includes(name)
+    ? newMap[parent].filter((child) => child !== name)
+    : [...newMap[parent], name];
+
+  newMap[parent] = updatedChildren;
   return newMap;
 };
 
@@ -56,28 +56,19 @@ export const convertMapToSelectionStateInfo = (
     if (!currentUserChangesMap[agent.name]) {
       return acc;
     }
-
-    if (!agent.displayStates.length) {
-      // if no tags and user has changed from default, remove agent name
-      if (!currentUserChangesMap[agent.name].length) {
-        acc.push({
-          name: agent.name,
-          tags: [],
-        });
-      }
-    } else {
-      // selected tags are either highlighted or hidden
-      // for highlighted: if its in the userChangesMap, it should be highlighted
-      // for hidden: if its in the userChangesMap, it should be hidden
-      const selectedTags = agent.displayStates
-        .filter((tag) => !currentUserChangesMap[agent.name].includes(tag.id))
-        .map((displayState) => displayState.id);
-      if (selectedTags.length) {
-        acc.push({
-          name: agent.name,
-          tags: selectedTags,
-        });
-      }
+    const selectedTags = currentUserChangesMap[agent.name];
+    if (selectedTags.length === 1 && selectedTags[0] === agent.name) {
+      // if an agent with no display states is selected we make a selection entry for it
+      acc.push({
+        name: agent.name,
+        tags: [],
+      });
+    } else if (selectedTags.length > 0) {
+      // if an agent with display states has some or all states selected we make a selection entry for it
+      acc.push({
+        name: agent.name,
+        tags: selectedTags,
+      });
     }
     return acc;
   }, init);
@@ -87,11 +78,7 @@ export const mapUIDisplayDataToSelectionMap = (
   uiDisplayData: UIDisplayData
 ) => {
   return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
-    if (agent.displayStates && agent.displayStates.length > 0) {
-      acc[agent.name] = [...agent.displayStates.map((state) => state.id)];
-    } else {
-      acc[agent.name] = [agent.name];
-    }
+    acc[agent.name] = [];
     return acc;
   }, {});
 };

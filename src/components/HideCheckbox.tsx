@@ -19,10 +19,10 @@ const HideCheckbox: React.FunctionComponent<CheckboxProps> = (
 
   const getCheckboxStatus = () => {
     if (selections?.length === 0) {
-      return CheckboxState.Unchecked;
+      return CheckboxState.Checked;
     }
     if (selections?.length === maxSelections) {
-      return CheckboxState.Checked;
+      return CheckboxState.Unchecked;
     }
     return CheckboxState.Indeterminate;
   };
