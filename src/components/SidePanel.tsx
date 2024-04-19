@@ -12,15 +12,13 @@ const SidePanel: React.FC = (): JSX.Element => {
   return (
     <div className="sp-container">
       <div className="agent-title">Agents</div>
-      <div className="checkboxtree">
-        <div className="item-row">
-          <HideAllAgentsCheckbox />
-          <span>All agent types</span>
-        </div>
-        {uiDisplayData.map((agent) => (
-          <AgentRow key={agent.name} agent={agent} />
-        ))}
+      <div className={['item-row', 'hide-all'].join(' ')}>
+        <HideAllAgentsCheckbox />
+        <span>All agent types</span>
       </div>
+      {uiDisplayData.map((agent) => (
+        <AgentRow key={agent.name} agent={agent} />
+      ))}
     </div>
   );
 };

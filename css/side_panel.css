@@ -1,17 +1,18 @@
 .sp-container {
   background-color: var(--dark-two);
   min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .sp-container .agent-title {
   background-color: var(--dark-one);
-  border-radius: 0px;
   color: var(--gray-two);
   margin-right: 5px;
   padding: 12px 0px 16px 21px;
 }
 
-.checkboxtree {
-  display: flex;
-  flex-direction: column;
+.item-row.hide-all {
+  padding-left: 102px;
 }
