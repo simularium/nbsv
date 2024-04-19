@@ -3,7 +3,7 @@ import { UIDisplayData } from '@aics/simularium-viewer';
 
 import { UserChangesMap } from './constants';
 import {
-  mapUIDisplayDataToSelectionMap,
+  getInitialUserSelections,
   updateUserChangesAfterCheckboxClick,
   getSelectionAfterChildCheckboxClick,
 } from './utils';
@@ -41,9 +41,9 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setUiDisplayData(data);
-    const noAgentsSelectedMap = mapUIDisplayDataToSelectionMap(data);
-    setHighlightedAgents(noAgentsSelectedMap);
-    setHiddenAgents(noAgentsSelectedMap);
+    const initialSelections = getInitialUserSelections(data);
+    setHighlightedAgents(initialSelections);
+    setHiddenAgents(initialSelections);
   };
 
   const handleHideCheckboxChange = (name: string, children: string[]) => {

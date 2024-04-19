@@ -4,7 +4,7 @@ import { isEqual } from '@jupyter-widgets/base';
 
 import { CheckboxState, UserChangesMap } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import { mapUIDisplayDataToSelectionMap } from '../utils';
+import { getInitialUserSelections } from '../utils';
 
 const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const { setHiddenAgents, hiddenAgents, uiDisplayData } =
@@ -14,8 +14,8 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
    * The maps below are values to use when clicking the checkbox, they are
    * essentially constant and only need to be computed when the uiDisplayData changes.
    */
-  const noAgentsSelectedMap = useMemo(() => {
-    return mapUIDisplayDataToSelectionMap(uiDisplayData);
+  const initialUserSelections = useMemo(() => {
+    return getInitialUserSelections(uiDisplayData);
   }, [uiDisplayData]);
 
   const allAgentsSelectedMap = useMemo(() => {
@@ -33,7 +33,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
     const newValue =
       checkboxStatus === CheckboxState.Checked
         ? allAgentsSelectedMap
-        : noAgentsSelectedMap;
+        : initialUserSelections;
     setHiddenAgents(newValue);
   };
 
@@ -44,7 +44,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   };
 
   const getCheckboxStatus = () => {
-    if (isEqual(hiddenAgents, noAgentsSelectedMap)) {
+    if (isEqual(hiddenAgents, initialUserSelections)) {
       return CheckboxState.Checked;
     }
     if (isEqual(hiddenAgents, allAgentsSelectedMap)) {

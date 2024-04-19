@@ -26,13 +26,15 @@ export const getSelectionAfterChildCheckboxClick = (
   currentUserChanges: UserChangesMap
 ): UserChangesMap => {
   const newMap: UserChangesMap = { ...currentUserChanges };
+  const currentChildren = newMap[parent];
   // Shouldn't ever hit this conditional, userChangesMap was not made correctly if so
-  if (newMap[parent] === undefined) {
+  if (currentChildren === undefined) {
     throw new Error('Parent not found in map');
   }
-  const updatedChildren = newMap[parent].includes(name)
-    ? newMap[parent].filter((child) => child !== name)
-    : [...newMap[parent], name];
+  // toggles inclusion in the array
+  const updatedChildren = currentChildren.includes(name)
+    ? currentChildren.filter((child) => child !== name)
+    : [...currentChildren, name];
 
   newMap[parent] = updatedChildren;
   return newMap;
@@ -74,9 +76,7 @@ export const convertMapToSelectionStateInfo = (
   }, init);
 };
 
-export const mapUIDisplayDataToSelectionMap = (
-  uiDisplayData: UIDisplayData
-) => {
+export const getInitialUserSelections = (uiDisplayData: UIDisplayData) => {
   return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
     acc[agent.name] = [];
     return acc;

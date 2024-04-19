@@ -3,7 +3,7 @@ import {
   getSelectionAfterChildCheckboxClick,
   updateUserChangesAfterCheckboxClick,
   getChildren,
-  mapUIDisplayDataToSelectionMap,
+  getInitialUserSelections,
 } from '../utils';
 
 describe('utils for converting selection data types and handling selection actions', () => {
@@ -166,7 +166,7 @@ describe('utils for converting selection data types and handling selection actio
       expect(result).toEqual([]);
     });
   });
-  describe('mapUIDisplayDataToSelectionMap', () => {
+  describe('getInitialUserSelections', () => {
     it('should make an entry for each agent with an empty array as its value', () => {
       const uiData = [
         {
@@ -175,7 +175,7 @@ describe('utils for converting selection data types and handling selection actio
           color: '#000000',
         },
       ];
-      const result = mapUIDisplayDataToSelectionMap(uiData);
+      const result = getInitialUserSelections(uiData);
       expect(result).toEqual({
         agent_with_no_children: [],
       });
