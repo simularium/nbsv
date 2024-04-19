@@ -41,9 +41,8 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setUiDisplayData(data);
-    const initialSelections = getInitialUserSelections(data);
-    setHighlightedAgents(initialSelections);
-    setHiddenAgents(initialSelections);
+    setHighlightedAgents(getInitialUserSelections(data));
+    setHiddenAgents(getInitialUserSelections(data));
   };
 
   const handleHideCheckboxChange = (name: string, children: string[]) => {
