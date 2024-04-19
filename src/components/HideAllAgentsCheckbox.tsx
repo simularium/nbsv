@@ -57,7 +57,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}

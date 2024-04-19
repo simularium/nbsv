@@ -57,7 +57,7 @@ const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
     getHighlightDisplayOptions(checkboxStatus);
 
   return (
-    <Tooltip placement="top" title={tooltipText}>
+    <Tooltip placement="top" title={tooltipText} trigger={['focus', 'hover']}>
       <input
         type="checkbox"
         aria-label={ariaLabel}

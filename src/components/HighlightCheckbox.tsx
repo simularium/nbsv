@@ -64,7 +64,7 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   const children = getChildren(agent);
 
   return (
-    <Tooltip placement="top" title={tooltipText}>
+    <Tooltip placement="top" title={tooltipText} trigger={['focus', 'hover']}>
       <input
         type="checkbox"
         aria-label={ariaLabel}

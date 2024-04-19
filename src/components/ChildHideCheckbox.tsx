@@ -25,7 +25,7 @@ const ChildHideCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText} trigger=["focus", "hover"]>
+    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
       <Checkbox
         checked={checkboxStatus === 'Checked'}
         onClick={() => handleHideChildCheckboxChange(name, parentName)}

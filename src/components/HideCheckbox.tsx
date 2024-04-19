@@ -32,7 +32,7 @@ const HideCheckbox: React.FunctionComponent<CheckboxProps> = (
   const children = getChildren(agent);
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
