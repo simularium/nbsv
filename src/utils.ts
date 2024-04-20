@@ -76,7 +76,7 @@ export const convertMapToSelectionStateInfo = (
   }, init);
 };
 
-export const getInitialUserSelections = (uiDisplayData: UIDisplayData) => {
+export const makeEmptyUserSelections = (uiDisplayData: UIDisplayData) => {
   return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
     acc[agent.name] = [];
     return acc;

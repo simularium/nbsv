@@ -4,7 +4,7 @@ import { isEqual } from '@jupyter-widgets/base';
 
 import { CheckboxState, UserChangesMap } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import { getInitialUserSelections } from '../utils';
+import { makeEmptyUserSelections } from '../utils';
 
 const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const { setHiddenAgents, hiddenAgents, uiDisplayData } =
@@ -15,7 +15,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
    * essentially constant and only need to be computed when the uiDisplayData changes.
    */
   const initialUserSelections = useMemo(() => {
-    return getInitialUserSelections(uiDisplayData);
+    return makeEmptyUserSelections(uiDisplayData);
   }, [uiDisplayData]);
 
   const allAgentsSelectedMap = useMemo(() => {
