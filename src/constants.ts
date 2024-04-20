@@ -32,6 +32,9 @@ export const VIEWER_HEIGHT: number = 580;
  * The selection state info for the viewer is derived from these maps.
  * The default state is to include the agent name, or if an agent has multiple display states,
  * all of the display state names.
+ * userChangesMap[agentName] = [] means nothing is selected
+ * userChangesMap[agentName] = [agentName] means the agent is selected in a case with no display states
+ * userChangesMap[agentName] = [displayState1, displayState2] means whatever display states are in the array are selected
  */
 export interface UserChangesMap {
   [key: string]: string[];
