@@ -26,7 +26,7 @@ export const VIEWER_INITIAL_WIDTH: number = 500;
 export const VIEWER_HEIGHT: number = 580;
 
 /**
- * The UserChangesMap stores user changes to highlighting and hiding (made by clicking checkboxes).
+ * A UserChangesMap stores user changes to highlighting and hiding (made by clicking checkboxes).
  * There should be a key in the map for each agent name,
  * and the value is an array to hold user changes to selection: hiding and highlighting.
  * The default state of the value array is to be empty.

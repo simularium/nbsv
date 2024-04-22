@@ -9,60 +9,65 @@ import {
 describe('utils for converting selection data types and handling selection actions', () => {
   describe('updateUserChangesAfterCheckboxClick', () => {
     it('removes an agent with no children from selection if it was previously included', () => {
+      const prevState = {
+        agent_with_no_children: ['agent_with_no_children'],
+      };
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_no_children',
         [],
-        {
-          agent_with_no_children: ['agent_with_no_children'],
-        }
+        prevState
       );
       expect(result).toEqual({ agent_with_no_children: [] });
     });
     it('it adds an agent with no children to selection if it was was not previously included in selection', () => {
+      const prevState = {
+        agent_with_no_children: [],
+      };
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_no_children',
         [],
-        {
-          agent_with_no_children: [],
-        }
+        prevState
       );
       expect(result).toEqual({
         agent_with_no_children: ['agent_with_no_children'],
       });
     });
     it('removes an agents children from selection if they were previously selected', () => {
+      const prevState = {
+        agent_with_children: ['child1', 'child2'],
+      };
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_children',
         ['child1', 'child2'],
-        {
-          agent_with_children: ['child1', 'child2'],
-        }
+        prevState,
       );
       expect(result).toEqual({
         agent_with_children: [],
       });
     });
-    it('selects agents children if they were not previously selected', () => {
+    it('adds agents children to the array if they were not previously selected', () => {
+      const prevState = {
+        agent_with_children: [],
+      };
       const childList = ['child1', 'child2'];
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_children',
         childList,
-        {
-          agent_with_children: [],
-        }
+        prevState
       );
       expect(result).toEqual({
         agent_with_children: childList,
       });
     });
     it('it includes all children in selection if only some were previously selected', () => {
+      const prevState = {
+        agent_with_children: ['child1'],
+      };
       const childList = ['child1', 'child2'];
       const result = updateUserChangesAfterCheckboxClick(
         'agent_with_children',
         childList,
-        {
-          agent_with_children: ['child1'],
-        }
+        prevState
       );
       expect(result).toEqual({
         agent_with_children: childList,
@@ -72,15 +77,25 @@ describe('utils for converting selection data types and handling selection actio
 
   describe('getSelectionAfterChildCheckboxClick', () => {
     it('removes child from parents selection array if it was previously included', () => {
-      const result = getSelectionAfterChildCheckboxClick('child', 'parent', {
+      const prevState = {
         parent: ['child'],
-      });
+      };
+      const result = getSelectionAfterChildCheckboxClick(
+        'child',
+        'parent',
+        prevState
+      );
       expect(result).toEqual({ parent: [] });
     });
     it('adds child to parents selection array if child was not previously included', () => {
-      const result = getSelectionAfterChildCheckboxClick('child', 'parent', {
+      const prevState = {
         parent: ['child2'],
-      });
+      };
+      const result = getSelectionAfterChildCheckboxClick(
+        'child',
+        'parent',
+        prevState
+      );
       expect(result).toEqual({ parent: ['child2', 'child'] });
     });
     it('will throw an error if the parent is not found in the userChangesMap', () => {

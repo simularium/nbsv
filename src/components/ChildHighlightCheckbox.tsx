@@ -18,7 +18,9 @@ const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
   const { handleChildHighlightChange, highlightedAgents } =
     useContext(VisibilityContext);
 
-  const selections = highlightedAgents[parentName];
+  // the selections are initialized with the parents names as keys,
+  // so this will always exist, but typeScript doesn't know that.
+  const selections = highlightedAgents[parentName] || [];
 
   const getCheckboxStatus = () => {
     if (selections?.includes(name)) {
