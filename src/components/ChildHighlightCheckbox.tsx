@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
 import { ChildCheckboxProps, HighlightDisplayOption } from '../types';
-import { VisibilityContext } from '../AgentVisibilityContext';
 import {
   HighlightStar,
   IndeterminateHighlightStar,
@@ -13,17 +12,10 @@ import {
 const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
   props: ChildCheckboxProps
 ): JSX.Element => {
-  const { name, parentName } = props;
-
-  const { handleChildHighlightChange, highlightedAgents } =
-    useContext(VisibilityContext);
-
-  // the selections are initialized with the parents names as keys,
-  // so this will always exist, but typeScript doesn't know that.
-  const selections = highlightedAgents[parentName] || [];
+  const { name, selections, clickHandler } = props;
 
   const getCheckboxStatus = () => {
-    if (selections?.includes(name)) {
+    if (selections.includes(name)) {
       return CheckboxState.Checked;
     }
     return CheckboxState.Unchecked;
@@ -69,7 +61,7 @@ const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
           opacity: 0,
           cursor: 'pointer',
         }}
-        onClick={() => handleChildHighlightChange(name, parentName)}
+        onClick={clickHandler}
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>

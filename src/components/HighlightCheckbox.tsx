@@ -1,33 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
 import { CheckboxProps, HighlightDisplayOption } from '../types';
-import { VisibilityContext } from '../AgentVisibilityContext';
 import {
   HighlightStar,
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
-import { getChildren } from '../utils';
 
 const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   props: CheckboxProps
 ): JSX.Element => {
-  const { agent } = props;
+  const { agent, selections, clickHandler } = props;
 
-  const { handleHighlightChange, highlightedAgents } =
-    useContext(VisibilityContext);
-
-  const selections = highlightedAgents[agent.name];
   const maxSelections =
     agent.displayStates.length > 0 ? agent.displayStates.length : 1;
 
   const getCheckboxStatus = () => {
-    if (selections?.length === 0) {
+    if (selections.length === 0) {
       return CheckboxState.Unchecked;
     }
-    if (selections?.length === maxSelections) {
+    if (selections.length === maxSelections) {
       return CheckboxState.Checked;
     }
     return CheckboxState.Indeterminate;
@@ -61,7 +55,6 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   const checkboxStatus = getCheckboxStatus();
   const { tooltipText, ariaLabel, icon } =
     getHighlightDisplayOptions(checkboxStatus);
-  const children = getChildren(agent);
 
   return (
     <Tooltip placement="top" title={tooltipText} trigger={['focus', 'hover']}>
@@ -74,7 +67,7 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
           opacity: 0,
           cursor: 'pointer',
         }}
-        onClick={() => handleHighlightChange(agent.name, children)}
+        onClick={clickHandler}
       />
       <label style={{ fill: '#d3d3d3' }}>{icon}</label>
     </Tooltip>

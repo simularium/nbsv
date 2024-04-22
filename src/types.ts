@@ -25,9 +25,12 @@ export interface HighlightDisplayOption {
 
 export interface ChildCheckboxProps {
   name: string;
-  parentName: string;
+  selections: string[];
+  clickHandler: () => void;
 }
 
 export interface CheckboxProps {
   agent: UIDisplayEntry;
+  selections: string[];
+  clickHandler: () => void;
 }
