@@ -2,7 +2,7 @@ import React from 'react';
 import { Checkbox, Tooltip } from 'antd';
 
 import { CheckboxProps } from '../types';
-import { CheckboxState, tooltipMap } from '../constants';
+import { CheckboxState, TOOLTIP_COLOR, tooltipMap } from '../constants';
 
 const HideCheckbox: React.FunctionComponent<CheckboxProps> = (
   props: CheckboxProps
@@ -26,7 +26,12 @@ const HideCheckbox: React.FunctionComponent<CheckboxProps> = (
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
+    <Tooltip
+      placement="right"
+      title={tooltipText}
+      color={TOOLTIP_COLOR}
+      trigger={['focus', 'hover']}
+    >
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}

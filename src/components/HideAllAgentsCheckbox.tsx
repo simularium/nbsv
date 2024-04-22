@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 import { isEqual } from '@jupyter-widgets/base';
 
-import { CheckboxState, UserChangesMap } from '../constants';
+import { CheckboxState, TOOLTIP_COLOR, UserChangesMap } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
 import { makeEmptyUserSelections } from '../utils';
 
@@ -57,11 +57,17 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
+    <Tooltip
+      placement="right"
+      title={tooltipText}
+      color={TOOLTIP_COLOR}
+      trigger={['focus', 'hover']}
+    >
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
         onClick={clickHandler}
+        className="hide-all-checkbox"
       />
     </Tooltip>
   );
