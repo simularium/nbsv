@@ -2,9 +2,9 @@ import React, { useContext, useMemo } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 import { isEqual } from '@jupyter-widgets/base';
 
-import { CheckboxState } from '../constants';
+import { CheckboxState, UserChangesMap } from '../constants';
 import { VisibilityContext } from '../AgentVisibilityContext';
-import { mapUIDisplayDataToSelectionMap } from '../utils';
+import { makeEmptyUserSelections } from '../utils';
 
 const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const { setHiddenAgents, hiddenAgents, uiDisplayData } =
@@ -14,21 +14,26 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
    * The maps below are values to use when clicking the checkbox, they are
    * essentially constant and only need to be computed when the uiDisplayData changes.
    */
-  const noAgentsSelectedMap = useMemo(() => {
-    return mapUIDisplayDataToSelectionMap(uiDisplayData);
+  const initialUserSelections = useMemo(() => {
+    return makeEmptyUserSelections(uiDisplayData);
   }, [uiDisplayData]);
 
   const allAgentsSelectedMap = useMemo(() => {
-    // the boolean tells the util to select all agents, it defaults to false
-    const selectAllAgents = true;
-    return mapUIDisplayDataToSelectionMap(uiDisplayData, selectAllAgents);
+    return uiDisplayData.reduce<UserChangesMap>((acc, agent) => {
+      if (agent.displayStates && agent.displayStates.length > 0) {
+        acc[agent.name] = [...agent.displayStates.map((state) => state.id)];
+      } else {
+        acc[agent.name] = [agent.name];
+      }
+      return acc;
+    }, {});
   }, [uiDisplayData]);
 
   const clickHandler = () => {
     const newValue =
       checkboxStatus === CheckboxState.Checked
-        ? noAgentsSelectedMap
-        : allAgentsSelectedMap;
+        ? allAgentsSelectedMap
+        : initialUserSelections;
     setHiddenAgents(newValue);
   };
 
@@ -39,7 +44,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   };
 
   const getCheckboxStatus = () => {
-    if (isEqual(hiddenAgents, noAgentsSelectedMap)) {
+    if (isEqual(hiddenAgents, initialUserSelections)) {
       return CheckboxState.Checked;
     }
     if (isEqual(hiddenAgents, allAgentsSelectedMap)) {
@@ -52,7 +57,7 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}

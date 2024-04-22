@@ -1,47 +1,36 @@
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 import { Checkbox, Tooltip } from 'antd';
 
-import { CheckboxState } from '../constants';
-import { VisibilityContext } from '../AgentVisibilityContext';
-import { UIDisplayEntry } from '@aics/simularium-viewer/type-declarations/simularium/SelectionInterface';
+import { CheckboxProps } from '../types';
+import { CheckboxState, tooltipMap } from '../constants';
 
-interface HideCheckboxProps {
-  agent: UIDisplayEntry;
-}
-
-const HideCheckbox: React.FunctionComponent<HideCheckboxProps> = (
-  props: HideCheckboxProps
+const HideCheckbox: React.FunctionComponent<CheckboxProps> = (
+  props: CheckboxProps
 ): JSX.Element => {
-  const { agent } = props;
+  const { agent, selections, clickHandler } = props;
 
-  const { handleVisibilityCheckboxChange, hiddenAgents } =
-    useContext(VisibilityContext);
+  const maxSelections =
+    agent.displayStates.length > 0 ? agent.displayStates.length : 1;
 
-  const getHideCheckboxStatus = (): CheckboxState => {
-    if (hiddenAgents[agent.name]?.length === 0) {
+  const getCheckboxStatus = () => {
+    if (selections.length === 0) {
+      return CheckboxState.Checked;
+    }
+    if (selections.length === maxSelections) {
       return CheckboxState.Unchecked;
     }
-    return CheckboxState.Checked;
+    return CheckboxState.Indeterminate;
   };
 
-  const checkboxStatus = useMemo(() => {
-    return getHideCheckboxStatus();
-  }, [hiddenAgents]);
-
-  const tooltipMap = {
-    [CheckboxState.Checked]: 'Hide',
-    [CheckboxState.Unchecked]: 'Show',
-    [CheckboxState.Indeterminate]: 'Show',
-  };
-
+  const checkboxStatus = getCheckboxStatus();
   const tooltipText = tooltipMap[checkboxStatus];
 
   return (
-    <Tooltip placement="right" title={tooltipText}>
+    <Tooltip placement="right" title={tooltipText} trigger={['focus', 'hover']}>
       <Checkbox
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
-        onClick={() => handleVisibilityCheckboxChange(agent.name)}
+        onClick={clickHandler}
       />
     </Tooltip>
   );

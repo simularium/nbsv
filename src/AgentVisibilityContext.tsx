@@ -1,17 +1,23 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { UIDisplayData } from '@aics/simularium-viewer';
 
-import { VisibilitySelectionMap } from './constants';
-import { getNewSelectionMap, mapUIDisplayDataToSelectionMap } from './utils';
+import { UserChangesMap } from './constants';
+import {
+  makeEmptyUserSelections,
+  updateUserChangesAfterCheckboxClick,
+  getSelectionAfterChildCheckboxClick,
+} from './utils';
 
 interface VisibilityContextType {
   uiDisplayData: UIDisplayData;
-  hiddenAgents: VisibilitySelectionMap;
-  highlightedAgents: VisibilitySelectionMap;
+  hiddenAgents: UserChangesMap;
+  highlightedAgents: UserChangesMap;
   receiveUIDisplayData: (data: UIDisplayData) => void;
-  setHiddenAgents: React.Dispatch<React.SetStateAction<VisibilitySelectionMap>>;
-  handleVisibilityCheckboxChange: (agentName: string) => void;
-  handleHightlightCheckboxChange: (agentName: string) => void;
+  setHiddenAgents: React.Dispatch<React.SetStateAction<UserChangesMap>>;
+  handleHideCheckboxChange: (name: string, children: string[]) => void;
+  handleHideChildCheckboxChange: (name: string, parent: string) => void;
+  handleHighlightChange: (name: string, children: string[]) => void;
+  handleChildHighlightChange: (name: string, parent: string) => void;
 }
 
 export const VisibilityContext = createContext<VisibilityContextType>({
@@ -20,32 +26,46 @@ export const VisibilityContext = createContext<VisibilityContextType>({
   highlightedAgents: {},
   receiveUIDisplayData: () => {},
   setHiddenAgents: () => {},
-  handleVisibilityCheckboxChange: () => {},
-  handleHightlightCheckboxChange: () => {},
+  handleHideCheckboxChange: () => {},
+  handleHideChildCheckboxChange: () => {},
+  handleHighlightChange: () => {},
+  handleChildHighlightChange: () => {},
 });
 
 export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
   const [uiDisplayData, setUiDisplayData] = useState<UIDisplayData>([]);
-  const [hiddenAgents, setHiddenAgents] = useState<VisibilitySelectionMap>({});
-  const [highlightedAgents, setHighlightedAgents] =
-    useState<VisibilitySelectionMap>({});
+  const [hiddenAgents, setHiddenAgents] = useState<UserChangesMap>({});
+  const [highlightedAgents, setHighlightedAgents] = useState<UserChangesMap>(
+    {}
+  );
 
   const receiveUIDisplayData = (data: UIDisplayData) => {
     setUiDisplayData(data);
-    const noAgentsSelectedMap = mapUIDisplayDataToSelectionMap(data);
-    setHighlightedAgents(noAgentsSelectedMap);
-    setHiddenAgents(noAgentsSelectedMap);
+    setHighlightedAgents(makeEmptyUserSelections(data));
+    setHiddenAgents(makeEmptyUserSelections(data));
   };
 
-  const handleVisibilityCheckboxChange = (agentName: string) => {
+  const handleHideCheckboxChange = (name: string, children: string[]) => {
     setHiddenAgents((prevHiddenAgents) =>
-      getNewSelectionMap(agentName, prevHiddenAgents)
+      updateUserChangesAfterCheckboxClick(name, children, prevHiddenAgents)
     );
   };
 
-  const handleHightlightCheckboxChange = (agentName: string) => {
+  const handleHideChildCheckboxChange = (name: string, parent: string) => {
+    setHiddenAgents((prevHiddenAgents) =>
+      getSelectionAfterChildCheckboxClick(name, parent, prevHiddenAgents)
+    );
+  };
+
+  const handleHighlightChange = (name: string, children: string[]) => {
     setHighlightedAgents((prevHighlightedAgents) =>
-      getNewSelectionMap(agentName, prevHighlightedAgents)
+      updateUserChangesAfterCheckboxClick(name, children, prevHighlightedAgents)
+    );
+  };
+
+  const handleChildHighlightChange = (name: string, parent: string) => {
+    setHighlightedAgents((prevHighlightedAgents) =>
+      getSelectionAfterChildCheckboxClick(name, parent, prevHighlightedAgents)
     );
   };
 
@@ -55,8 +75,10 @@ export const VisibilityProvider = ({ children }: { children: ReactNode }) => {
     highlightedAgents,
     receiveUIDisplayData,
     setHiddenAgents,
-    handleHightlightCheckboxChange,
-    handleVisibilityCheckboxChange,
+    handleHighlightChange,
+    handleChildHighlightChange,
+    handleHideCheckboxChange,
+    handleHideChildCheckboxChange,
   };
 
   return (

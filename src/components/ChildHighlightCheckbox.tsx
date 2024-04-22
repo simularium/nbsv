@@ -2,29 +2,23 @@ import React from 'react';
 import { Tooltip } from 'antd';
 
 import { CheckboxState } from '../constants';
-import { CheckboxProps, HighlightDisplayOption } from '../types';
+import { ChildCheckboxProps, HighlightDisplayOption } from '../types';
 import {
   HighlightStar,
   IndeterminateHighlightStar,
   NoHighlightStar,
 } from './Icons';
 
-const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
-  props: CheckboxProps
+const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
+  props: ChildCheckboxProps
 ): JSX.Element => {
-  const { agent, selections, clickHandler } = props;
-
-  const maxSelections =
-    agent.displayStates.length > 0 ? agent.displayStates.length : 1;
+  const { name, selections, clickHandler } = props;
 
   const getCheckboxStatus = () => {
-    if (selections.length === 0) {
-      return CheckboxState.Unchecked;
-    }
-    if (selections.length === maxSelections) {
+    if (selections.includes(name)) {
       return CheckboxState.Checked;
     }
-    return CheckboxState.Indeterminate;
+    return CheckboxState.Unchecked;
   };
 
   const getHighlightDisplayOptions = (
@@ -74,4 +68,4 @@ const HighlightCheckbox: React.FunctionComponent<CheckboxProps> = (
   );
 };
 
-export default HighlightCheckbox;
+export default ChildHighlightCheckbox;
