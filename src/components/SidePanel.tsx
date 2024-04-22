@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
 import { VisibilityContext } from '../AgentVisibilityContext';
+import { VIEWER_HEIGHT } from '../constants';
 import AgentRow from './AgentRow';
 import HideAllAgentsCheckbox from './HideAllAgentsCheckbox';
 
@@ -10,7 +11,7 @@ const SidePanel: React.FC = (): JSX.Element => {
   const { uiDisplayData } = useContext(VisibilityContext);
 
   return (
-    <div className="sp-container">
+    <div className="sp-container" style={{ maxHeight: VIEWER_HEIGHT }}>
       <div className="agent-title">Agents</div>
       <div className={['item-row', 'hide-all'].join(' ')}>
         <HideAllAgentsCheckbox />
