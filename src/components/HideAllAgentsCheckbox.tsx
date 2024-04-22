@@ -67,7 +67,6 @@ const HideAllAgentsCheckbox: React.FunctionComponent = (): JSX.Element => {
         indeterminate={checkboxStatus === 'Indeterminate'}
         checked={checkboxStatus === 'Checked'}
         onClick={clickHandler}
-        className="hide-all-checkbox"
       />
     </Tooltip>
   );
