@@ -26,15 +26,15 @@ export const VIEWER_INITIAL_WIDTH: number = 500;
 export const VIEWER_HEIGHT: number = 580;
 
 /**
- * The UserChangesMap stores user changes to highlighting and hiding checkboxes.
- * If a user highlights an agent or display state, that "star" checkbox will be checked.
- * If a user hides an agent or display state, that checkbox will be checked.
- * The selection state info for the viewer is derived from these maps.
- * The default state is to include the agent name, or if an agent has multiple display states,
- * all of the display state names.
- * userChangesMap[agentName] = [] means nothing is selected
- * userChangesMap[agentName] = [agentName] means the agent is selected in a case with no display states
- * userChangesMap[agentName] = [displayState1, displayState2] means whatever display states are in the array are selected
+ * The UserChangesMap stores user changes to highlighting and hiding (made by clicking checkboxes).
+ * There should be a key in the map for each agent name,
+ * and the value is an array to hold user changes to selection: hiding and highlighting.
+ * The default state of the value array is to be empty.
+ * If an agent with no display states is hidden or highlighted, the array will contain the agent name.
+ * If an agent has display states, those states that are hidden/highlighted will be in the array.
+ * userChangesMap[agentName] = [] means nothing is hidden/highlighted
+ * userChangesMap[agentName] = [agentName] means the agent is hidden/highlighted in a case with no display states
+ * userChangesMap[agentName] = [displayState1, displayState2] means whatever display states are in the array are hidden/highlighted
  */
 export interface UserChangesMap {
   [key: string]: string[];
