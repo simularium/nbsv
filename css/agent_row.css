@@ -28,8 +28,7 @@
 }
 
 /* the following rules and selectors override the antd default to have
-blue backgrounds, borders, and elements, and get the checkboxes, checks
-and borders colored and styled right.
+blue backgrounds, borders, and elements
 */
 .item-row .ant-checkbox-inner {
   border-radius: 0px;
