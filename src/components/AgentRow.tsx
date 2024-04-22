@@ -26,8 +26,8 @@ const AgentRow: React.FC<AgentRowProps> = (
     highlightedAgents,
     hiddenAgents,
   } = useContext(VisibilityContext);
-  const highlightSelections = highlightedAgents[agent.name];
-  const hiddenSelections = hiddenAgents[agent.name];
+  const highlightSelections = highlightedAgents[agent.name] || [];
+  const hiddenSelections = hiddenAgents[agent.name] || [];
 
   const [showChildren, setShowChildren] = React.useState(false);
   const hasChildren = agent.displayStates.length > 0;
