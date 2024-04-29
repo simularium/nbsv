@@ -70,15 +70,6 @@ export class Viewport extends DOMWidgetView {
 
   render(): void {
     this.el.classList.add('custom-widget');
-
-    // const wrappedComponent = React.createElement(
-    //   VisibilityProvider,
-    //   null,
-    //   React.createElement(Viewer, {
-    //     controller: this.controller,
-    //   } as ViewerProps)
-    // );
-
     const wrappedComponent = React.createElement(
       StyleProvider,
       null,
