@@ -34,7 +34,7 @@ const AgentRow: React.FC<AgentRowProps> = (
   const [showChildren, setShowChildren] = React.useState(false);
   const hasChildren = agent.displayStates.length > 0;
 
-  const Caret = (
+  const Caret = () => (
     <div
       className="caret-spacer"
       onClick={() => setShowChildren(!showChildren)}
@@ -43,13 +43,13 @@ const AgentRow: React.FC<AgentRowProps> = (
     </div>
   );
 
-  const Spacer = <div className="caret-spacer" />;
+  const Spacer = () => <div className="caret-spacer" />;
 
   const getChildRows = (agent: UIDisplayEntry) => {
     return agent.displayStates.map((displayState) => {
       return (
         <div className="item-row" style={{ display: 'flex' }}>
-          {Spacer}
+          <Spacer />
           <ChildHighlightCheckbox
             name={displayState.name}
             selections={highlightSelections}
@@ -82,7 +82,7 @@ const AgentRow: React.FC<AgentRowProps> = (
   return (
     <div>
       <div className="item-row">
-        {hasChildren ? Caret : Spacer}
+        {hasChildren ? <Caret /> : <Spacer />}
         <HighlightCheckbox
           agent={agent}
           selections={highlightSelections}
