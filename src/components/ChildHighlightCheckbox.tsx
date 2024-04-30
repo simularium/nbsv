@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 
-import { CheckboxState } from '../constants';
+import { CheckboxState, TOOLTIP_COLOR } from '../constants';
 import { ChildCheckboxProps, HighlightDisplayOption } from '../types';
 import {
   HighlightStar,
@@ -51,7 +51,12 @@ const ChildHighlightCheckbox: React.FunctionComponent<ChildCheckboxProps> = (
     getHighlightDisplayOptions(checkboxStatus);
 
   return (
-    <Tooltip placement="top" title={tooltipText} trigger={['focus', 'hover']}>
+    <Tooltip
+      placement="top"
+      title={tooltipText}
+      color={TOOLTIP_COLOR}
+      trigger={['focus', 'hover']}
+    >
       <input
         type="checkbox"
         aria-label={ariaLabel}
