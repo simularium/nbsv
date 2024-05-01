@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nbsv"
-version = "0.1.5"
+version = "0.1.6"
 description = "Simularium Viewer Jupyter Widget "
 readme = "README.md"
 license = { file = "LICENSE.txt" }
@@ -88,7 +88,7 @@ file = [
 ]
 
 [tool.tbump.version]
-current = "0.1.5"
+current = "0.1.6"
 regex = '''
   (?P<major>\d+)
   \.
