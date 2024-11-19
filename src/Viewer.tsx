@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { WidgetModel } from '@jupyter-widgets/base';
 import SimulariumViewer, {
   RenderStyle,
   SimulariumController,
@@ -24,10 +23,6 @@ import { PlaybackData, PlaybackState } from './types';
 import { VisibilityContext } from './AgentVisibilityContext';
 
 import '../css/viewer.css';
-
-export interface WidgetModelWithState extends WidgetModel {
-  controller: SimulariumController;
-}
 
 export interface ViewerProps {
   controller: SimulariumController;
@@ -88,14 +83,11 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
-            const { height } = entry.contentRect;
             // hide side panel if space is small
             setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
               width = width - SIDE_PANEL_WIDTH;
             }
-            // pass size to viewer
-            setDimensions({ width, height });
           }
         }
       );
@@ -169,7 +161,7 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
               highlightedAgents,
               uiDisplayData
             ),
-            colorChange: null,
+            appliedColors: [],
           }}
           onUIDisplayDataChanged={receiveUIDisplayData}
           loadInitialData={true}
