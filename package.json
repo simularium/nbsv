@@ -29,7 +29,7 @@
   },
   "scripts": {
     "dev": "npm run build -- --sourcemap=inline --watch",
-    "build": "bun build src/widget.tsx --minify --format=esm --outdir=./lib --asset-naming=[name].[ext]",
+    "build": "esbuild src/widget.tsx --bundle --minify --format=esm --outdir=./lib --asset-names=[name].[ext]",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -45,7 +45,7 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.169.0",
-    "typescript": "^5.6.3",
-    "@types/bun": "latest"
+    "esbuild": "0.24.0",
+    "typescript": "^5.6.3"
   }
 }
