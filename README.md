@@ -25,7 +25,7 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] nbsv
 
 Create a dev environment:
 ```bash
-conda create -n nbsv -c conda-forge yarn python jupyterlab=3.6.4
+conda create -n nbsv -c conda-forge yarn python=3.9 jupyterlab
 conda activate nbsv
 nvm use 18
 ```
@@ -33,8 +33,9 @@ Note: make sure you are using the node managed by nvm and not in your conda env 
 
 Install and build:
 ```bash
-yarn install
-./build.sh
+npm install
+pip install -e '.[test, examples]'
+npm run build
 ``` 
 
 ### How to see your changes
@@ -45,7 +46,7 @@ terminals to watch for changes in the extension's source and automatically rebui
 ```bash
 # Watch the source directory in one terminal, automatically rebuilding when needed.
 # Note: You may need to run this in a terminal with elevated permissions (Run as Administrator)
-yarn run watch
+npm run dev
 # Run JupyterLab in another terminal
 jupyter lab
 ```
