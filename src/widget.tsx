@@ -8,6 +8,8 @@ import { createRender, useModelState } from "@anywidget/react";
 import React from 'react';
 
 import Viewer from './Viewer';
+import { VisibilityProvider } from './AgentVisibilityContext';
+import StyleProvider from './ConfigProvider';
 
 // Import the CSS
 import '../css/widget.css';
@@ -37,9 +39,13 @@ const render = createRender(() => {
 			.catch(console.error);;
 	}, []);
 	return (
-		<div className="new_nbsv">
+		<div className="nbsv">
 			<div>
-				<Viewer controller={controller}/>
+				<StyleProvider>
+					<VisibilityProvider>
+						<Viewer controller={controller}/>
+					</VisibilityProvider>
+				</StyleProvider>
 			</div>
 		</div>
 	);
