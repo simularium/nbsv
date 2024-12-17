@@ -15,40 +15,40 @@ import StyleProvider from './ConfigProvider';
 import '../css/widget.css';
 
 const defaultModelProperties = {
-	trajectory: '',
-	width: 400,
-	height: 400,
+  trajectory: '',
+  width: 400,
+  height: 400,
 };
 
 export type WidgetModelState = typeof defaultModelProperties;
 
 const render = createRender(() => {
-	const [trajectoryAsString] = useModelState<string>("trajectory_str");
-	const controller = new SimulariumController({});
-	React.useEffect(() => {
-		if (!trajectoryAsString) {
-			return;
-		}
-		const blob = new Blob([trajectoryAsString], { type: 'application/json' });
-		const fetchData = async () => {
-			const simulariumFile = await loadSimulariumFile(blob);
-			await controller.changeFile({ simulariumFile }, 'test.siumularium');
-		}
-		fetchData()
-			.then(() => {console.log("fetched data")})
-			.catch(console.error);;
-	}, []);
-	return (
-		<div className="nbsv">
-			<div>
-				<StyleProvider>
-					<VisibilityProvider>
-						<Viewer controller={controller}/>
-					</VisibilityProvider>
-				</StyleProvider>
-			</div>
-		</div>
-	);
+  const [trajectoryAsString] = useModelState<string>("trajectory_str");
+  const controller = new SimulariumController({});
+  React.useEffect(() => {
+    if (!trajectoryAsString) {
+      return;
+    }
+    const blob = new Blob([trajectoryAsString], { type: 'application/json' });
+    const fetchData = async () => {
+      const simulariumFile = await loadSimulariumFile(blob);
+      await controller.changeFile({ simulariumFile }, 'test.siumularium');
+    }
+    fetchData()
+      .then(() => {console.log("fetched data")})
+      .catch(console.error);;
+  }, []);
+  return (
+    <div className="nbsv">
+      <div>
+        <StyleProvider>
+          <VisibilityProvider>
+            <Viewer controller={controller}/>
+          </VisibilityProvider>
+        </StyleProvider>
+      </div>
+    </div>
+  );
 });
 
 export default { render };
