@@ -83,11 +83,14 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
           for (const entry of entries) {
             // get the size of viewer container
             let { width } = entry.contentRect;
+            const { height } = entry.contentRect;
             // hide side panel if space is small
             setShowSidePanel(width > MIN_WIDTH_TO_SHOW_SIDE_PANEL);
             if (showSidePanel) {
               width = width - SIDE_PANEL_WIDTH;
             }
+            // pass size to viewer
+            setDimensions({ width, height });
           }
         }
       );
