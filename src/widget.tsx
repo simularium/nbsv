@@ -14,14 +14,6 @@ import StyleProvider from './ConfigProvider';
 // Import the CSS
 import '../css/widget.css';
 
-const defaultModelProperties = {
-  trajectory: '',
-  width: 400,
-  height: 400,
-};
-
-export type WidgetModelState = typeof defaultModelProperties;
-
 const render = createRender(() => {
   const [trajectoryAsString] = useModelState<string>('trajectory_str');
   const controller = new SimulariumController({});
