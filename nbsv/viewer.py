@@ -25,8 +25,8 @@ from typing import List, Dict
 
 
 class ViewerWidget(anywidget.AnyWidget):
-    _esm = pathlib.Path(__file__).parent / ".." / "lib" / "widget.js"
-    _css = pathlib.Path(__file__).parent / ".." / "lib" / "widget.css"
+    _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
+    _css = pathlib.Path(__file__).parent / "static" / "widget.css"
     trajectory = Instance(TrajectoryData)
     converter = Instance(TrajectoryConverter)
     trajectory_str = Unicode("").tag(sync=True)
