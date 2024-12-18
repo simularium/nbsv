@@ -28,11 +28,12 @@
     "url": "https://github.com/simularium/nbsv"
   },
   "scripts": {
-    "dev": "npm run build -- --sourcemap=inline --watch",
+    "watch": "yarn run build -- --sourcemap=inline --watch",
     "build": "esbuild src/widget.tsx --bundle --minify --format=esm --outdir=./nbsv/static --asset-names=[name].[ext]",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aics/simularium-viewer": "file:../simularium-viewer",
     "@anywidget/react": "^0.0.8",
     "@jupyter-widgets/base": "^6.0.10",
     "antd": "^5.22.1",

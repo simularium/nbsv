@@ -15,12 +15,6 @@ You can install using `pip`:
 pip install nbsv
 ```
 
-If you are using Jupyter Notebook 5.2 or earlier, you may also need to enable
-the nbextension:
-```bash
-jupyter nbextension enable --py [--sys-prefix|--user|--system] nbsv
-```
-
 ## Development Installation
 
 Create a dev environment:
@@ -33,9 +27,8 @@ Note: make sure you are using the node managed by nvm and not in your conda env 
 
 Install and build:
 ```bash
-npm install
-pip install -e '.[test, examples]'
-npm run build
+yarn install
+./build.sh
 ``` 
 
 ### How to see your changes
@@ -46,7 +39,7 @@ terminals to watch for changes in the extension's source and automatically rebui
 ```bash
 # Watch the source directory in one terminal, automatically rebuilding when needed.
 # Note: You may need to run this in a terminal with elevated permissions (Run as Administrator)
-npm run dev
+yarn run watch
 # Run JupyterLab in another terminal
 jupyter lab
 ```

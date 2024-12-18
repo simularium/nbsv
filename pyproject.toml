@@ -56,11 +56,12 @@ ignore-vcs = true
 exclude = [
   "**/node_modules",
   ".ipynb_checkpoints",
-  "dist",
   ".github",
-  "src",
-  "lib",
   "css",
+  "dist",
+  "lib",
+  "src",
+  "yarn.lock",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -77,6 +78,7 @@ dependencies = ["hatch-jupyter-builder>=0.5.0"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 path = "."
+npm = "yarn"
 build_cmd = "build"
 
 [tool.tbump]
