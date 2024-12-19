@@ -16,6 +16,8 @@ import '../css/widget.css';
 
 const render = createRender(() => {
   const [trajectoryAsString] = useModelState<string>('trajectory_str');
+  const [width] = useModelState<number>('width');
+  const [height] = useModelState<number>('height');
   const controller = new SimulariumController({});
   React.useEffect(() => {
     if (!trajectoryAsString) {
@@ -37,7 +39,7 @@ const render = createRender(() => {
       <div>
         <StyleProvider>
           <VisibilityProvider>
-            <Viewer controller={controller} />
+            <Viewer controller={controller} width={width} height={height} />
           </VisibilityProvider>
         </StyleProvider>
       </div>

@@ -14,8 +14,6 @@ import ScaleBar from './components/ScaleBar';
 import {
   MIN_WIDTH_TO_SHOW_SIDE_PANEL,
   SIDE_PANEL_WIDTH,
-  VIEWER_HEIGHT,
-  VIEWER_INITIAL_WIDTH,
   agentColors,
 } from './constants';
 import { convertMapToSelectionStateInfo } from './utils';
@@ -26,6 +24,8 @@ import '../css/viewer.css';
 
 export interface ViewerProps {
   controller: SimulariumController;
+  width: number;
+  height: number;
 }
 
 const initialPlaybackData: PlaybackData = {
@@ -58,8 +58,8 @@ function ViewerWidget(props: ViewerProps): JSX.Element {
 
   // UI state
   const [dimensions, setDimensions] = useState({
-    width: VIEWER_INITIAL_WIDTH,
-    height: VIEWER_HEIGHT,
+    width: props.width,
+    height: props.height,
   });
   const [showSidePanel, setShowSidePanel] = useState(true);
   const [playbackState, setPlaybackState] = useState<PlaybackState>({
