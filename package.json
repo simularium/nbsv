@@ -36,7 +36,7 @@
     "watch": "yarn run build -- --sourcemap=inline --watch"
   },
   "dependencies": {
-    "@aics/simularium-viewer": "file:../simularium-viewer",
+    "@aics/simularium-viewer": "^3.9.1",
     "@anywidget/react": "^0.0.8",
     "@jupyter-widgets/base": "^6.0.10",
     "antd": "^5.22.1",
