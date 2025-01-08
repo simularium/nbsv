@@ -28,12 +28,12 @@
     "url": "https://github.com/simularium/nbsv"
   },
   "scripts": {
-    "build": "esbuild src/widget.tsx --bundle --minify --format=esm --outdir=./nbsv/static --asset-names=[name].[ext]",
+    "build": "esbuild src/widget.tsx --bundle --minify --format=esm --outdir=./nbsv/static",
     "clean": "rimraf nbsv/static",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "lint:check": "eslint . --ext .ts,.tsx",
     "test": "yarn jest --runInBand",
-    "watch": "yarn run build -- --sourcemap=inline --watch"
+    "watch": "yarn run build --sourcemap=inline --watch"
   },
   "dependencies": {
     "@aics/simularium-viewer": "^3.9.1",
