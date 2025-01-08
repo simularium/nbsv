@@ -19,11 +19,9 @@ pip install nbsv
 
 Create a dev environment:
 ```bash
-conda create -n nbsv -c conda-forge yarn python=3.9 jupyterlab
+conda create -n nbsv -c conda-forge yarn python=3.9 jupyterlab notebook
 conda activate nbsv
-nvm use 18
 ```
-Note: make sure you are using the node managed by nvm and not in your conda env by checking `which node`
 
 Install and build:
 ```bash
@@ -45,6 +43,8 @@ jupyter lab
 ```
 
 After a change wait for the build to finish and then refresh your browser and the changes should take effect.
+
+The viewer widget is also compatible with Jupyter Notebook, so that can be used for development instead if preferred over JupyterLab.
 
 #### Python:
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
