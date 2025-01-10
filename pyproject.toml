@@ -24,12 +24,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
-    "ipydatawidgets>=4.3.2",
-    "ipywidgets==8.0.4",
-    "jupyter-packaging>=0.12.3",
-    "jupyter>=1.0.0",
-    "jupyterlab==3.5.2",
-    "numpy>=1.14.3",
+    "anywidget",
     "simulariumio",
 ]
 
@@ -46,38 +41,45 @@ docs = [
 ]
 examples = ["simulariumio", "numpy"]
 test = ["nbval", "pytest-cov", "pytest>=7.1", "tbump"]
+dev = ["watchfiles", "jupyterlab"]
 
 [project.urls]
 Homepage = "https://github.com/simularium/nbsv"
 
-[tool.hatch.build]
-artifacts = [
-    "nbsv/nbextension/index.*",
-    "nbsv/labextension/*.tgz",
-    "nbsv/labextension",
-]
-
-[tool.hatch.build.targets.wheel.shared-data]
-"nbsv/nbextension" = "share/jupyter/nbextensions/nbsv"
-"nbsv/labextension" = "share/jupyter/labextensions/nbsv"
-"./install.json" = "share/jupyter/labextensions/nbsv/install.json"
-"./nbsv.json" = "etc/jupyter/nbconfig/notebook.d/nbsv.json"
+# Dependency groups (recognized by `uv`). For more details, visit:
+# https://peps.python.org/pep-0735/
+[dependency-groups]
+dev = ["watchfiles", "jupyterlab"]
 
 [tool.hatch.build.targets.sdist]
-exclude = [".github"]
+ignore-vcs = true
+exclude = [
+  "**/node_modules",
+  ".ipynb_checkpoints",
+  ".github",
+  "css",
+  "dist",
+  "lib",
+  "src",
+  "yarn.lock",
+]
+
+[tool.hatch.build.targets.wheel]
+only-packages = true
+artifacts = [
+  "nbsv",
+  "package.json",
+]
 
 [tool.hatch.build.hooks.jupyter-builder]
 build-function = "hatch_jupyter_builder.npm_builder"
-ensured-targets = [
-    "nbsv/nbextension/index.js",
-    "nbsv/labextension/package.json",
-]
-skip-if-exists = ["nbsv/nbextension/index.js", "nbsv/labextension/package.json"]
+ensured-targets = ["lib/widget.js", "package.json"]
 dependencies = ["hatch-jupyter-builder>=0.5.0"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 path = "."
-build_cmd = "build:prod"
+npm = "yarn"
+build_cmd = "build"
 
 [tool.tbump]
 file = [
